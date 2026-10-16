@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { Award, TrendingUp } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
 import SampleChip from "@/components/SampleChip";
+import SpotlightCard from "@/components/motion/SpotlightCard";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -99,23 +100,29 @@ export default function StatsBand({
       className={cn("bg-ink-deep py-20 text-snow md:py-28", className)}
     >
       <div className="container-kw">
-        {/* Bento Stats Grid */}
+        {/* Bento Stats Grid with Spotlight + 3D Tilt */}
         <div className="grid gap-6 md:grid-cols-3">
           {stats.map((item, idx) => (
-            <div
+            <SpotlightCard
               key={item.label}
+              enableTilt
+              maxTilt={3.5}
+              spotlightColor="rgba(209, 25, 25, 0.25)"
+              borderGlowColor="rgba(255, 80, 80, 0.9)"
               className={cn(
-                "group relative flex flex-col justify-between overflow-hidden rounded-3xl border p-8 transition-all duration-300 md:p-10",
+                "group flex flex-col justify-between rounded-3xl border p-8 transition-all duration-300 md:p-10",
                 idx === 0
-                  ? "border-kw-red/50 bg-gradient-to-br from-kw-red/20 via-ink to-ink"
-                  : "border-white/10 bg-ink hover:border-white/20"
+                  ? "border-kw-red/50 bg-gradient-to-br from-kw-red/20 via-ink to-ink shadow-[0_18px_50px_-15px_rgba(180,1,1,0.4)]"
+                  : "border-white/10 bg-ink hover:border-kw-red/50 shadow-lift-dark"
               )}
             >
               <div className="flex items-center justify-between">
                 <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-stone-dark">
                   0{idx + 1} · Track Record
                 </span>
-                <TrendingUp className="h-4 w-4 text-kw-red-bright" />
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl border border-kw-red/30 bg-kw-red/15 text-kw-red-bright transition-transform duration-300 group-hover:scale-110 group-hover:bg-kw-red group-hover:text-white">
+                  <TrendingUp className="h-4 w-4" />
+                </span>
               </div>
 
               <div className="my-8">
@@ -143,22 +150,28 @@ export default function StatsBand({
                   />
                 )}
               </div>
-            </div>
+            </SpotlightCard>
           ))}
         </div>
 
         {/* §5.6 Best of State Badge under the stats */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/10 bg-ink px-6 py-5 sm:flex-row md:px-8">
-          <div className="flex flex-wrap items-center gap-3 text-center sm:text-left">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-kw-red/15 text-kw-red-bright">
-              <Award className="h-5 w-5" />
-            </span>
-            <p className="text-sm font-medium text-snow/90">
-              {activeBrokerage.disclosures.bestOfStateBadge}
-            </p>
+        <SpotlightCard
+          spotlightColor="rgba(209, 25, 25, 0.18)"
+          borderGlowColor="rgba(255, 80, 80, 0.75)"
+          className="mt-6 rounded-2xl border border-white/10 bg-ink px-6 py-5 md:px-8"
+        >
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <div className="flex flex-wrap items-center gap-3 text-center sm:text-left">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-kw-red/40 bg-kw-red/15 text-kw-red-bright shadow-[0_0_20px_rgba(180,1,1,0.4)]">
+                <Award className="h-5 w-5" />
+              </span>
+              <p className="text-sm font-medium text-snow/90">
+                {activeBrokerage.disclosures.bestOfStateBadge}
+              </p>
+            </div>
+            <SampleChip label="SHAWN REVIEW" variant="review" />
           </div>
-          <SampleChip label="SHAWN REVIEW" variant="review" />
-        </div>
+        </SpotlightCard>
       </div>
     </section>
   );
