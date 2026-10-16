@@ -1,23 +1,11 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
-import { CheckCircle2, Mail, MapPin } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Mail, MapPin, ShieldCheck } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
 import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import SplitChars from "@/components/motion/SplitChars";
-import BlurUp from "@/components/motion/BlurUp";
-import DuskCard from "@/components/motion/DuskCard";
-import Magnetic from "@/components/motion/Magnetic";
 import { HEADER_H } from "@/components/Navbar";
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
-const SERVICE_IMAGES: Record<string, string> = {
-  mortgage: "/service-mortgage.jpg",
-  title: "/service-title.jpg",
-  insurance: "/service-insurance.jpg",
-};
 
 export default function ServiceDetail() {
   const { slug = "" } = useParams<{ slug: string }>();
@@ -32,193 +20,143 @@ export default function ServiceDetail() {
   }
 
   const partner = partners[slug];
-  const serviceImg = SERVICE_IMAGES[slug] ?? "/service-title.jpg";
 
   return (
     <>
-      {/* Hero */}
+      {/* §10 Partner Hero (Dark Slate) */}
       <section
-        className="relative flex min-h-[48vh] flex-col items-center justify-center overflow-hidden bg-ink"
-        style={{ marginTop: -HEADER_H, paddingTop: HEADER_H }}
+        className="relative flex min-h-[55dvh] items-center overflow-hidden bg-ink-deep pb-16 pt-[150px] text-snow"
+        style={{ marginTop: -HEADER_H }}
       >
-        <div className="absolute inset-0">
-          <img
-            src={serviceImg}
-            alt=""
-            className="h-full w-full object-cover opacity-30"
-          />
-          <div className="overlay-hero absolute inset-0" />
-        </div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(20,23,26,0.98) 0%, rgba(31,35,38,0.9) 60%, rgba(180,1,1,0.22) 100%)",
+          }}
+        />
 
-        <div className="relative z-10 flex flex-col items-center px-6 py-24 text-center">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="flex items-center gap-4"
-          >
-            <span className="h-px w-10 bg-copper" />
-            <span className="type-label text-copper">{partner.roleLabel}</span>
-            <span className="h-px w-10 bg-copper" />
-          </motion.div>
-
-          <h1 className="type-display-lg mt-8 text-ivory">
-            <SplitChars text={partner.companyName} delay={0.4} />
-          </h1>
-
-          <motion.p
-            initial={{ opacity: 0, filter: "blur(10px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
-            transition={{ delay: 0.9, duration: 0.8 }}
-            className="type-serif-accent mt-6 max-w-2xl text-stone-dark"
-          >
-            {partner.heroHeadline}
-          </motion.p>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="bg-ivory py-24 md:py-32">
-        <div className="container-monogram grid gap-14 lg:grid-cols-2 lg:gap-20">
-          {/* Left: Logo + Story + Highlights */}
-          <div>
-            <Reveal>
-              <div className="flex items-center gap-4">
-                <span className="h-px w-10 bg-copper" />
-                <span className="type-label text-copper">
-                  Part of Our Family of Companies
-                </span>
-              </div>
-            </Reveal>
-
-            <h2 className="type-display-md mt-5 text-ink">
-              <SplitWords text="Part of One Relationship." />
-            </h2>
-
-            <Reveal delay={0.1}>
-              <div className="mt-8 inline-flex items-center border hairline-light bg-white p-6">
-                <img
-                  src={partner.logo}
-                  alt={`${partner.companyName} logo`}
-                  className="h-14 w-auto max-w-[240px] object-contain"
-                />
-              </div>
-            </Reveal>
-
-            {partner.isPlaceholderCopy && (
-              <div className="mt-5">
-                <SampleChip label="PLACEHOLDER: Final Partner Copy Pending" />
-              </div>
-            )}
-
-            <Reveal delay={0.15}>
-              <p className="type-body mt-6 text-stone">{partner.introCopy}</p>
-            </Reveal>
-
-            <Reveal delay={0.25}>
-              <p className="type-body-sm mt-6 flex items-center gap-2 text-ink/70">
-                <MapPin className="h-4 w-4 text-copper" strokeWidth={1.5} />
-                Serving Weber, Davis &amp; Morgan Counties ·{" "}
-                {contact.cityStateZip}
-              </p>
-            </Reveal>
-
-            <div className="mt-8">
-              {partner.highlights.map((item, i) => (
-                <Reveal key={item} delay={0.1 + 0.08 * i} y={16}>
-                  <div className="flex items-center gap-4 border-t py-4 last:border-b hairline-light">
-                    <CheckCircle2
-                      className="h-4 w-4 shrink-0 text-copper"
-                      strokeWidth={1.5}
-                    />
-                    <span className="type-body-sm text-ink/80">{item}</span>
-                  </div>
-                </Reveal>
-              ))}
+        <div className="container-kw relative z-10">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/40 bg-kw-red/15 px-4 py-1.5">
+              <span className="h-2 w-2 rounded-full bg-kw-red-bright" />
+              <span className="type-label text-kw-red-bright">
+                {partner.roleLabel} · Family of Companies
+              </span>
             </div>
 
-            {/* Why It Matters at the Table */}
-            <Reveal delay={0.3} y={24}>
-              <div className="mt-10 border hairline-light bg-white p-8 md:p-10">
-                <p className="type-label text-copper">
-                  {partner.whyItMattersHeadline}
-                </p>
-                <h3 className="mt-4 font-serif text-[1.6rem] italic leading-snug text-ink">
-                  Everyone at One Table.
-                </h3>
-                <p className="type-body-sm mt-3 text-stone">
-                  {partner.whyItMattersBody}
-                </p>
-              </div>
-            </Reveal>
-          </div>
+            <h1 className="type-display-xl mt-6 text-white">
+              <SplitChars
+                text={partner.companyName}
+                delay={0.15}
+                stagger={0.02}
+              />
+            </h1>
 
-          {/* Right: BlurUp DuskCard Image + Main Contact Card + Affiliated Disclosure */}
-          <div className="flex flex-col gap-8 lg:pt-12">
-            <BlurUp className="mb-2">
-              <div className="aspect-[3/2] overflow-hidden border hairline-light">
-                <DuskCard src={serviceImg} alt={partner.companyName} />
-              </div>
-            </BlurUp>
-
-            <Reveal delay={0.3} y={30}>
-              <div className="bg-ink p-8 md:p-10">
-                <p className="type-label flex items-center gap-2 text-copper">
-                  Main Contact <SampleChip label="Sample" />
-                </p>
-                <a
-                  href={`mailto:${contact.generalEmail}`}
-                  className="mt-5 flex items-center gap-2 text-[0.9rem] font-light text-ivory/85 transition-colors hover:text-copper"
-                >
-                  <Mail className="h-4 w-4 text-copper" strokeWidth={1.5} />
-                  {contact.generalEmail}
-                </a>
-                <p className="type-body-sm mt-3 text-stone-dark">
-                  Connect with {partner.companyName} alongside your KW Success
-                  advisor.
-                </p>
-                <Magnetic className="mt-7 inline-block">
-                  <Link
-                    to={`/contact/${slug}`}
-                    className="btn-sweep inline-block rounded-full border border-copper px-7 py-3 text-[0.74rem] font-medium uppercase tracking-[0.24em] text-copper transition-colors duration-300 hover:text-ink"
-                  >
-                    Contact Us →
-                  </Link>
-                </Magnetic>
-              </div>
-            </Reveal>
-
-            {/* §10 Full Affiliated Business Disclosure in capitals [SHAWN REVIEW] */}
-            {partner.affiliated && (
-              <Reveal delay={0.35} y={24}>
-                <AffiliatedDisclosure tone="light" showFullLegal />
-              </Reveal>
-            )}
+            <p className="type-lead mt-5 text-stone-dark">
+              {partner.heroHeadline}
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Bottom CTA Band */}
-      <section className="border-t bg-ink py-24 hairline-dark md:py-32">
-        <div className="container-monogram flex flex-col items-center text-center">
-          <motion.span
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true, amount: 0.8 }}
-            transition={{ duration: 1.2, ease: EASE }}
-            className="h-px w-24 origin-left bg-copper"
-          />
-          <h2 className="type-display-md mt-8 max-w-3xl text-ivory">
-            <SplitWords text="One Conversation Opens Every Door." />
-          </h2>
-          <Reveal delay={0.2}>
-            <Link
-              to={`/contact/${slug}`}
-              className="mt-10 inline-block rounded-full bg-copper px-10 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright"
-            >
-              Contact Us
-            </Link>
-          </Reveal>
+      {/* §10 Partner Content + Why It Matters at the Table (Cool Sky Mist) */}
+      <section className="bg-mist py-24 text-ink md:py-32">
+        <div className="container-kw">
+          <div className="grid gap-10 lg:grid-cols-12">
+            {/* Left Column: Partner Logo + Intro + Highlights */}
+            <div className="lg:col-span-7">
+              <div className="rounded-3xl border border-ink/10 bg-white p-8 shadow-card md:p-12">
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-ink/10 pb-8">
+                  <img
+                    src={partner.logo}
+                    alt={`${partner.companyName} logo`}
+                    className="h-14 w-auto max-w-[240px] object-contain"
+                  />
+                  {partner.isPlaceholderCopy && (
+                    <SampleChip label="PLACEHOLDER: Final Partner Copy Pending" />
+                  )}
+                </div>
+
+                <h2 className="type-display-md mt-8 text-ink">
+                  <SplitWords text="COORDINATED AROUND YOUR TABLE." />
+                </h2>
+
+                <p className="type-body mt-4 leading-relaxed text-charcoal">
+                  {partner.introCopy}
+                </p>
+
+                <div className="mt-8 space-y-3">
+                  {partner.highlights.map((item) => (
+                    <div
+                      key={item}
+                      className="flex items-start gap-3 rounded-2xl bg-mist/60 p-4"
+                    >
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-kw-red" />
+                      <span className="text-sm font-medium text-ink">
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Why It Matters at the Table (Dark Slate Card) + Contact CTA */}
+            <div className="flex flex-col gap-6 lg:col-span-5">
+              <Reveal delay={0.1}>
+                <div className="rounded-3xl bg-ink p-8 text-snow shadow-lift md:p-10">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-kw-red px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                    {partner.whyItMattersHeadline}
+                  </span>
+
+                  <h3 className="mt-6 text-2xl font-bold text-white">
+                    Everyone at One Table.
+                  </h3>
+
+                  <p className="mt-4 text-sm leading-relaxed text-stone-dark">
+                    {partner.whyItMattersBody}
+                  </p>
+
+                  <div className="mt-8 space-y-3 border-t border-white/10 pt-6 text-xs text-stone-dark">
+                    <div className="flex items-center gap-2.5">
+                      <MapPin className="h-4 w-4 text-kw-red-bright" />
+                      <span>{contact.fullAddress}</span>
+                    </div>
+                    <div className="flex items-center gap-2.5">
+                      <Mail className="h-4 w-4 text-kw-red-bright" />
+                      <a
+                        href={`mailto:${contact.generalEmail}`}
+                        className="text-snow hover:text-kw-red-bright"
+                      >
+                        {contact.generalEmail}
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="mt-8">
+                    <Link
+                      to={`/contact/${slug}`}
+                      className="group inline-flex items-center gap-3.5 rounded-full bg-kw-red py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
+                    >
+                      <span>Connect With {partner.companyName}</span>
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
+                        <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+
+          {/* §10 Full Affiliated Business Disclosure in capitals [SHAWN REVIEW] */}
+          {partner.affiliated && (
+            <div className="mt-10">
+              <AffiliatedDisclosure tone="light" showFullLegal />
+            </div>
+          )}
         </div>
       </section>
     </>

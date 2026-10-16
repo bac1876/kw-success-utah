@@ -1,107 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ExternalLink, Menu, Search, X } from "lucide-react";
-import { brokerage } from "@/brokerages";
-import FlyLabel from "@/components/motion/FlyLabel";
-import Magnetic from "@/components/motion/Magnetic";
+import { ArrowUpRight, ChevronDown, ExternalLink, Menu, Search, X } from "lucide-react";
+import { activeBrokerage, brokerage } from "@/brokerages";
 import { cn } from "@/lib/utils";
 
-const UTIL_H = 40;
-const MAIN_H = 72;
+const UTIL_H = 38;
+const MAIN_H = 74;
 export const HEADER_H = UTIL_H + MAIN_H;
 
-const DROPDOWN_MENUS: Record<
-  string,
-  {
-    heading: string;
-    accent: string;
-    ctaTo: string;
-    ctaLabel: string;
-    links: { label: string; sub?: string; to: string; external?: boolean }[];
-  }
-> = {
-  "KELLER WILLIAMS REALTY": {
-    heading: "Our Brokerage & Reach",
-    accent: "Rooted in Layton. Serving the Wasatch Front.",
-    ctaTo: "/areas-served",
-    ctaLabel: "Interactive Network Map →",
-    links: [
-      {
-        label: "Layton Market Center",
-        sub: "Davis, Weber & Morgan Counties",
-        to: "/about#market-center",
-      },
-      {
-        label: "Areas Served",
-        sub: "37+ Northern Utah Communities",
-        to: "/areas-served",
-      },
-      {
-        label: "Keller Williams International",
-        sub: "kw.com",
-        to: "https://kw.com",
-        external: true,
-      },
-      {
-        label: "KW Utah Region",
-        sub: "Regional Network",
-        to: "https://kwsuccessutah.kw.com",
-        external: true,
-      },
-    ],
-  },
-  SERVICES: {
-    heading: "Around the Life of the Home",
-    accent: "Everyone at one table. Every step.",
-    ctaTo: "/clients",
-    ctaLabel: "Buy & Sell Guide →",
-    links: [
-      {
-        label: "Buy & Sell Real Estate",
-        sub: "KW Success Advisors",
-        to: "/clients",
-      },
-      {
-        label: "Mortgage Solutions",
-        sub: "Unity Home Loans",
-        to: "/services/mortgage",
-      },
-      {
-        label: "Title & Escrow",
-        sub: "Amicus Title",
-        to: "/services/title",
-      },
-      {
-        label: "Search Utah Homes",
-        sub: "MLS & Active Listings",
-        to: brokerage.search.buyUrl,
-        external: true,
-      },
-    ],
-  },
-};
-
 const NAV_LINKS = [
-  { label: "FOR AGENTS", to: "/agents" },
-  { label: "BUY & SELL", to: "/clients" },
-  { label: "ABOUT", to: "/about" },
-  { label: "AREAS SERVED", to: "/areas-served" },
+  { label: "For Agents", to: "/agents" },
+  { label: "Buy & Sell", to: "/clients" },
+  { label: "About", to: "/about" },
+  { label: "Areas Served", to: "/areas-served" },
 ];
 
 function UtilityBar() {
   const [openKw, setOpenKw] = useState(false);
 
   return (
-    <div className="hidden h-10 items-center justify-between gap-6 bg-ink-deep px-6 text-stone-dark md:flex">
-      <div className="flex items-center gap-5 whitespace-nowrap">
-        <Link to="/" className="flex items-center gap-2.5">
-          <span className="inline-block h-2 w-2 rotate-45 bg-copper" />
-          <span className="text-[0.7rem] font-medium uppercase tracking-[0.45em] text-ivory">
-            KW Success
-          </span>
-        </Link>
-        <span className="h-4 w-px bg-copper/30" aria-hidden />
+    <div className="hidden h-[38px] items-center justify-between border-b border-white/10 bg-ink-deep px-6 text-[0.75rem] text-stone-dark md:flex lg:px-10">
+      {/* Left: Keller Williams Realty ▸ light link-through dropdown (§4) */}
+      <div className="flex items-center gap-4">
         <div
           className="relative"
           onMouseEnter={() => setOpenKw(true)}
@@ -111,95 +32,90 @@ function UtilityBar() {
             type="button"
             aria-expanded={openKw}
             onClick={() => setOpenKw((v) => !v)}
-            className="type-body-sm flex items-center gap-1.5 transition-colors hover:text-copper"
+            className="flex items-center gap-1.5 font-medium tracking-wide text-snow/80 transition-colors hover:text-white"
           >
-            A Keller Williams Realty Brokerage
-            <ChevronDown className="h-3 w-3 text-copper" strokeWidth={1.5} />
+            <span className="h-1.5 w-1.5 rounded-full bg-kw-red" />
+            <span>Keller Williams Realty</span>
+            <ChevronDown className="h-3.5 w-3.5 text-kw-red" strokeWidth={2} />
           </button>
+
           <AnimatePresence>
             {openKw && (
               <motion.div
-                initial={{ opacity: 0, y: -6 }}
+                initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.2 }}
-                className="absolute left-0 top-full z-[60] w-72 border hairline-dark bg-ink py-2 shadow-lift"
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.16 }}
+                className="absolute left-0 top-full z-[60] mt-1 w-64 rounded-xl border border-white/15 bg-ink p-1.5 shadow-lift-dark"
               >
-                {brokerage.utilityBar.kwDropdownLinks.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setOpenKw(false)}
-                    className="flex items-center justify-between px-5 py-2.5 transition-colors hover:bg-copper/10"
-                  >
-                    <span className="block text-[0.82rem] font-medium text-ivory">
-                      {item.label}
-                    </span>
-                    <ExternalLink
-                      className="h-3.5 w-3.5 text-copper"
-                      strokeWidth={1.5}
-                    />
-                  </a>
-                ))}
-                <Link
-                  to="/areas-served"
+                <a
+                  href={activeBrokerage.externalLinks.kwMainUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setOpenKw(false)}
-                  className="mt-1 block border-t hairline-dark px-5 py-2.5 transition-colors hover:bg-copper/10"
+                  className="flex items-center justify-between rounded-lg px-3.5 py-2.5 text-[0.8rem] font-medium text-snow transition-colors hover:bg-white/10"
                 >
-                  <span className="block text-[0.82rem] font-medium text-copper">
-                    Areas Served Map
-                  </span>
-                  <span className="type-body-sm text-stone-dark">
-                    Davis, Weber &amp; Morgan Counties
-                  </span>
-                </Link>
+                  <span>Keller Williams (kw.com)</span>
+                  <ExternalLink className="h-3.5 w-3.5 text-kw-red" />
+                </a>
+                <a
+                  href={activeBrokerage.externalLinks.kwRegionUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setOpenKw(false)}
+                  className="flex items-center justify-between rounded-lg px-3.5 py-2.5 text-[0.8rem] font-medium text-snow transition-colors hover:bg-white/10"
+                >
+                  <span>{activeBrokerage.externalLinks.kwRegionLabel}</span>
+                  <ExternalLink className="h-3.5 w-3.5 text-kw-red" />
+                </a>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
+
+        <span className="hidden h-3.5 w-px bg-white/15 lg:inline-block" />
+        <span className="hidden text-[0.72rem] text-stone-dark lg:inline-block">
+          Layton Market Center · Serving Weber, Davis &amp; Morgan Counties
+        </span>
       </div>
 
-      <div className="flex items-center gap-4 whitespace-nowrap xl:gap-5">
+      {/* Right: Utility bar links per §4 */}
+      <div className="flex items-center gap-5 whitespace-nowrap">
         <Link
           to="/agents"
-          className="flex items-center gap-1.5 text-[0.7rem] font-medium uppercase tracking-[0.22em] text-copper transition-colors hover:text-copper-bright"
+          className="font-semibold uppercase tracking-[0.14em] text-kw-red-bright transition-colors hover:text-white"
         >
           Join Our Team
         </Link>
-        <span className="h-4 w-px bg-copper/30" aria-hidden />
+        <span className="h-3 w-px bg-white/15" aria-hidden />
         <Link
           to="/services/mortgage"
-          className="type-body-sm transition-colors hover:text-copper"
+          className="text-snow/80 transition-colors hover:text-white"
         >
           Unity Home Loans
         </Link>
-        <span className="text-copper/40">·</span>
         <Link
           to="/services/title"
-          className="type-body-sm transition-colors hover:text-copper"
+          className="text-snow/80 transition-colors hover:text-white"
         >
           Amicus Title
         </Link>
-        <span className="h-4 w-px bg-copper/30" aria-hidden />
+        <span className="h-3 w-px bg-white/15" aria-hidden />
         <a
           href={brokerage.search.buyUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="type-body-sm transition-colors hover:text-copper"
+          className="inline-flex items-center gap-1 text-snow/80 transition-colors hover:text-white"
         >
           Search Homes
+          <ArrowUpRight className="h-3 w-3 text-kw-red" />
         </a>
         <Link
           to="/login/agent"
-          className="type-body-sm transition-colors hover:text-copper"
+          className="rounded-full border border-white/15 bg-white/5 px-3 py-0.5 text-[0.7rem] font-medium text-snow transition-colors hover:border-kw-red hover:bg-kw-red hover:text-white"
         >
           Agent Login
         </Link>
-        <span className="hidden border border-copper/40 px-2 py-0.5 text-[0.6rem] uppercase tracking-[0.2em] text-copper 2xl:inline-block">
-          Equal Housing
-        </span>
       </div>
     </div>
   );
@@ -208,7 +124,6 @@ function UtilityBar() {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [showUtil, setShowUtil] = useState(true);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const lastY = useRef(0);
   const location = useLocation();
@@ -216,7 +131,7 @@ export default function Navbar() {
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      setScrolled(y > 60);
+      setScrolled(y > 40);
       if (y > 80 && y > lastY.current) {
         setShowUtil(false);
       } else if (y < lastY.current || y <= 80) {
@@ -230,7 +145,6 @@ export default function Navbar() {
 
   useEffect(() => {
     setMobileOpen(false);
-    setOpenDropdown(null);
   }, [location.pathname]);
 
   return (
@@ -239,7 +153,7 @@ export default function Navbar() {
         <div
           className={cn(
             "overflow-visible transition-[height] duration-300",
-            showUtil ? "h-10" : "h-0"
+            showUtil ? "h-0 md:h-[38px]" : "h-0"
           )}
         >
           <div className={cn(!showUtil && "hidden")}>
@@ -249,159 +163,76 @@ export default function Navbar() {
 
         <nav
           className={cn(
-            "relative flex h-[72px] items-center justify-between px-5 transition-colors duration-500 md:px-10",
+            "relative flex h-[74px] items-center justify-between px-5 transition-all duration-300 md:px-10",
             scrolled
-              ? "border-b bg-[rgba(18,20,19,0.92)] backdrop-blur-md hairline-dark"
-              : "border-b border-transparent bg-ink/60 backdrop-blur-sm"
+              ? "border-b border-white/10 bg-ink-deep/95 shadow-lift-dark backdrop-blur-xl"
+              : "border-b border-white/10 bg-ink/85 backdrop-blur-md"
           )}
         >
-          {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-3.5">
+          {/* Official KW Success Reversed Logo */}
+          <Link to="/" className="flex items-center gap-3">
             <img
               src={brokerage.brand.logos.reversed}
               alt={brokerage.brand.name}
-              className="h-9 w-auto object-contain md:h-10"
+              className="h-9 w-auto object-contain md:h-11"
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="ml-auto hidden items-center gap-7 xl:flex">
-            {Object.keys(DROPDOWN_MENUS).map((key) => {
-              const menu = DROPDOWN_MENUS[key];
-              return (
-                <span
-                  key={key}
-                  className="relative"
-                  onMouseEnter={() => setOpenDropdown(key)}
-                  onMouseLeave={() => setOpenDropdown(null)}
-                >
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setOpenDropdown(openDropdown === key ? null : key)
-                    }
-                    className={cn(
-                      "nav-link-line text-[0.72rem] font-medium uppercase tracking-[0.28em] text-ivory transition-colors hover:text-copper",
-                      openDropdown === key && "text-copper"
-                    )}
-                  >
-                    <FlyLabel text={key} />{" "}
-                    <span className="text-copper">▸</span>
-                  </button>
-
-                  <AnimatePresence>
-                    {openDropdown === key && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.18 }}
-                        className="absolute left-1/2 top-full z-40 -translate-x-1/2 pt-4"
-                      >
-                        <div className="w-[24rem] border hairline-dark bg-ink py-2 shadow-lift">
-                          {menu.links.map((item) =>
-                            item.external ? (
-                              <a
-                                key={item.label}
-                                href={item.to}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() => setOpenDropdown(null)}
-                                className="flex items-baseline justify-between gap-4 px-5 py-2.5 transition-colors hover:bg-copper/10"
-                              >
-                                <span className="whitespace-nowrap text-[0.82rem] font-medium normal-case tracking-normal text-ivory">
-                                  {item.label}
-                                </span>
-                                {item.sub && (
-                                  <span className="type-body-sm text-right text-stone-dark">
-                                    {item.sub}
-                                  </span>
-                                )}
-                              </a>
-                            ) : (
-                              <Link
-                                key={item.label}
-                                to={item.to}
-                                onClick={() => setOpenDropdown(null)}
-                                className="flex items-baseline justify-between gap-4 px-5 py-2.5 transition-colors hover:bg-copper/10"
-                              >
-                                <span className="whitespace-nowrap text-[0.82rem] font-medium normal-case tracking-normal text-ivory">
-                                  {item.label}
-                                </span>
-                                {item.sub && (
-                                  <span className="type-body-sm text-right text-stone-dark">
-                                    {item.sub}
-                                  </span>
-                                )}
-                              </Link>
-                            )
-                          )}
-                          <Link
-                            to={menu.ctaTo}
-                            onClick={() => setOpenDropdown(null)}
-                            className="mt-1 block border-t px-5 py-2.5 text-[0.62rem] uppercase tracking-[0.24em] text-copper transition-colors hairline-dark hover:text-copper-bright"
-                          >
-                            {menu.ctaLabel}
-                          </Link>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </span>
-              );
-            })}
-
+          {/* Center-Right Main Nav (§4: For Agents · Buy & Sell · About · Areas Served) */}
+          <div className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1.5 lg:flex">
             {NAV_LINKS.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
-                onMouseEnter={() => setOpenDropdown(null)}
                 className={({ isActive }) =>
                   cn(
-                    "nav-link-line text-[0.72rem] font-medium uppercase tracking-[0.28em] text-ivory transition-colors hover:text-copper",
-                    isActive && "active text-copper"
+                    "relative rounded-full px-5 py-2 text-[0.78rem] font-semibold tracking-[0.06em] transition-all duration-200",
+                    isActive
+                      ? "bg-kw-red text-white shadow-sm"
+                      : "text-snow/85 hover:bg-white/10 hover:text-white"
                   )
                 }
               >
-                <FlyLabel text={item.label} />
+                {item.label}
               </NavLink>
             ))}
           </div>
 
-          {/* Right Actions */}
-          <div className="ml-6 flex items-center gap-4">
+          {/* Right Actions: Search + Contact Us Pill Button */}
+          <div className="flex items-center gap-3">
             <a
               href={brokerage.search.buyUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Search Utah Homes"
-              className="relative text-ivory transition-colors hover:text-copper"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-snow transition-colors hover:border-kw-red hover:bg-kw-red hover:text-white"
             >
-              <Search className="h-5 w-5" strokeWidth={1.5} />
+              <Search className="h-4 w-4" strokeWidth={1.75} />
             </a>
 
-            <Magnetic radius={60} strength={0.25} className="hidden md:block">
-              <Link
-                to="/contact"
-                className="btn-sweep flex items-center gap-2 rounded-full border border-copper px-6 py-2 text-[0.72rem] font-medium uppercase tracking-[0.22em] text-copper transition-colors duration-300 hover:text-ink"
-              >
-                Contact Us
-              </Link>
-            </Magnetic>
+            <Link
+              to="/contact"
+              className="group hidden items-center gap-3 rounded-full bg-kw-red py-1.5 pl-5 pr-1.5 text-[0.78rem] font-semibold tracking-[0.08em] text-white transition-all duration-300 hover:bg-kw-red-bright sm:inline-flex"
+            >
+              <span>Contact Us</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-ink transition-transform duration-300 group-hover:rotate-45">
+                <ArrowUpRight className="h-4 w-4 text-kw-red" strokeWidth={2.25} />
+              </span>
+            </Link>
 
             <button
               type="button"
               aria-label="Open menu"
               onClick={() => setMobileOpen(true)}
-              className="text-ivory transition-colors hover:text-copper xl:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-snow transition-colors hover:border-kw-red lg:hidden"
             >
-              <Menu className="h-6 w-6" strokeWidth={1.25} />
+              <Menu className="h-5 w-5" strokeWidth={1.75} />
             </button>
           </div>
         </nav>
       </header>
 
-      {/* Fullscreen Editorial Mobile Menu */}
+      {/* Modern Mobile Sheet Overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -409,10 +240,10 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            className="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-ink"
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[70] flex flex-col justify-between bg-ink-deep/98 p-6 backdrop-blur-xl"
           >
-            <div className="flex h-[72px] shrink-0 items-center justify-between px-5">
+            <div className="flex items-center justify-between border-b border-white/10 pb-5">
               <img
                 src={brokerage.brand.logos.reversed}
                 alt={brokerage.brand.name}
@@ -422,53 +253,53 @@ export default function Navbar() {
                 type="button"
                 aria-label="Close menu"
                 onClick={() => setMobileOpen(false)}
-                className="text-ivory hover:text-copper"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-snow hover:border-kw-red"
               >
-                <X className="h-7 w-7" strokeWidth={1.25} />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
-            <nav className="flex flex-1 flex-col justify-center gap-1 px-8 py-6">
+            <nav className="my-auto flex flex-col gap-2 py-8">
               {[
-                { label: "Home", to: "/" },
-                { label: "For Agents", to: "/agents" },
-                { label: "Buy & Sell", to: "/clients" },
-                { label: "About & Leadership", to: "/about" },
-                { label: "Areas Served (Network Map)", to: "/areas-served" },
-                { label: "Unity Home Loans", to: "/services/mortgage" },
-                { label: "Amicus Title", to: "/services/title" },
-                { label: "Contact Us", to: "/contact" },
-              ].map((item, idx) => (
-                <motion.div
+                { label: "Home", to: "/", num: "01" },
+                { label: "For Agents", to: "/agents", num: "02" },
+                { label: "Buy & Sell", to: "/clients", num: "03" },
+                { label: "About & Leadership", to: "/about", num: "04" },
+                { label: "Areas Served", to: "/areas-served", num: "05" },
+                { label: "Unity Home Loans", to: "/services/mortgage", num: "06" },
+                { label: "Amicus Title", to: "/services/title", num: "07" },
+                { label: "Contact Us", to: "/contact", num: "08" },
+              ].map((item) => (
+                <Link
                   key={item.to}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 * idx, duration: 0.5 }}
+                  to={item.to}
+                  onClick={() => setMobileOpen(false)}
+                  className="group flex items-center justify-between rounded-xl border border-transparent px-4 py-3 text-xl font-semibold text-snow transition-all hover:border-white/10 hover:bg-white/5"
                 >
-                  <Link
-                    to={item.to}
-                    onClick={() => setMobileOpen(false)}
-                    className="block border-b hairline-dark py-3.5 text-[1.35rem] font-light uppercase tracking-[0.12em] text-ivory transition-colors hover:text-copper"
-                  >
-                    {item.label}
-                  </Link>
-                </motion.div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-xs font-semibold tracking-widest text-kw-red">
+                      {item.num}
+                    </span>
+                    <span>{item.label}</span>
+                  </div>
+                  <ArrowUpRight className="h-5 w-5 text-stone-dark transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-kw-red" />
+                </Link>
               ))}
             </nav>
 
-            <div className="flex items-center justify-between gap-5 px-8 pb-10">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5 text-sm">
               <a
                 href={brokerage.search.buyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="type-label text-copper transition-colors hover:text-copper-bright"
+                className="inline-flex items-center gap-1.5 font-semibold text-kw-red-bright"
               >
-                Search Utah Homes →
+                Search Utah Homes <ExternalLink className="h-4 w-4" />
               </a>
               <Link
                 to="/login/agent"
                 onClick={() => setMobileOpen(false)}
-                className="type-label text-stone-dark transition-colors hover:text-copper"
+                className="rounded-full border border-white/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-snow"
               >
                 Agent Login
               </Link>

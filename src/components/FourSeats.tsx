@@ -1,115 +1,45 @@
-import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import { brokerage } from "@/brokerages";
-import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
+import {
+  ClipboardCheck,
+  FileCheck2,
+  Hammer,
+  Landmark,
+  Paintbrush,
+  ShieldCheck,
+  Truck,
+  Users,
+  Wrench,
+} from "lucide-react";
+import { activeBrokerage } from "@/brokerages";
 import { cn } from "@/lib/utils";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
-interface SeatInfo {
-  title: string;
-  descriptor: string;
-  to?: string;
-  affiliated?: boolean;
-}
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Lending: Landmark,
+  "Title & Escrow": FileCheck2,
+  Insurance: ShieldCheck,
+  Inspections: ClipboardCheck,
+  "Contractors & Repairs": Hammer,
+  Moving: Truck,
+  "Home Maintenance": Wrench,
+  "Design & Remodel": Paintbrush,
+};
 
-function SeatCard({
-  seat,
-  dark,
-  delay,
-}: {
-  seat: SeatInfo;
-  dark: boolean;
-  delay: number;
-}) {
-  const reduced = useReducedMotion();
-  const inner = (
-    <motion.div
-      data-cursor={seat.to ? "Meet" : "Table"}
-      initial={reduced ? false : { opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.5 }}
-      transition={{ delay, duration: 0.7, ease: EASE }}
-      className={cn(
-        "group relative flex h-full w-full flex-col items-center justify-center border px-5 py-6 text-center transition-colors duration-500 hover:border-copper",
-        dark ? "hairline-dark bg-ink/60" : "hairline-light bg-white/75"
-      )}
-    >
-      <div className="flex items-center gap-1.5">
-        <span
-          className={cn(
-            "text-[0.82rem] font-medium uppercase tracking-[0.22em] transition-colors group-hover:text-copper",
-            dark ? "text-ivory" : "text-ink"
-          )}
-        >
-          {seat.title}
-        </span>
-        {seat.to && (
-          <ArrowUpRight
-            className="h-3.5 w-3.5 text-copper transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-            strokeWidth={1.5}
-          />
-        )}
-      </div>
-      <span
-        className={cn(
-          "type-body-sm mt-2.5 max-w-[230px]",
-          dark ? "text-stone-dark" : "text-stone"
-        )}
-      >
-        {seat.descriptor}
-      </span>
-      {seat.affiliated && (
-        <span className="mt-3 border border-copper/40 px-2 py-0.5 text-[0.52rem] font-medium uppercase tracking-[0.2em] text-copper">
-          In-House Partner
-        </span>
-      )}
-    </motion.div>
-  );
-
-  if (seat.to) {
-    return (
-      <Link to={seat.to} className="block h-full w-full">
-        {inner}
-      </Link>
-    );
-  }
-  return inner;
-}
-
-function Connector({
-  dark,
-  vertical,
-  delay,
-}: {
-  dark?: boolean;
-  vertical?: boolean;
-  delay: number;
-}) {
-  const reduced = useReducedMotion();
-  return (
-    <motion.span
-      aria-hidden
-      initial={reduced ? false : { scale: 0, opacity: 0 }}
-      whileInView={{ scale: 1, opacity: 1 }}
-      viewport={{ once: true, amount: 0.6 }}
-      transition={{ delay, duration: 0.6, ease: EASE }}
-      className={cn(
-        "block bg-copper/40",
-        vertical
-          ? "mx-auto h-8 w-px origin-top"
-          : "my-auto h-px w-8 origin-left",
-        dark && "bg-copper/50"
-      )}
-    />
-  );
-}
+const CATEGORY_NOTES: Record<string, string> = {
+  Lending: "Purchase, refinance & strategy tailored to your goals",
+  "Title & Escrow": "Clear title, smooth settlement & protected closings",
+  Insurance: "Home, auto & umbrella coverage comparisons",
+  Inspections: "Thorough property, radon, roof & sewer evaluations",
+  "Contractors & Repairs": "Trusted local trades for repairs & upgrades",
+  Moving: "Coordinated local & out-of-state relocation support",
+  "Home Maintenance": "Seasonal upkeep, HVAC, landscaping & care",
+  "Design & Remodel": "Architects, interior design & renovation pros",
+};
 
 export default function FourSeats({
-  tone = "light",
+  tone = "dark",
   showJourney = true,
-  showDisclosure = true,
   className,
 }: {
   tone?: "light" | "dark";
@@ -119,187 +49,223 @@ export default function FourSeats({
 }) {
   const dark = tone === "dark";
   const reduced = useReducedMotion();
-  const { seats, journeySteps } = brokerage.oneTable;
+  const { oneTable } = activeBrokerage.home;
+  const seats = oneTable.seats;
 
-  // Map the 8 seats around the central table:
-  // Top row: 3 seats (Real Estate, Mortgage/Unity, Title/Amicus)
-  // Left & Right flanks: Home Warranty (left) & Home Inspection (right)
-  // Bottom row: 3 seats (Moving Services, Contractors & Trades, Wealth & Investment)
-  const topSeats: SeatInfo[] = [
-    {
-      title: seats[0].title,
-      descriptor: seats[0].descriptor,
-      to: "/clients",
-    },
-    {
-      title: `${seats[1].title} · Unity Home Loans`,
-      descriptor: seats[1].descriptor,
-      to: "/services/mortgage",
-      affiliated: true,
-    },
-    {
-      title: `${seats[2].title} · Amicus Title`,
-      descriptor: seats[2].descriptor,
-      to: "/services/title",
-      affiliated: true,
-    },
-  ];
+  const leftSeats = seats.slice(0, 4);
+  const rightSeats = seats.slice(4, 8);
 
-  const leftSeat: SeatInfo = {
-    title: seats[3].title,
-    descriptor: seats[3].descriptor,
+  const renderSeatCard = (
+    seat: (typeof seats)[number],
+    idx: number
+  ) => {
+    const Icon = CATEGORY_ICONS[seat.category] ?? Wrench;
+    const note =
+      CATEGORY_NOTES[seat.category] ??
+      "Vetted Northern Utah professionals brought to your table";
+
+    return (
+      <motion.div
+        key={seat.category}
+        initial={reduced ? false : { opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ delay: 0.05 * idx, duration: 0.55, ease: EASE }}
+        className={cn(
+          "group relative flex items-start gap-4 rounded-2xl border p-5 transition-all duration-300",
+          dark
+            ? "border-white/10 bg-slate-card/80 hover:border-kw-red/60 hover:bg-slate-card"
+            : "border-ink/10 bg-white shadow-card hover:border-kw-red/50"
+        )}
+      >
+        <div
+          className={cn(
+            "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-colors duration-300",
+            dark
+              ? "border-white/10 bg-ink-deep text-kw-red-bright group-hover:border-kw-red group-hover:bg-kw-red group-hover:text-white"
+              : "border-ink/10 bg-mist text-kw-red group-hover:border-kw-red group-hover:bg-kw-red group-hover:text-white"
+          )}
+        >
+          <Icon className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-2">
+            <h3
+              className={cn(
+                "text-[0.95rem] font-bold tracking-tight",
+                dark ? "text-snow" : "text-ink"
+              )}
+            >
+              {seat.category}
+            </h3>
+            <span
+              className={cn(
+                "text-[0.65rem] font-semibold uppercase tracking-widest",
+                dark ? "text-stone-dark" : "text-kw-gray"
+              )}
+            >
+              0{idx + 1}
+            </span>
+          </div>
+          <p
+            className={cn(
+              "mt-1 text-xs leading-relaxed",
+              dark ? "text-stone-dark" : "text-charcoal"
+            )}
+          >
+            {note}
+          </p>
+        </div>
+      </motion.div>
+    );
   };
-
-  const rightSeat: SeatInfo = {
-    title: seats[4].title,
-    descriptor: seats[4].descriptor,
-  };
-
-  const bottomSeats: SeatInfo[] = [
-    {
-      title: seats[5].title,
-      descriptor: seats[5].descriptor,
-    },
-    {
-      title: seats[6].title,
-      descriptor: seats[6].descriptor,
-    },
-    {
-      title: seats[7].title,
-      descriptor: seats[7].descriptor,
-    },
-  ];
-
-  const centerTable = (
-    <motion.div
-      initial={reduced ? false : { opacity: 0, scale: 0.94 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, amount: 0.6 }}
-      transition={{ delay: 0.15, duration: 0.8, ease: EASE }}
-      className="relative mx-auto flex w-full flex-col items-center border border-copper bg-ink px-6 py-10 text-center shadow-lift md:py-12"
-    >
-      {/* Slow copper breathing frame on the table itself */}
-      <motion.span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 border border-copper"
-        animate={
-          reduced
-            ? undefined
-            : { opacity: [0.25, 0.75, 0.25], scale: [1, 1.014, 1] }
-        }
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <span className="inline-block h-3 w-3 rotate-45 bg-copper" />
-      <span className="mt-5 text-[0.95rem] font-medium uppercase tracking-[0.26em] text-ivory">
-        Your KW Success Trusted Advisor
-      </span>
-      <span className="type-serif-accent mt-1 !text-[1.25rem] text-copper-bright">
-        &amp; you
-      </span>
-      <span className="type-body-sm mt-4 max-w-sm text-stone-dark">
-        Sitting at the table together — coordinating real estate, lending,
-        title, inspections, and home services from first conversation to long
-        after closing.
-      </span>
-    </motion.div>
-  );
 
   return (
     <div className={cn("w-full", className)}>
-      {/* Desktop: 8 seats arranged around the center table */}
-      <div className="hidden lg:block">
-        {/* Top 3 Seats */}
-        <div className="grid grid-cols-3 gap-5">
-          {topSeats.map((s, i) => (
-            <SeatCard
-              key={s.title}
-              seat={s}
-              dark={dark}
-              delay={0.05 + i * 0.06}
-            />
-          ))}
+      {/* Modern 3-Column Bento Architecture: 4 Left Seats | Central Advisor Core | 4 Right Seats */}
+      <div className="grid items-stretch gap-6 lg:grid-cols-12">
+        {/* Left 4 Categories */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1">
+          {leftSeats.map((s, i) => renderSeatCard(s, i))}
         </div>
 
-        <div className="grid grid-cols-3">
-          <Connector vertical dark={dark} delay={0.3} />
-          <Connector vertical dark={dark} delay={0.35} />
-          <Connector vertical dark={dark} delay={0.4} />
-        </div>
+        {/* Center Command Card: "Your KW Success Trusted Advisor & you." (§5.2) */}
+        <motion.div
+          initial={reduced ? false : { opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.7, ease: EASE }}
+          className="relative flex flex-col items-center justify-between overflow-hidden rounded-3xl border-2 border-kw-red bg-gradient-to-b from-ink via-ink-deep to-ink p-8 text-center text-snow shadow-lift-dark lg:col-span-4 lg:p-10"
+        >
+          {/* Subtle radial red glow at top */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-24 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-kw-red/25 blur-3xl"
+          />
 
-        {/* Middle Row: Left Seat — Center Table — Right Seat */}
-        <div className="grid grid-cols-[1fr_auto_1.8fr_auto_1fr] items-center">
-          <SeatCard seat={leftSeat} dark={dark} delay={0.18} />
-          <Connector dark={dark} delay={0.45} />
-          <div>{centerTable}</div>
-          <Connector dark={dark} delay={0.45} />
-          <SeatCard seat={rightSeat} dark={dark} delay={0.22} />
-        </div>
+          <div className="relative z-10 flex flex-col items-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-kw-red/50 bg-kw-red/15 px-3.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-kw-red-bright">
+              <span className="h-1.5 w-1.5 rounded-full bg-kw-red-bright" />
+              {oneTable.subhead}
+            </span>
 
-        <div className="grid grid-cols-3">
-          <Connector vertical dark={dark} delay={0.35} />
-          <Connector vertical dark={dark} delay={0.4} />
-          <Connector vertical dark={dark} delay={0.45} />
-        </div>
+            <div className="mt-7 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/15 bg-white/5 text-kw-red-bright shadow-inner">
+              <Users className="h-8 w-8" />
+            </div>
 
-        {/* Bottom 3 Seats */}
-        <div className="grid grid-cols-3 gap-5">
-          {bottomSeats.map((s, i) => (
-            <SeatCard
-              key={s.title}
-              seat={s}
-              dark={dark}
-              delay={0.25 + i * 0.06}
-            />
-          ))}
-        </div>
-      </div>
+            <h3 className="mt-6 text-2xl font-bold leading-tight tracking-tight text-white md:text-[1.65rem]">
+              {oneTable.centerCardTitle}
+            </h3>
 
-      {/* Tablet & Mobile: Center Table + 2-column grid */}
-      <div className="flex flex-col items-center gap-4 lg:hidden">
-        {centerTable}
-        <Connector vertical dark={dark} delay={0.2} />
-        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-          {[...topSeats, leftSeat, rightSeat, ...bottomSeats].map((s, idx) => (
-            <SeatCard
-              key={s.title}
-              seat={s}
-              dark={dark}
-              delay={0.05 * idx}
-            />
-          ))}
-        </div>
-      </div>
+            <p className="mt-3 text-sm font-medium text-kw-red-bright">
+              {oneTable.centerCardCaption}
+            </p>
 
-      {/* 7-Step Horizontal Journey Strip */}
-      {showJourney && (
-        <div className="mt-20">
-          <div className="flex items-center justify-center gap-4">
-            <span className="h-px w-10 bg-copper" />
-            <span className="type-label text-copper">The Journey</span>
-            <span className="h-px w-10 bg-copper" />
+            <div className="my-6 h-px w-16 bg-white/15" />
+
+            <p className="text-sm leading-relaxed text-stone-dark">
+              Before, during, and long after the closing, your advisor coordinates
+              every specialist around your table and stays with you for as long
+              as you own your home.
+            </p>
           </div>
-          <div className="relative mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
-            {journeySteps.map((step, idx) => (
-              <motion.div
-                key={step}
-                initial={reduced ? false : { opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.06 * idx, duration: 0.5, ease: EASE }}
+
+          <div className="relative z-10 mt-8 grid w-full grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-center">
+            <div>
+              <span className="block text-sm font-bold text-white">8+</span>
+              <span className="text-[0.62rem] uppercase tracking-wider text-stone-dark">
+                Specialties
+              </span>
+            </div>
+            <div className="border-x border-white/10">
+              <span className="block text-sm font-bold text-kw-red-bright">1</span>
+              <span className="text-[0.62rem] uppercase tracking-wider text-stone-dark">
+                Point of Call
+              </span>
+            </div>
+            <div>
+              <span className="block text-sm font-bold text-white">1997</span>
+              <span className="text-[0.62rem] uppercase tracking-wider text-stone-dark">
+                Utah Roots
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Right 4 Categories */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1">
+          {rightSeats.map((s, i) => renderSeatCard(s, i + 4))}
+        </div>
+      </div>
+
+      {/* §5.2 Journey line under the diagram: Buying · Moving · Living · Maintaining · Growing · Selling · Beginning Again */}
+      {showJourney && (
+        <div
+          className={cn(
+            "mt-12 rounded-2xl border p-6 md:p-8",
+            dark
+              ? "border-white/10 bg-ink-deep/90"
+              : "border-ink/10 bg-white shadow-card"
+          )}
+        >
+          <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-2.5">
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-kw-red text-[0.68rem] font-bold text-white">
+                ∞
+              </span>
+              <span
                 className={cn(
-                  "flex flex-col items-center border p-4 text-center transition-colors hover:border-copper",
-                  dark
-                    ? "hairline-dark bg-ink/50"
-                    : "hairline-light bg-white/60"
+                  "text-xs font-bold uppercase tracking-[0.2em]",
+                  dark ? "text-snow" : "text-ink"
                 )}
               >
-                <span className="text-[0.65rem] font-medium uppercase tracking-[0.28em] text-copper">
-                  0{idx + 1}
-                </span>
+                The Homeownership Lifecycle
+              </span>
+            </div>
+            <span
+              className={cn(
+                "text-xs font-medium",
+                dark ? "text-stone-dark" : "text-charcoal"
+              )}
+            >
+              {oneTable.journeyCaption}
+            </span>
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
+            {oneTable.journeySteps.map((step, idx) => (
+              <motion.div
+                key={step}
+                initial={reduced ? false : { opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.05 * idx, duration: 0.45, ease: EASE }}
+                className={cn(
+                  "group relative flex flex-col justify-between rounded-xl border p-3.5 transition-colors",
+                  dark
+                    ? "border-white/10 bg-slate-card/60 hover:border-kw-red/60"
+                    : "border-ink/10 bg-mist/60 hover:border-kw-red/50"
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[0.65rem] font-bold text-kw-red-bright">
+                    0{idx + 1}
+                  </span>
+                  {idx < oneTable.journeySteps.length - 1 && (
+                    <span
+                      className={cn(
+                        "text-xs",
+                        dark ? "text-white/25" : "text-ink/25"
+                      )}
+                    >
+                      →
+                    </span>
+                  )}
+                </div>
                 <span
                   className={cn(
-                    "mt-2 text-[0.78rem] font-medium uppercase tracking-[0.14em]",
-                    dark ? "text-ivory" : "text-ink"
+                    "mt-2.5 text-xs font-semibold tracking-tight",
+                    dark ? "text-snow" : "text-ink"
                   )}
                 >
                   {step}
@@ -307,13 +273,6 @@ export default function FourSeats({
               </motion.div>
             ))}
           </div>
-        </div>
-      )}
-
-      {/* Affiliated Business Disclosure */}
-      {showDisclosure && (
-        <div className="mt-12">
-          <AffiliatedDisclosure tone={dark ? "dark" : "light"} />
         </div>
       )}
     </div>

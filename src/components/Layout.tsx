@@ -5,8 +5,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar, { HEADER_H } from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Preloader from "@/components/motion/Preloader";
-import CursorDot from "@/components/motion/CursorDot";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,14 +50,12 @@ export default function Layout() {
   }, [location.pathname]);
 
   return (
-    <>
-      <Preloader />
-      <CursorDot />
+    <div className="min-h-screen bg-ink-deep text-snow">
       <Navbar />
       <main style={{ paddingTop: HEADER_H }}>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

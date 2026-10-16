@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "kws-intro-seen";
-const INTRO_DURATION_S = 2.35;
 
 function shouldPlayIntro(): boolean {
   try {
@@ -17,12 +16,9 @@ function shouldPlayIntro(): boolean {
 }
 
 const playOnLoad = typeof window !== "undefined" ? shouldPlayIntro() : false;
-const startTime = typeof performance !== "undefined" ? performance.now() : 0;
 
 export function introDelay(): number {
-  if (!playOnLoad) return 0;
-  const elapsed = (performance.now() - startTime) / 1000;
-  return Math.max(0, INTRO_DURATION_S - elapsed);
+  return 0;
 }
 
 const CHARS = "KW SUCCESS".split("");

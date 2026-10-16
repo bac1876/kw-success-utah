@@ -4,23 +4,27 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { ArrowRight, ChevronDown, ExternalLink } from "lucide-react";
-import { brokerage } from "@/brokerages";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Building2,
+  ChevronDown,
+  Compass,
+  Home as HomeIcon,
+  MapPin,
+  Sparkles,
+  Users,
+} from "lucide-react";
+import { activeBrokerage } from "@/brokerages";
 import FourSeats from "@/components/FourSeats";
 import ThreePillars from "@/components/ThreePillars";
-import { FourPartInfinity, InfinityMark } from "@/components/InfinityMark";
 import StatsBand from "@/components/StatsBand";
+import TestimonialCarousel from "@/components/TestimonialCarousel";
+import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
-import Magnetic from "@/components/motion/Magnetic";
-import { introDelay } from "@/components/motion/Preloader";
-import Spotlight from "@/components/motion/Spotlight";
-import SplitChars from "@/components/motion/SplitChars";
-import ScrollWords from "@/components/motion/ScrollWords";
 import Parallax from "@/components/motion/Parallax";
-import JourneyRail from "@/components/motion/JourneyRail";
-import MouseTrail from "@/components/motion/MouseTrail";
-import Ticker from "@/components/motion/Ticker";
+import SplitChars from "@/components/motion/SplitChars";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -28,85 +32,75 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
 /* ------------------------------------------------------------------ */
-/* Section 1 — Sticky Curtain Hero + Spotlight                        */
+/* §5.1 Hero — Wasatch Mountains + Modern Editorial Layout             */
 /* ------------------------------------------------------------------ */
 
 function HeroBackground() {
   const root = useRef<HTMLDivElement>(null);
-  const wait = introDelay();
+  const { hero } = activeBrokerage.home;
 
   useGSAP(
     () => {
       const reduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
-      const img = root.current!.querySelector("[data-hero-img]");
-      const wrap = root.current!.querySelector("[data-hero-clip]");
+      const img = root.current?.querySelector("[data-hero-img]");
+      if (!img || reduced) return;
 
-      if (reduced) {
-        gsap.set(wrap, { clipPath: "inset(0% 0 0% 0)" });
-        gsap.set(img, { scale: 1 });
-      } else {
-        gsap.fromTo(
-          wrap,
-          { clipPath: "inset(0% 0 100% 0)" },
-          {
-            clipPath: "inset(0% 0 0% 0)",
-            duration: 1.4,
-            ease: "power3.inOut",
-            delay: wait * 0.6,
-          }
-        );
-        gsap.fromTo(
-          img,
-          { scale: 1.15 },
-          {
-            scale: 1,
-            duration: 1.4,
-            ease: "power3.inOut",
-            delay: wait * 0.6,
-          }
-        );
-        gsap.to(img, {
-          yPercent: 18,
-          scale: 1.08,
-          ease: "none",
-          scrollTrigger: {
-            trigger: document.documentElement,
-            start: "top top",
-            end: () => `+=${window.innerHeight}`,
-            scrub: true,
-          },
-        });
-      }
+      gsap.fromTo(
+        img,
+        { scale: 1.1 },
+        { scale: 1, duration: 1.5, ease: "power3.out" }
+      );
+      gsap.to(img, {
+        yPercent: 14,
+        ease: "none",
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
     },
     { scope: root }
   );
 
   return (
-    <div ref={root} className="absolute inset-0 overflow-hidden">
-      <div data-hero-clip className="h-full w-full will-change-transform">
-        <img
-          data-hero-img
-          src="/hero-home.jpg"
-          alt="Luxury Northern Utah residence at dusk along the Wasatch Front"
-          className="h-[115%] w-full object-cover will-change-transform"
-        />
-      </div>
-      <div className="overlay-hero absolute inset-0" />
-      <Spotlight src="/hero-home.jpg" />
+    <div ref={root} className="absolute inset-0 overflow-hidden bg-ink-deep">
+      <img
+        data-hero-img
+        src={hero.image}
+        alt={hero.imageAlt}
+        className="h-[115%] w-full object-cover object-center will-change-transform"
+      />
+      {/* Balanced alpine gradient: preserves clear sky & snow-capped peaks while grounding typography */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(20,23,26,0.62) 0%, rgba(20,23,26,0.34) 45%, rgba(20,23,26,0.92) 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-28 left-1/2 h-64 w-[48rem] -translate-x-1/2 rounded-full bg-kw-red/20 blur-3xl"
+      />
     </div>
   );
 }
 
 function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const wait = introDelay();
-  const { scrollY } = useScroll();
-  const vh = typeof window !== "undefined" ? window.innerHeight : 900;
-  const contentY = useTransform(scrollY, [0, vh], [0, -90]);
-  const contentOpacity = useTransform(scrollY, [0, vh * 0.75], [1, 0]);
-  const shadeOpacity = useTransform(scrollY, [0, vh], [0, 0.55]);
+  const { hero } = activeBrokerage.home;
+  const { logos, name } = activeBrokerage;
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 
   const scrollTo = (selector: string) => {
     const el = document.querySelector(selector);
@@ -121,246 +115,291 @@ function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="sticky top-0 z-0 flex h-[100dvh] flex-col overflow-hidden"
+      className="relative flex min-h-[96dvh] flex-col justify-between overflow-hidden"
       style={{ marginTop: -HEADER_H }}
     >
       <HeroBackground />
-      <motion.div
-        style={{ opacity: shadeOpacity }}
-        className="pointer-events-none absolute inset-0 z-[15] bg-ink"
-      />
-      <motion.div
-        className="pointer-events-none absolute inset-0 z-10 bg-ink"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 0 }}
-        transition={{ duration: 0.6, delay: wait * 0.5 }}
-      />
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-20 flex flex-1 flex-col items-center justify-center px-6 pb-24 pt-[140px] text-center"
+        className="container-kw relative z-20 my-auto pb-20 pt-[160px]"
       >
-        <motion.img
-          src={brokerage.brand.logos.reversed}
-          alt={brokerage.brand.name}
-          className="mt-6 h-[110px] w-auto max-w-full object-contain md:h-[135px]"
-          initial={{ opacity: 0, scale: 0.96, filter: "blur(6px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          transition={{ delay: 0.3 + wait, duration: 1.4, ease: EASE }}
-        />
-
-        <p className="type-serif-accent mt-6 max-w-3xl text-ivory text-balance">
-          <SplitChars
-            text={brokerage.hero.headline}
-            delay={0.8 + wait}
-          />
-        </p>
-
-        <motion.span
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 1.0 + wait, duration: 1.2, ease: EASE }}
-          className="mt-8 h-px w-20 origin-left bg-copper"
-        />
-
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.05 + wait, duration: 0.9, ease: EASE }}
-          className="type-lead mt-8 max-w-2xl text-white/85 text-balance"
-        >
-          {brokerage.hero.subheadline}
-        </motion.p>
-
-        <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+        <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+          {/* Location Pill */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 + wait, duration: 0.7, ease: EASE }}
+            transition={{ duration: 0.6, ease: EASE }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-ink-deep/65 px-4 py-1.5 backdrop-blur-md"
           >
-            <Magnetic>
-              <Link
-                to={brokerage.hero.primaryCta.to}
-                className="inline-block rounded-full bg-copper px-8 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright"
-              >
-                {brokerage.hero.primaryCta.label}
-              </Link>
-            </Magnetic>
+            <MapPin className="h-3.5 w-3.5 text-kw-red-bright" />
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-snow">
+              {hero.cornerCaption}
+            </span>
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
+
+          {/* §5.1 KW Success Reversed Logo Centered */}
+          <motion.img
+            src={logos.reversed}
+            alt={name}
+            className="mt-7 h-16 w-auto max-w-[280px] object-contain drop-shadow-lg md:h-20 md:max-w-[340px]"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.15, duration: 0.9, ease: EASE }}
+          />
+
+          {/* §5.1 Headline: You define Success. The relationship is how we get there. */}
+          <h1 className="type-display-xl mt-7 max-w-4xl text-white drop-shadow-sm text-balance">
+            <SplitChars text={hero.headline} delay={0.25} stagger={0.018} />
+          </h1>
+
+          {/* §5.1 Subhead */}
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.3 + wait, duration: 0.7, ease: EASE }}
+            transition={{ delay: 0.55, duration: 0.8, ease: EASE }}
+            className="type-lead mt-6 max-w-2xl text-snow/90 text-balance"
           >
-            <Magnetic>
-              <Link
-                to={brokerage.hero.secondaryCta.to}
-                className="inline-block rounded-full border border-white/50 px-8 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-white transition-colors duration-300 hover:border-white hover:bg-white hover:text-ink"
-              >
-                {brokerage.hero.secondaryCta.label}
-              </Link>
-            </Magnetic>
+            {hero.subhead}
+          </motion.p>
+
+          {/* §5.1 Two Doors: I'm an Agent | I'm Buying or Selling */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.75, duration: 0.7, ease: EASE }}
+            className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+          >
+            <Link
+              to={hero.primaryCta.to}
+              className="group inline-flex items-center gap-3.5 rounded-full bg-kw-red py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-lift-dark transition-all duration-300 hover:bg-kw-red-bright"
+            >
+              <span>{hero.primaryCta.label}</span>
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
+                <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+              </span>
+            </Link>
+
+            <Link
+              to={hero.secondaryCta.to}
+              className="group inline-flex items-center gap-3.5 rounded-full border border-white/30 bg-ink-deep/65 py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md transition-all duration-300 hover:border-white hover:bg-white hover:text-ink"
+            >
+              <span>{hero.secondaryCta.label}</span>
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white transition-transform duration-300 group-hover:rotate-45 group-hover:bg-ink group-hover:text-white">
+                <ArrowUpRight className="h-4 w-4" strokeWidth={2.25} />
+              </span>
+            </Link>
           </motion.div>
         </div>
       </motion.div>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6 + wait, duration: 0.8 }}
-        className="type-body-sm absolute bottom-8 left-6 z-20 text-stone-dark md:left-10"
-      >
-        {brokerage.hero.eyebrow}
-      </motion.p>
-
-      <motion.button
-        type="button"
-        aria-label="Scroll to Everyone at One Table"
-        onClick={() => scrollTo("#connected")}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6 + wait, duration: 0.8 }}
-        className="absolute bottom-8 right-6 z-20 flex h-14 w-8 flex-col items-center justify-start md:right-10"
-      >
-        <span className="relative h-12 w-px bg-white/25">
-          <span className="animate-scroll-dot absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-copper" />
-        </span>
-        <ChevronDown
-          className="mt-1 h-3.5 w-3.5 text-copper"
-          strokeWidth={1.5}
-        />
-      </motion.button>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Section 2 — Connected Homeownership ("Everyone at One Table")       */
-/* ------------------------------------------------------------------ */
-
-function Connected() {
-  return (
-    <section id="connected" className="bg-ivory py-24 md:py-32">
-      <div className="container-monogram">
-        <div className="text-center">
-          <Reveal>
-            <div className="flex items-center justify-center gap-4">
-              <span className="h-px w-10 bg-copper" />
-              <span className="type-label text-copper">
-                {brokerage.oneTable.eyebrow}
-              </span>
-              <span className="h-px w-10 bg-copper" />
-            </div>
-          </Reveal>
-          <h2 className="type-display-lg mx-auto mt-8 max-w-4xl text-ink text-balance">
-            <SplitWords text={brokerage.oneTable.headline} />
-          </h2>
-          <Reveal delay={0.25}>
-            <p className="type-lead mx-auto mt-10 max-w-3xl text-stone text-balance">
-              {brokerage.oneTable.subheadline}
-            </p>
-          </Reveal>
+      {/* Bottom Hero Bar */}
+      <div className="container-kw relative z-20 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 py-5">
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="h-2 w-2 rounded-full bg-kw-red-bright" />
+          <span className="text-xs font-medium tracking-wider text-snow/80">
+            Layton Market Center · Est. 1997
+          </span>
+          {hero.isPlaceholderImage && (
+            <SampleChip label="PLACEHOLDER: Wasatch / Ogden Valley Stock Photo" />
+          )}
         </div>
 
-        <div className="mt-20">
-          <Reveal>
-            <p className="type-serif-accent text-center text-ink/80">
-              {brokerage.oneTable.centerLabel}
-            </p>
-          </Reveal>
-
-          <Parallax distance={-28} className="mt-12">
-            <FourSeats tone="light" />
-          </Parallax>
-        </div>
+        <button
+          type="button"
+          onClick={() => scrollTo("#connected")}
+          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-snow/80 transition-colors hover:text-white"
+        >
+          <span>Explore KW Success</span>
+          <ChevronDown className="h-4 w-4 text-kw-red-bright" />
+        </button>
       </div>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Section 3 — The Thesis (ScrollWords + FourPartInfinity)             */
+/* §5.2 "Everyone at One Table" (Dark Architectural Slate Section)     */
 /* ------------------------------------------------------------------ */
 
-function Thesis() {
+function EveryoneAtOneTable() {
+  const { oneTable } = activeBrokerage.home;
+
   return (
-    <section id="thesis" className="border-t hairline-light bg-ivory py-28 md:py-40">
-      <div className="container-monogram text-center">
-        <Reveal>
-          <div className="flex items-center justify-center gap-4">
-            <span className="h-px w-10 bg-copper" />
-            <span className="type-label text-copper">The KW Success Standard</span>
-            <span className="h-px w-10 bg-copper" />
-          </div>
-        </Reveal>
-        <h2 className="type-display-lg mx-auto mt-8 max-w-4xl text-ink text-balance">
-          <SplitWords text="A Home Is More Than a Transaction." />
-        </h2>
-        <ScrollWords
-          className="type-lead mx-auto mt-10 max-w-3xl text-stone"
-          text="It is a lifelong journey shaped by *trust,* *guidance,* and *relationship.* Since 1997, KW Success has united *real estate,* *mortgage,* and *title* under one roof so Northern Utah families and agents thrive for *the life of the home.*"
-        />
-        <Reveal delay={0.35}>
-          <FourPartInfinity className="mx-auto mt-16" />
-        </Reveal>
-        <motion.span
-          initial={{ scaleX: 0, opacity: 0 }}
-          whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.4, delay: 0.3, ease: EASE }}
-          className="mx-auto mt-12 block h-px w-32 origin-center bg-copper"
-        />
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Section 5 — Our Promise (1997 → ∞ timeline)                        */
-/* ------------------------------------------------------------------ */
-
-function PromiseSection() {
-  return (
-    <section className="sticky top-0 z-0 bg-ink py-28 md:py-40">
-      <div className="container-monogram text-center">
-        <Reveal>
-          <div className="flex items-center justify-center gap-4">
-            <span className="h-px w-10 bg-copper" />
-            <span className="type-label text-copper">Our Promise</span>
-            <span className="h-px w-10 bg-copper" />
-          </div>
-        </Reveal>
-        <h2 className="type-display-lg mx-auto mt-8 max-w-4xl text-ivory text-balance">
-          <SplitWords text="The Relationship Is the Product." />
-        </h2>
-        <Reveal delay={0.25}>
-          <p className="type-lead mx-auto mt-10 max-w-3xl text-ivory/70 text-balance">
-            Homeownership and career growth should feel personal, trusted, and
-            intentionally supported across every market cycle. We don&apos;t
-            disappear at the closing table — we stay, one relationship at a
-            time.
-          </p>
-        </Reveal>
-
-        <Reveal delay={0.3} y={24}>
-          <div className="mx-auto mt-20 max-w-3xl">
-            <div className="flex items-center gap-5">
-              <span className="type-label text-copper">1997</span>
-              <div className="relative h-px flex-1 bg-line-dark">
-                <motion.span
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true, amount: 0.9 }}
-                  transition={{ duration: 1.8, ease: EASE }}
-                  className="absolute inset-0 origin-left bg-copper"
-                />
-                <span className="absolute -top-[3px] right-0 h-[7px] w-[7px] rotate-45 bg-copper" />
+    <section
+      id="connected"
+      className="relative overflow-hidden bg-ink py-24 text-snow md:py-32"
+    >
+      <div className="container-kw">
+        {/* Asymmetric Modern Editorial Header */}
+        <div className="grid items-end gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <Reveal>
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                  01
+                </span>
+                <span className="type-label text-kw-red-bright">
+                  {oneTable.eyebrow}
+                </span>
               </div>
-              <InfinityMark className="h-7 text-copper" />
+            </Reveal>
+
+            <h2 className="type-display-lg mt-5 text-white text-balance">
+              <SplitWords text={oneTable.headline} />
+            </h2>
+          </div>
+
+          <div className="lg:col-span-5">
+            <Reveal delay={0.15}>
+              <p className="type-body text-stone-dark leading-relaxed">
+                {oneTable.body}
+              </p>
+            </Reveal>
+          </div>
+        </div>
+
+        <Parallax distance={-16} className="mt-16">
+          <FourSeats tone="dark" showJourney />
+        </Parallax>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* §5.3 The Success Idea (Cool Wasatch Sky Mist Section)               */
+/* ------------------------------------------------------------------ */
+
+function TheSuccessIdea() {
+  const { successIdea } = activeBrokerage.home;
+
+  return (
+    <section
+      id="thesis"
+      className="relative overflow-hidden bg-mist py-24 text-ink md:py-32"
+    >
+      <div className="container-kw">
+        <div className="grid items-end gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <Reveal>
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                  02
+                </span>
+                <span className="type-label text-kw-red">
+                  {successIdea.eyebrow}
+                </span>
+              </div>
+            </Reveal>
+
+            <h2 className="type-display-lg mt-5 text-ink text-balance">
+              <SplitWords text={successIdea.headline} />
+            </h2>
+          </div>
+
+          <div className="lg:col-span-5">
+            <Reveal delay={0.15}>
+              <p className="type-lead text-charcoal">{successIdea.body}</p>
+            </Reveal>
+          </div>
+        </div>
+
+        {/* §5.3 Two-column split (High-Contrast Dark Slate + Crisp Light Bento Cards) */}
+        <div className="mt-14 grid gap-6 lg:grid-cols-2">
+          {/* Card 1: For Our Agents (Dark Slate Card) */}
+          <Reveal delay={0.1} y={24}>
+            <div className="group flex h-full flex-col justify-between rounded-3xl border border-ink/10 bg-ink p-8 text-snow shadow-lift md:p-12">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-kw-red px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    {successIdea.forAgentsTitle}
+                  </span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-stone-dark">
+                    01 / Agents
+                  </span>
+                </div>
+
+                <h3 className="mt-7 text-2xl font-bold leading-snug text-white md:text-3xl">
+                  Build the business that funds your version of success.
+                </h3>
+
+                <p className="type-body mt-4 leading-relaxed text-stone-dark">
+                  {successIdea.forAgentsBody}
+                </p>
+              </div>
+
+              <div className="mt-10 border-t border-white/10 pt-6">
+                <Link
+                  to="/agents"
+                  className="group/btn inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-colors hover:text-kw-red-bright"
+                >
+                  <span>Explore For Agents</span>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-kw-red text-white transition-transform duration-300 group-hover/btn:rotate-45">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              </div>
             </div>
-            <p className="type-serif-accent mt-10 text-ivory/80">
-              Built one relationship at a time across the Wasatch Front.
-            </p>
+          </Reveal>
+
+          {/* Card 2: For Our Clients (Crisp Elevated Card) */}
+          <Reveal delay={0.2} y={24}>
+            <div className="group flex h-full flex-col justify-between rounded-3xl border border-ink/10 bg-white p-8 text-ink shadow-lift md:p-12">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-kw-red">
+                    <HomeIcon className="h-3.5 w-3.5" />
+                    {successIdea.forClientsTitle}
+                  </span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-kw-gray">
+                    02 / Clients
+                  </span>
+                </div>
+
+                <h3 className="mt-7 text-2xl font-bold leading-snug text-ink md:text-3xl">
+                  Home base for living out your dreams in Northern Utah.
+                </h3>
+
+                <p className="type-body mt-4 leading-relaxed text-charcoal">
+                  {successIdea.forClientsBody}
+                </p>
+              </div>
+
+              <div className="mt-10 border-t border-ink/10 pt-6">
+                <Link
+                  to="/clients"
+                  className="group/btn inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-kw-red"
+                >
+                  <span>Explore Buy &amp; Sell</span>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ink text-white transition-transform duration-300 group-hover/btn:rotate-45 group-hover/btn:bg-kw-red">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* §5.3 Visual Chain: KW Success invests in agents → Agents invest in clients → Everyone builds success by design */}
+        <Reveal delay={0.25}>
+          <div className="mt-8 rounded-3xl border border-ink/10 bg-ink-deep p-6 text-snow shadow-lift md:p-9">
+            <div className="grid items-center gap-6 md:grid-cols-3">
+              {successIdea.chainSteps.map((step, i) => (
+                <div
+                  key={step}
+                  className="relative flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-kw-red text-sm font-extrabold text-white">
+                    0{i + 1}
+                  </span>
+                  <p className="text-sm font-semibold leading-snug text-white">
+                    {step}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </Reveal>
       </div>
@@ -369,13 +408,86 @@ function PromiseSection() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Section 7 — Dual Audience Paths + Home Search Strip                 */
+/* §5.5 Our Promise (Cool Mist Section + Dark Architectural Timeline)  */
 /* ------------------------------------------------------------------ */
 
-const SEARCH_TABS = ["Buy", "Sell", "Rent"] as const;
+function OurPromise() {
+  const { promise } = activeBrokerage.home;
 
-function SearchStrip() {
-  const [tab, setTab] = useState<(typeof SEARCH_TABS)[number]>("Buy");
+  return (
+    <section className="relative overflow-hidden bg-mist-deep py-24 text-ink md:py-32">
+      <div className="container-kw">
+        <div className="rounded-3xl border border-ink/10 bg-white p-8 shadow-lift md:p-14 lg:p-16">
+          <div className="grid items-center gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <Reveal>
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                    04
+                  </span>
+                  <span className="type-label text-kw-red">
+                    {promise.eyebrow}
+                  </span>
+                </div>
+              </Reveal>
+
+              <h2 className="type-display-lg mt-5 text-ink text-balance">
+                <SplitWords text={promise.headline} />
+              </h2>
+
+              <Reveal delay={0.15}>
+                <p className="type-lead mt-6 max-w-2xl text-charcoal">
+                  {promise.body}
+                </p>
+              </Reveal>
+            </div>
+
+            {/* §5.5 Timeline Card: 1997 ———— today */}
+            <div className="lg:col-span-5">
+              <Reveal delay={0.2}>
+                <div className="rounded-2xl bg-ink p-8 text-snow shadow-lift">
+                  <span className="type-label text-kw-red-bright">
+                    Wasatch Front Continuity
+                  </span>
+                  <div className="mt-6 flex items-center gap-4">
+                    <span className="text-2xl font-extrabold tracking-tight text-white">
+                      {promise.timelineStart}
+                    </span>
+                    <div className="relative h-1 flex-1 overflow-hidden rounded-full bg-white/15">
+                      <motion.span
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.5, ease: EASE }}
+                        className="absolute inset-0 origin-left bg-kw-red"
+                      />
+                    </div>
+                    <span className="rounded-full bg-kw-red px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
+                      {promise.timelineEnd}
+                    </span>
+                  </div>
+                  <p className="mt-6 text-base font-medium text-stone-dark">
+                    {promise.timelineCaption}
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* §5.7 Home Search ("When You're Ready")                              */
+/* ------------------------------------------------------------------ */
+
+const TABS = ["Buy", "Sell", "Rent"] as const;
+
+function HomeSearchSection() {
+  const { search } = activeBrokerage.home;
+  const [tab, setTab] = useState<(typeof TABS)[number]>("Buy");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
   const [beds, setBeds] = useState("");
@@ -384,299 +496,160 @@ function SearchStrip() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (tab === "Sell") {
-      navigate("/contact?intent=Selling");
+      navigate("/contact?topic=selling");
       return;
     }
-    const base =
-      tab === "Rent" ? brokerage.search.rentUrl : brokerage.search.buyUrl;
-    const params = new URLSearchParams();
-    if (location.trim()) params.set("q", location.trim());
-    if (price) params.set("max", price);
-    if (beds) params.set("beds", beds);
-    const url = params.toString() ? `${base}?${params.toString()}` : base;
-    window.open(url, "_blank", "noopener,noreferrer");
+    const url = new URL(activeBrokerage.externalLinks.searchHomesUrl);
+    if (location.trim()) url.searchParams.set("q", location.trim());
+    if (price) url.searchParams.set("maxPrice", price);
+    if (beds) url.searchParams.set("beds", beds);
+    window.open(url.toString(), "_blank", "noopener,noreferrer");
   };
 
   const fieldCls =
-    "w-full border hairline-light bg-white/60 px-4 py-3 text-[0.9rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper";
+    "w-full rounded-xl border border-white/15 bg-ink-deep px-4 py-3.5 text-sm text-white outline-none transition-colors placeholder:text-stone-dark focus:border-kw-red";
 
   return (
-    <div className="relative">
-      <motion.div
-        initial={{ opacity: 0, y: 60 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.9, ease: EASE }}
-      >
-        <div className="border hairline-light bg-ivory shadow-lift">
-          <div className="flex border-b hairline-light">
-            {SEARCH_TABS.map((t) => (
+    <section id="home-search" className="bg-mist py-24 text-ink md:py-32">
+      <div className="container-kw">
+        <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
+          <div>
+            <Reveal>
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                  05
+                </span>
+                <span className="type-label text-kw-red">{search.eyebrow}</span>
+              </div>
+            </Reveal>
+            <h2 className="type-display-lg mt-5 max-w-3xl text-ink text-balance">
+              <SplitWords text={search.headline} />
+            </h2>
+          </div>
+
+          <Reveal delay={0.15}>
+            <Link
+              to="/areas-served"
+              className="group inline-flex items-center gap-2.5 rounded-full border border-ink/20 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-ink transition-all hover:border-kw-red hover:text-kw-red"
+            >
+              <Compass className="h-4 w-4 text-kw-red" />
+              <span>Interactive Areas Served Map</span>
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+          </Reveal>
+        </div>
+
+        {/* High-Contrast Dark Slate Search Console */}
+        <div className="mt-12 overflow-hidden rounded-3xl border border-ink/10 bg-ink text-snow shadow-lift">
+          {/* Buy / Sell / Rent Tabs */}
+          <div className="flex border-b border-white/10 bg-ink-deep/60 px-6 pt-4">
+            {TABS.map((t) => (
               <button
                 key={t}
                 type="button"
                 onClick={() => setTab(t)}
                 className={cn(
-                  "relative flex-1 px-6 py-4 text-[0.78rem] font-medium uppercase tracking-[0.3em] transition-colors sm:flex-none sm:px-10",
-                  tab === t ? "text-ink" : "text-stone hover:text-copper"
+                  "relative px-7 py-3.5 text-xs font-bold uppercase tracking-[0.22em] transition-colors",
+                  tab === t
+                    ? "text-white"
+                    : "text-stone-dark hover:text-white"
                 )}
               >
                 {t}
                 {tab === t && (
                   <motion.span
                     layoutId="search-tab-underline"
-                    className="absolute inset-x-0 bottom-0 h-[2px] bg-copper"
-                    transition={{
-                      type: "spring",
-                      stiffness: 500,
-                      damping: 40,
-                    }}
+                    className="absolute inset-x-0 bottom-0 h-0.5 bg-kw-red"
+                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
                   />
                 )}
               </button>
             ))}
           </div>
 
-          <form
-            onSubmit={submit}
-            className="grid gap-4 p-6 md:grid-cols-[1.4fr_1fr_0.8fr_1.1fr] md:items-end md:p-8"
-          >
-            <div>
-              <label className="type-label mb-2 block text-stone">
-                Utah Location
-              </label>
-              <input
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="Layton, Kaysville, Ogden, Bountiful, or ZIP"
-                className={fieldCls}
-              />
-            </div>
-            <div>
-              <label className="type-label mb-2 block text-stone">
-                Price Range
-              </label>
-              <select
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className={fieldCls}
-              >
-                <option value="">Any price</option>
-                <option value="450000">Up to $450K</option>
-                <option value="650000">Up to $650K</option>
-                <option value="850000">Up to $850K</option>
-                <option value="1200000">Up to $1.2M</option>
-                <option value="2000000">Up to $2M+</option>
-              </select>
-            </div>
-            <div>
-              <label className="type-label mb-2 block text-stone">Beds</label>
-              <select
-                value={beds}
-                onChange={(e) => setBeds(e.target.value)}
-                className={fieldCls}
-              >
-                <option value="">Any</option>
-                <option value="2">2+</option>
-                <option value="3">3+</option>
-                <option value="4">4+</option>
-                <option value="5">5+</option>
-              </select>
-            </div>
-            <button
-              type="submit"
-              className="flex items-center justify-center gap-2 bg-copper px-8 py-3.5 text-[0.8rem] font-medium uppercase tracking-[0.24em] text-ink transition-colors duration-300 hover:bg-copper-bright"
-            >
-              {tab === "Sell" ? (
-                <>
-                  Request Valuation{" "}
-                  <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
-                </>
-              ) : (
-                <>
-                  Begin Your Search{" "}
-                  <ExternalLink className="h-4 w-4" strokeWidth={1.5} />
-                </>
-              )}
-            </button>
-          </form>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
-function DualAudienceAndSearch() {
-  return (
-    <section
-      id="home-search"
-      className="relative z-10 bg-ivory py-24 shadow-[0_-30px_60px_-30px_rgba(0,0,0,.6)] md:py-32"
-    >
-      <div className="container-monogram">
-        {/* Dual Audience Cards: Agents & Clients */}
-        <div className="grid gap-8 lg:grid-cols-2">
-          <Reveal y={30}>
-            <div className="flex h-full flex-col justify-between border hairline-light bg-white p-10 md:p-14">
+          {tab === "Sell" ? (
+            <div className="flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center md:p-10">
               <div>
-                <div className="flex items-center gap-4">
-                  <span className="h-px w-10 bg-copper" />
-                  <span className="type-label text-copper">
-                    {brokerage.agentCta.eyebrow}
-                  </span>
-                </div>
-                <h3 className="type-display-md mt-6 text-ink">
-                  {brokerage.agentCta.headline}
-                </h3>
-                <p className="type-body mt-5 text-stone">
-                  {brokerage.agentCta.body}
+                <p className="text-xl font-bold text-white">
+                  Thinking about selling your home in Northern Utah?
+                </p>
+                <p className="mt-2 text-sm text-stone-dark">
+                  Connect with a KW Success Trusted Advisor for a personalized
+                  market valuation and selling strategy across Weber, Davis, or
+                  Morgan County.
                 </p>
               </div>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
-                <Link
-                  to={brokerage.agentCta.primaryCta.to}
-                  className="btn-sweep inline-block rounded-full border border-copper px-8 py-3.5 text-[0.75rem] font-medium uppercase tracking-[0.26em] text-copper transition-colors duration-300 hover:text-ink"
-                >
-                  {brokerage.agentCta.primaryCta.label}
-                </Link>
-                <Link
-                  to={brokerage.agentCta.secondaryCta.to}
-                  className="nav-link-line type-label text-ink transition-colors hover:text-copper"
-                >
-                  {brokerage.agentCta.secondaryCta.label} →
-                </Link>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.12} y={30}>
-            <div className="flex h-full flex-col justify-between border hairline-dark bg-ink p-10 md:p-14">
-              <div>
-                <div className="flex items-center gap-4">
-                  <span className="h-px w-10 bg-copper" />
-                  <span className="type-label text-copper">
-                    {brokerage.clientCta.eyebrow}
-                  </span>
-                </div>
-                <h3 className="type-display-md mt-6 text-ivory">
-                  {brokerage.clientCta.headline}
-                </h3>
-                <p className="type-body mt-5 text-stone-dark">
-                  {brokerage.clientCta.body}
-                </p>
-              </div>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
-                <a
-                  href={brokerage.clientCta.primaryCta.to}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-copper px-8 py-3.5 text-[0.75rem] font-medium uppercase tracking-[0.26em] text-ink transition-colors duration-300 hover:bg-copper-bright"
-                >
-                  {brokerage.clientCta.primaryCta.label}
-                  <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.5} />
-                </a>
-                <Link
-                  to={brokerage.clientCta.secondaryCta.to}
-                  className="nav-link-line type-label text-ivory transition-colors hover:text-copper"
-                >
-                  {brokerage.clientCta.secondaryCta.label} →
-                </Link>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Search Strip */}
-        <div className="mt-24 text-center">
-          <Reveal>
-            <div className="flex items-center justify-center gap-4">
-              <span className="h-px w-10 bg-copper" />
-              <span className="type-label text-copper">When You&apos;re Ready</span>
-              <span className="h-px w-10 bg-copper" />
-            </div>
-          </Reveal>
-          <h2 className="type-display-lg mx-auto mt-8 max-w-4xl text-ink text-balance">
-            <SplitWords text="Guidance for Wherever You Are in the Journey." />
-          </h2>
-          <Reveal delay={0.25}>
-            <p className="type-lead mx-auto mt-8 max-w-2xl text-stone text-balance">
-              Whether you&apos;re exploring Northern Utah neighborhoods, buying,
-              selling, or planning ahead, your advisor is ready when you are.
-            </p>
-          </Reveal>
-        </div>
-
-        <div className="mt-14">
-          <SearchStrip />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Section 9 — Leadership Preview (Editorial Portrait Grid)            */
-/* ------------------------------------------------------------------ */
-
-function LeadershipPreview() {
-  const featured = brokerage.leadership.slice(0, 4);
-
-  return (
-    <section className="bg-ink py-28 md:py-40">
-      <div className="container-monogram">
-        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <Reveal>
-              <div className="flex items-center gap-4">
-                <span className="h-px w-10 bg-copper" />
-                <span className="type-label text-copper">
-                  Leadership &amp; Stewardship
+              <Link
+                to="/contact?topic=selling"
+                className="group inline-flex shrink-0 items-center gap-3 rounded-full bg-kw-red py-2.5 pl-6 pr-2.5 text-xs font-bold uppercase tracking-wider text-white transition-all hover:bg-kw-red-bright"
+              >
+                <span>Talk to an Advisor</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
+                  <ArrowRight className="h-4 w-4" />
                 </span>
-              </div>
-            </Reveal>
-            <h2 className="type-display-lg mt-6 max-w-2xl text-ivory">
-              <SplitWords text="Meet the Leaders Behind the Table." />
-            </h2>
-          </div>
-          <Reveal delay={0.2}>
-            <Link
-              to="/about#leadership"
-              className="btn-sweep inline-flex items-center gap-2 rounded-full border border-copper px-8 py-3.5 text-[0.75rem] font-medium uppercase tracking-[0.26em] text-copper transition-colors duration-300 hover:text-ink"
-            >
-              Meet All {brokerage.leadership.length} Leaders →
-            </Link>
-          </Reveal>
-        </div>
-
-        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((leader, idx) => (
-            <Reveal key={leader.id} delay={0.08 * idx} y={32}>
-              <Link
-                to="/about#leadership"
-                data-cursor="Meet"
-                className="group block"
-              >
-                <div className="relative aspect-[4/5] overflow-hidden border hairline-dark bg-ink-deep">
-                  <img
-                    src={leader.headshot}
-                    alt={leader.name}
-                    className="h-full w-full object-cover object-top grayscale-[25%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                    loading="lazy"
-                  />
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-3 border border-copper opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                  />
-                </div>
-                <div className="mt-5">
-                  <h3 className="text-[1.15rem] font-medium text-ivory transition-colors group-hover:text-copper">
-                    {leader.name}
-                  </h3>
-                  <p className="type-label mt-1.5 text-copper">
-                    {leader.role}
-                  </p>
-                </div>
               </Link>
-            </Reveal>
-          ))}
+            </div>
+          ) : (
+            <form
+              onSubmit={submit}
+              className="grid gap-5 p-6 md:grid-cols-[1.5fr_1fr_0.8fr_auto] md:items-end md:p-10"
+            >
+              <div>
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                  Community / ZIP
+                </label>
+                <input
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="Layton, Ogden, Kaysville, Bountiful, Morgan…"
+                  className={fieldCls}
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                  Price Range
+                </label>
+                <select
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className={fieldCls}
+                >
+                  <option value="">Any price</option>
+                  <option value="400000">Up to $400K</option>
+                  <option value="600000">Up to $600K</option>
+                  <option value="800000">Up to $800K</option>
+                  <option value="1000000">Up to $1M</option>
+                  <option value="1500000">Up to $1.5M+</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                  Beds
+                </label>
+                <select
+                  value={beds}
+                  onChange={(e) => setBeds(e.target.value)}
+                  className={fieldCls}
+                >
+                  <option value="">Any</option>
+                  <option value="1">1+</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                  <option value="5">5+</option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                className="group inline-flex h-[50px] items-center justify-center gap-3 rounded-full bg-kw-red pl-7 pr-2.5 text-xs font-bold uppercase tracking-wider text-white transition-all hover:bg-kw-red-bright"
+              >
+                <span>{search.buttonLabel}</span>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+                </span>
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </section>
@@ -684,78 +657,95 @@ function LeadershipPreview() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Section 10 — Footer CTA (MouseTrail + Ticker)                       */
+/* §5.9 Closing CTA                                                    */
 /* ------------------------------------------------------------------ */
 
-function FooterCTA() {
+function ClosingCTA() {
+  const { closingCta } = activeBrokerage.home;
+
   return (
-    <MouseTrail
-      images={[
-        "/interior-a.jpg",
-        "/interior-b.jpg",
-        "/interior-c.jpg",
-        "/interior-d.jpg",
-        "/luxe-estate.jpg",
-        "/listing-03.jpg",
-        "/listing-06.jpg",
-        "/listing-09.jpg",
-      ]}
-      className="relative overflow-hidden bg-black py-28 md:py-36"
-    >
-      <Ticker word="KW SUCCESS" />
-      <div className="container-monogram relative z-10 text-center">
-        <Reveal>
-          <span className="mx-auto inline-block h-3.5 w-3.5 rotate-45 bg-copper" />
-        </Reveal>
-        <h2 className="type-display-lg mx-auto mt-10 max-w-4xl text-ivory text-balance">
-          <SplitWords text="One Conversation Opens Every Door." />
-        </h2>
-        <Reveal delay={0.25}>
-          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Magnetic radius={120}>
+    <section className="relative overflow-hidden bg-ink py-24 text-snow md:py-32">
+      {/* Subtle Wasatch radial glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-kw-red/20 blur-3xl"
+      />
+      <div className="container-kw relative z-10">
+        <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-card via-ink-deep to-ink-deep p-10 text-center shadow-lift-dark md:p-16">
+          <Reveal>
+            <span className="inline-flex items-center gap-2 rounded-full border border-kw-red/40 bg-kw-red/15 px-4 py-1 text-xs font-bold uppercase tracking-[0.2em] text-kw-red-bright">
+              <Users className="h-3.5 w-3.5" />
+              Layton Market Center · Northern Utah
+            </span>
+          </Reveal>
+
+          <h2 className="type-display-lg mx-auto mt-6 max-w-4xl text-white text-balance">
+            <SplitWords text={closingCta.headline} />
+          </h2>
+
+          <Reveal delay={0.2}>
+            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
-                to="/contact"
-                className="inline-block rounded-full bg-copper px-10 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright"
+                to={closingCta.primaryCta.to}
+                className="group inline-flex items-center gap-3.5 rounded-full bg-kw-red py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
               >
-                Start a Conversation
+                <span>{closingCta.primaryCta.label}</span>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+                </span>
               </Link>
-            </Magnetic>
-            <Magnetic radius={120}>
+
               <Link
-                to="/areas-served"
-                className="inline-block rounded-full border border-white/40 px-10 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ivory transition-colors duration-300 hover:border-copper hover:text-copper"
+                to={closingCta.secondaryCta.to}
+                className="group inline-flex items-center gap-3.5 rounded-full border border-white/25 bg-white/5 py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:border-white hover:bg-white hover:text-ink"
               >
-                Explore Network Map
+                <Building2 className="h-4 w-4 text-kw-red-bright group-hover:text-kw-red" />
+                <span>{closingCta.secondaryCta.label}</span>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-transform duration-300 group-hover:rotate-45 group-hover:bg-ink group-hover:text-white">
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={2.25} />
+                </span>
               </Link>
-            </Magnetic>
-          </div>
-        </Reveal>
+            </div>
+          </Reveal>
+        </div>
       </div>
-    </MouseTrail>
+    </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Page                                                                */
+/* Home Page (§5 section order)                                        */
 /* ------------------------------------------------------------------ */
 
 export default function Home() {
+  const { flags } = activeBrokerage;
+
   return (
     <>
+      {/* §5.1 Hero (Wasatch Mountain Panorama) */}
       <Hero />
-      <div className="relative z-10 shadow-[0_-40px_80px_-30px_rgba(0,0,0,.7)]">
-        <Connected />
-        <Thesis />
-        <ThreePillars defaultAudience="agents" allowToggle pinned />
-        <PromiseSection />
-        <div className="relative z-10">
-          <JourneyRail />
-          <DualAudienceAndSearch />
-          <StatsBand />
-          <LeadershipPreview />
-          <FooterCTA />
-        </div>
-      </div>
+      {/* §5.2 Everyone at One Table (Dark Slate) */}
+      <EveryoneAtOneTable />
+      {/* §5.3 The Success Idea (Cool Sky Mist) */}
+      <TheSuccessIdea />
+      {/* §5.4 The Three Pillars (Deep Slate) */}
+      <ThreePillars mode="toggle" tone="dark" />
+      {/* §5.5 Our Promise (Cool Mist + Dark Timeline Card) */}
+      <OurPromise />
+      {/* §5.6 Stats Band + Best of State Badge (Deep Slate Bento) */}
+      <StatsBand />
+      {/* §5.7 Home Search (Cool Sky Mist + Dark Search Console) */}
+      <HomeSearchSection />
+      {/* §5.8 Testimonials (hidden by flag showTestimonials=false until real) */}
+      {flags.showTestimonials && (
+        <section className="bg-ink py-28 text-white md:py-40">
+          <div className="container-kw">
+            <TestimonialCarousel />
+          </div>
+        </section>
+      )}
+      {/* §5.9 Closing CTA (Dark Slate Architectural Banner) */}
+      <ClosingCTA />
     </>
   );
 }

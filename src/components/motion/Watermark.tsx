@@ -50,9 +50,9 @@ export default function Watermark({
           y="160"
           textAnchor="middle"
           fontSize="200"
-          fontWeight="500"
-          letterSpacing="0.12em"
-          fill="rgba(184,115,51,0.07)"
+          fontWeight="700"
+          letterSpacing="0.08em"
+          fill="rgba(255,255,255,0.04)"
           style={{ fontFamily: "inherit" }}
         >
           {word}

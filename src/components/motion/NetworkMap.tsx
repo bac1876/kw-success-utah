@@ -35,13 +35,15 @@ export const UTAH_AREA_GROUPS: AreaGroup[] = [
   },
   {
     county: "Weber County",
-    note: "Ogden Metro & Ogden Valley Resort Corridor",
+    note: "Ogden Metro & Ogden Valley Communities",
     communities: [
       "Eden",
       "Farr West",
       "Harrisville",
       "Hooper",
       "Huntsville",
+      "Liberty",
+      "Marriott-Slaterville",
       "North Ogden",
       "Ogden",
       "Plain City",
@@ -49,26 +51,19 @@ export const UTAH_AREA_GROUPS: AreaGroup[] = [
       "Riverdale",
       "Roy",
       "South Ogden",
+      "Uintah",
       "Washington Terrace",
+      "West Haven",
     ],
   },
   {
     county: "Morgan County",
     note: "Wasatch Back & Weber Canyon Communities",
     communities: [
-      "Croydon",
-      "Enterprise",
-      "Milton",
       "Morgan",
       "Mountain Green",
-      "Peterson",
-      "Porterville",
+      "Croydon",
     ],
-  },
-  {
-    county: "Salt Lake & Wasatch Regional Gateway",
-    note: "Extended Advisor Coverage",
-    communities: ["Salt Lake City", "Park City"],
   },
 ];
 
@@ -109,6 +104,10 @@ const COORDS: Record<string, [number, number]> = {
   "Pleasant View": [41.3219, -111.9922],
   Eden: [41.3005, -111.8124],
   Huntsville: [41.2608, -111.7705],
+  Liberty: [41.3316, -111.8638],
+  "Marriott-Slaterville": [41.2533, -112.0169],
+  Uintah: [41.1444, -111.9249],
+  "West Haven": [41.2038, -112.053],
   // Morgan County
   Morgan: [41.0361, -111.6766],
   "Mountain Green": [41.1458, -111.7927],
@@ -135,7 +134,7 @@ const HUB_DEFS: HubDef[] = [
     slug: "kw-success-layton",
     name: "KW Success Market Center",
     homeCity: "Layton",
-    subtitle: "Layton HQ · Central & North Davis",
+    subtitle: "Layton HQ · Davis County",
     communities: [
       "Layton",
       "Kaysville",
@@ -156,7 +155,7 @@ const HUB_DEFS: HubDef[] = [
     slug: "weber-corridor",
     name: "Weber & Ogden Valley Hub",
     homeCity: "Ogden",
-    subtitle: "Ogden · Weber County & Resort Valleys",
+    subtitle: "Ogden · Weber County & Ogden Valley",
     communities: [
       "Ogden",
       "South Ogden",
@@ -171,30 +170,29 @@ const HUB_DEFS: HubDef[] = [
       "Pleasant View",
       "Eden",
       "Huntsville",
+      "Liberty",
+      "Marriott-Slaterville",
+      "Uintah",
+      "West Haven",
     ],
   },
   {
     slug: "morgan-wasatch-back",
     name: "Wasatch Back & Morgan Hub",
     homeCity: "Morgan",
-    subtitle: "Morgan · Mountain Green & Backcountry",
+    subtitle: "Morgan · Mountain Green & Croydon",
     communities: [
       "Morgan",
       "Mountain Green",
-      "Peterson",
-      "Milton",
-      "Enterprise",
-      "Porterville",
       "Croydon",
       "Huntsville",
-      "Park City",
     ],
   },
   {
     slug: "south-davis-slc",
-    name: "South Davis & Metro Gateway",
+    name: "South Davis Corridor",
     homeCity: "Bountiful",
-    subtitle: "Bountiful · Farmington to Salt Lake",
+    subtitle: "Bountiful · Farmington to North Salt Lake",
     communities: [
       "Bountiful",
       "Centerville",
@@ -202,8 +200,6 @@ const HUB_DEFS: HubDef[] = [
       "West Bountiful",
       "Woods Cross",
       "North Salt Lake",
-      "Salt Lake City",
-      "Park City",
     ],
   },
 ];
@@ -255,9 +251,9 @@ function project([lat, lng]: [number, number]): [number, number] {
   return [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
 }
 
-const COPPER = "#B87333";
-const COPPER_BRIGHT = "#D09454";
-const IVORY = "#F5F1EA";
+const COPPER = "#B40101";
+const COPPER_BRIGHT = "#D11919";
+const IVORY = "#F7F8FA";
 
 const HUB_LABEL_POS: Record<string, string> = {
   b: "-translate-x-1/2 mt-4 text-center",

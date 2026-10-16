@@ -2,8 +2,8 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { Award } from "lucide-react";
-import { brokerage } from "@/brokerages";
+import { Award, TrendingUp } from "lucide-react";
+import { activeBrokerage } from "@/brokerages";
 import SampleChip from "@/components/SampleChip";
 import { cn } from "@/lib/utils";
 
@@ -19,38 +19,34 @@ export interface StatItem {
   sample?: boolean;
 }
 
-const KW_STATS: StatItem[] = [
+const DEFAULT_KW_STATS: StatItem[] = [
   {
     display: "20,000+",
     countTo: 20000,
     format: "comma",
-    label: "Families & Individuals Served",
-    note: "Across Northern Utah since 1997",
+    label: "Homes closed since 1997",
+    note: "Trusted across Northern Utah",
+    sample: true,
   },
   {
-    display: "$6B+",
+    display: "$6 Billion+",
     countTo: 6,
     format: "money",
-    label: "Closed Real Estate Volume",
-    note: "Davis, Weber, Morgan & Salt Lake Metro",
+    label: "In real estate",
+    note: "Closed volume across Weber, Davis & Morgan",
+    sample: true,
   },
   {
-    display: "1997",
+    display: "Since 1997",
     countTo: 1997,
     format: "plain",
-    label: "Serving Utah Since",
-    note: "Founded by Marcus & Jenifer Arbuckle",
-  },
-  {
-    display: "8 of 9",
-    label: "Utah Best of State",
-    note: "Recognized inside the KW Utah Region",
-    review: true,
+    label: "Serving Weber, Davis & Morgan",
+    note: "Nearly three decades of local leadership",
   },
 ];
 
 export default function StatsBand({
-  stats = KW_STATS,
+  stats = DEFAULT_KW_STATS,
   className,
 }: {
   stats?: StatItem[];
@@ -63,27 +59,7 @@ export default function StatsBand({
       const reduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
-      const dividers = gsap.utils.toArray<HTMLElement>("[data-stat-divider]");
-      if (reduced) {
-        gsap.set(dividers, { scaleY: 1 });
-        return;
-      }
-
-      gsap.fromTo(
-        dividers,
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          transformOrigin: "top",
-          duration: 1.1,
-          ease: "power3.inOut",
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: rootRef.current,
-            start: "top 75%",
-          },
-        }
-      );
+      if (reduced) return;
 
       gsap.utils.toArray<HTMLElement>("[data-stat-numeral]").forEach((el) => {
         const raw = el.dataset.countTo;
@@ -93,30 +69,23 @@ export default function StatsBand({
         const fmt = el.dataset.format;
         const formatFn =
           fmt === "money"
-            ? (v: number) => `$${Math.round(v)}B+`
+            ? (v: number) => `$${Math.round(v)} Billion+`
             : fmt === "comma"
               ? (v: number) => `${Math.round(v).toLocaleString("en-US")}+`
-              : (v: number) => String(Math.round(v));
+              : (v: number) => `Since ${Math.round(v)}`;
 
         const state = { v: fmt === "plain" ? 1950 : 0 };
         gsap.to(state, {
           v: target,
-          duration: 2,
+          duration: 1.8,
           ease: "power2.out",
           scrollTrigger: {
             trigger: el,
-            start: "top 75%",
+            start: "top 80%",
             once: true,
           },
           onUpdate: () => {
             el.textContent = formatFn(state.v);
-          },
-          onComplete: () => {
-            gsap.fromTo(
-              el,
-              { color: "#D09454" },
-              { color: "#B87333", duration: 0.3 }
-            );
           },
         });
       });
@@ -125,59 +94,72 @@ export default function StatsBand({
   );
 
   return (
-    <div ref={rootRef} className={cn("bg-ink border-y hairline-dark", className)}>
-      <div className="container-monogram grid grid-cols-2 lg:grid-cols-4">
-        {stats.map((item, idx) => (
-          <div
-            key={item.label}
-            className="relative flex flex-col items-center gap-4 px-6 py-16 text-center md:py-24"
-          >
-            {idx > 0 && (
-              <span
-                data-stat-divider
-                className="absolute left-0 top-1/2 hidden h-24 w-px -translate-y-1/2 bg-line-dark lg:block"
-              />
-            )}
-            <span
-              data-stat-numeral
-              data-count-to={item.countTo ?? ""}
-              data-format={typeof item.format === "string" ? item.format : ""}
-              className="type-stat text-copper"
-            >
-              {item.display}
-            </span>
-            <span className="type-label flex flex-wrap items-center justify-center gap-2 text-ivory/85">
-              {item.label}
-              {(item.review || item.sample) && (
-                <SampleChip label="SHAWN REVIEW" variant="review" />
+    <section
+      ref={rootRef}
+      className={cn("bg-ink-deep py-20 text-snow md:py-28", className)}
+    >
+      <div className="container-kw">
+        {/* Bento Stats Grid */}
+        <div className="grid gap-6 md:grid-cols-3">
+          {stats.map((item, idx) => (
+            <div
+              key={item.label}
+              className={cn(
+                "group relative flex flex-col justify-between overflow-hidden rounded-3xl border p-8 transition-all duration-300 md:p-10",
+                idx === 0
+                  ? "border-kw-red/50 bg-gradient-to-br from-kw-red/20 via-ink to-ink"
+                  : "border-white/10 bg-ink hover:border-white/20"
               )}
-            </span>
-            {item.note && (
-              <span className="type-body-sm max-w-[240px] text-stone-dark">
-                {item.note}
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
+            >
+              <div className="flex items-center justify-between">
+                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-stone-dark">
+                  0{idx + 1} · Track Record
+                </span>
+                <TrendingUp className="h-4 w-4 text-kw-red-bright" />
+              </div>
 
-      {/* Best of State Attribution Bar */}
-      <div className="border-t hairline-dark bg-ink-deep py-4">
-        <div className="container-monogram flex flex-wrap items-center justify-center gap-3 text-center">
-          <Award className="h-4 w-4 text-copper" strokeWidth={1.5} />
-          <span className="type-body-sm text-ivory/80">
-            {brokerage.disclosures.bestOfStateBadge}
-          </span>
-          <a
-            href={brokerage.externalLinks.socials.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="type-label text-copper transition-colors hover:text-copper-bright"
-          >
-            View Feature →
-          </a>
+              <div className="my-8">
+                <span
+                  data-stat-numeral
+                  data-count-to={item.countTo ?? ""}
+                  data-format={typeof item.format === "string" ? item.format : ""}
+                  className="block font-display text-[clamp(2.4rem,4.5vw,3.8rem)] font-extrabold leading-none tracking-tight text-white"
+                >
+                  {item.display}
+                </span>
+                <span className="mt-3 block text-base font-semibold text-kw-red-bright">
+                  {item.label}
+                </span>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-4">
+                {item.note && (
+                  <span className="text-xs text-stone-dark">{item.note}</span>
+                )}
+                {(item.review || item.sample) && (
+                  <SampleChip
+                    label={item.review ? "SHAWN REVIEW" : "DRAFT STAT"}
+                    variant={item.review ? "review" : "placeholder"}
+                  />
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* §5.6 Best of State Badge under the stats */}
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/10 bg-ink px-6 py-5 sm:flex-row md:px-8">
+          <div className="flex flex-wrap items-center gap-3 text-center sm:text-left">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-kw-red/15 text-kw-red-bright">
+              <Award className="h-5 w-5" />
+            </span>
+            <p className="text-sm font-medium text-snow/90">
+              {activeBrokerage.disclosures.bestOfStateBadge}
+            </p>
+          </div>
+          <SampleChip label="SHAWN REVIEW" variant="review" />
         </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -12,10 +12,10 @@ export default function SampleChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center border px-1.5 py-0.5 align-middle text-[0.55rem] font-medium uppercase tracking-[0.22em]",
+        "inline-flex items-center rounded-full border px-2 py-0.5 align-middle text-[0.58rem] font-semibold uppercase tracking-[0.16em]",
         variant === "review" || variant === "shawn-review"
-          ? "border-copper/60 text-copper-bright"
-          : "border-copper/50 text-copper",
+          ? "border-kw-red/40 bg-kw-red/10 text-kw-red-bright"
+          : "border-stone-dark/40 bg-white/10 text-stone-dark",
         className
       )}
       title="Staging note — final confirmation pending"

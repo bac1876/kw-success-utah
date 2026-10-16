@@ -9,17 +9,17 @@ export default function AmbientGlow({
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
     >
       <span
-        className="animate-orb-a absolute -left-[10%] top-[10%] h-[55vmax] w-[55vmax] rounded-full opacity-40 blur-3xl"
+        className="animate-orb-a absolute -left-[10%] top-[10%] h-[55vmax] w-[55vmax] rounded-full opacity-35 blur-3xl"
         style={{
           background:
-            "radial-gradient(circle, rgba(184,115,51,.35), rgba(184,115,51,0) 62%)",
+            "radial-gradient(circle, rgba(180,1,1,.32), rgba(180,1,1,0) 62%)",
         }}
       />
       <span
-        className="animate-orb-b absolute -right-[15%] bottom-[-10%] h-[50vmax] w-[50vmax] rounded-full opacity-30 blur-3xl"
+        className="animate-orb-b absolute -right-[15%] bottom-[-10%] h-[50vmax] w-[50vmax] rounded-full opacity-25 blur-3xl"
         style={{
           background:
-            "radial-gradient(circle, rgba(208,148,84,.3), rgba(208,148,84,0) 62%)",
+            "radial-gradient(circle, rgba(209,25,25,.26), rgba(209,25,25,0) 62%)",
         }}
       />
     </div>

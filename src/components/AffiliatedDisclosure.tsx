@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { brokerage } from "@/brokerages";
 import SampleChip from "@/components/SampleChip";
 import { cn } from "@/lib/utils";
@@ -15,24 +16,48 @@ export default function AffiliatedDisclosure({
   return (
     <div
       className={cn(
-        "border p-5 text-left",
+        "rounded-xl border p-5 text-left",
         dark
-          ? "hairline-dark bg-ink-deep/80 text-stone-dark"
-          : "hairline-light bg-ivory-deep/50 text-stone",
+          ? "border-white/10 bg-white/[0.03] text-stone-dark"
+          : "border-ink/10 bg-mist/70 text-charcoal",
         className
       )}
     >
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="type-label text-copper">
+      <div className="flex flex-wrap items-center gap-2.5">
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-kw-red" />
+        <span
+          className={cn(
+            "type-label",
+            dark ? "text-snow" : "text-ink"
+          )}
+        >
           Affiliated Business Arrangement Disclosure
         </span>
         <SampleChip label="SHAWN REVIEW" variant="review" />
       </div>
-      <p className="type-body-sm mt-2 leading-relaxed">
-        {brokerage.disclosures.affiliatedBusinessDraft}
+      <p className="type-body-sm mt-2.5 leading-relaxed">
+        {brokerage.disclosures.affiliatedBusinessDraft}{" "}
+        <Link
+          to={brokerage.disclosures.affiliatedPdfUrl}
+          className={cn(
+            "font-medium underline underline-offset-4 transition-colors",
+            dark
+              ? "text-snow hover:text-kw-red-bright"
+              : "text-kw-red hover:text-ink"
+          )}
+        >
+          View our Affiliated Business Disclosure.
+        </Link>
       </p>
       {showFullLegal && (
-        <p className="mt-3 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-ink">
+        <p
+          className={cn(
+            "mt-3.5 rounded-lg border p-3.5 text-[0.74rem] font-semibold uppercase tracking-[0.04em]",
+            dark
+              ? "border-white/10 bg-ink-deep text-snow/90"
+              : "border-ink/10 bg-white text-ink"
+          )}
+        >
           {brokerage.disclosures.affiliatedBusinessFullCapitals}
         </p>
       )}

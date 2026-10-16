@@ -1,439 +1,663 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
 import {
-  ArrowRight,
-  Award,
-  BookOpen,
+  ArrowUpRight,
+  Bot,
+  Building2,
+  CheckCircle2,
   Compass,
-  Handshake,
+  GraduationCap,
+  HeartHandshake,
+  Laptop,
   Layers,
+  Mail,
+  Phone,
+  Rocket,
+  Sparkles,
   TrendingUp,
   Users,
 } from "lucide-react";
-import { brokerage } from "@/brokerages";
+import { activeBrokerage } from "@/brokerages";
 import ThreePillars from "@/components/ThreePillars";
-import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
-import { submitLead } from "@/lib/leads";
+import SplitChars from "@/components/motion/SplitChars";
+import { submitLeadForm } from "@/lib/leads";
 import { cn } from "@/lib/utils";
 
-const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
-
-const AGENT_PATHS = [
-  {
-    key: "Experienced Agent",
-    label: "Experienced Agent",
-    icon: TrendingUp,
-    line: "Keep more of what you earn, plug into in-house mortgage & title, and scale with proven systems.",
-    routesTo: "Russie Edwards · Team Leader (russie@unitedagentservices.biz)",
-  },
-  {
-    key: "Team / Group",
-    label: "Producing Team",
-    icon: Users,
-    line: "Leverage leadership coaching, recruiting support, and a full family of companies at one table.",
-    routesTo: "Russie Edwards & Marcus Green · Leadership Team",
-  },
-  {
-    key: "New / Newly Licensed",
-    label: "New or Aspiring Agent",
-    icon: Compass,
-    line: "Launch your business with structured mentorship, contract mastery, and daily accountability.",
-    routesTo: "Russie Edwards · Team Leader (russie@unitedagentservices.biz)",
-  },
-];
-
-const FIVE_ADVANTAGES = [
-  { icon: BookOpen, title: "Technology & KW Command" },
-  { icon: TrendingUp, title: "Wealth-Building & Profit Share" },
-  { icon: Users, title: "Masterminds & Collaboration" },
-  { icon: Award, title: "Daily Coaching & Accountability" },
-  { icon: Handshake, title: "In-House Mortgage & Title" },
+const PROMISE_ICONS = [HeartHandshake, TrendingUp, Bot, Users];
+const TILE_ICONS = [
+  Users,
+  Building2,
+  HeartHandshake,
+  GraduationCap,
+  Bot,
+  Sparkles,
+  Compass,
+  Laptop,
+  Layers,
 ];
 
 export default function Agents() {
-  const [selectedPath, setSelectedPath] = useState<string | null>(
-    "Experienced Agent"
-  );
+  const { agentsPage, flags } = activeBrokerage;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [licenseStatus, setLicenseStatus] = useState("Licensed in Utah");
+  const [currentBrokerage, setCurrentBrokerage] = useState("");
+  const [yearsLicensed, setYearsLicensed] = useState("");
   const [message, setMessage] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [submittedTo, setSubmittedTo] = useState<string | null>(null);
 
-  const activePath = AGENT_PATHS.find((p) => p.key === selectedPath);
-
-  const onSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || submitting) return;
+    if (!name.trim() || !email.trim()) return;
     setSubmitting(true);
-    await submitLead({
-      topic: "Joining KW Success (Agent)",
-      name: name.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-      licenseStatus: `${selectedPath ?? "Agent"} — ${licenseStatus}`,
-      message: message.trim(),
+    const res = await submitLeadForm({
+      topic: "I'm an agent",
+      name,
+      email,
+      phone,
+      currentBrokerage,
+      yearsLicensed,
+      message,
       sourcePage: "/agents",
+      honeypot,
     });
     setSubmitting(false);
-    setSubmitted(true);
+    if (res.ok) {
+      setSubmittedTo(`${res.routedToName} (${res.routedToEmail})`);
+    }
   };
+
+  const scrollToForm = () => {
+    const el = document.getElementById("talk-to-russie");
+    if (!el) return;
+    if (window.__lenis) {
+      window.__lenis.scrollTo(el, { offset: -HEADER_H });
+    } else {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const inputCls =
+    "w-full rounded-xl border border-white/15 bg-ink-deep px-4 py-3.5 text-sm text-white outline-none transition-colors placeholder:text-stone-dark focus:border-kw-red";
 
   return (
     <>
-      {/* Hero */}
+      {/* §6.1 Hero (Dark Architectural Slate + Wasatch Backdrop) */}
       <section
-        className="relative flex min-h-[58vh] flex-col items-center justify-center overflow-hidden bg-ink"
-        style={{ marginTop: -HEADER_H, paddingTop: HEADER_H }}
+        className="relative flex min-h-[78dvh] items-center overflow-hidden bg-ink-deep pb-20 pt-[160px] text-snow"
+        style={{ marginTop: -HEADER_H }}
       >
-        <div className="relative z-10 flex flex-col items-center px-6 py-24 text-center">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="flex items-center gap-4"
-          >
-            <span className="h-px w-10 bg-copper" />
-            <span className="type-label text-copper">
-              {brokerage.agentsPage.heroEyebrow}
-            </span>
-            <span className="h-px w-10 bg-copper" />
-          </motion.div>
+        <img
+          src={activeBrokerage.home.hero.image}
+          alt={activeBrokerage.home.hero.imageAlt}
+          className="absolute inset-0 h-full w-full object-cover opacity-25"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(20,23,26,0.96) 0%, rgba(31,35,38,0.82) 55%, rgba(180,1,1,0.22) 100%)",
+          }}
+        />
 
-          <h1 className="type-display-lg mt-8 max-w-4xl text-ivory text-balance">
-            <SplitWords
-              text={brokerage.agentsPage.heroHeadline}
-              stagger={0.05}
-              delay={0.4}
-            />
-          </h1>
-
-          <motion.p
-            initial={{ opacity: 0, filter: "blur(10px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
-            transition={{ delay: 1.0, duration: 0.8 }}
-            className="type-lead mt-8 max-w-2xl text-white/80 text-balance"
-          >
-            {brokerage.agentsPage.heroSubheadline}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.7, ease: EASE }}
-            className="mt-10"
-          >
-            <a
-              href="#join-form"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("join-form")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="inline-block rounded-full bg-copper px-9 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright"
-            >
-              Talk to Russie Edwards
-            </a>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Three Ways In (Career Paths) */}
-      <section className="bg-ivory py-24 md:py-32">
-        <div className="container-monogram">
-          <Reveal>
-            <div className="flex items-center gap-4">
-              <span className="h-px w-10 bg-copper" />
-              <span className="type-label text-copper">Your Path Here</span>
-            </div>
-          </Reveal>
-
-          <div className="mt-12 grid gap-8 lg:grid-cols-3">
-            {AGENT_PATHS.map((p, idx) => (
-              <Reveal key={p.key} delay={0.1 * idx} y={40}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedPath(p.key);
-                    document
-                      .getElementById("join-form")
-                      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }}
-                  className="group flex h-full w-full flex-col items-start border bg-white p-10 text-left transition-colors hairline-light hover:border-copper md:p-12"
-                >
-                  <p.icon className="h-8 w-8 text-copper" strokeWidth={1} />
-                  <h2 className="type-display-md !text-[1.6rem] mt-8 text-ink">
-                    {p.label}
-                  </h2>
-                  <p className="type-body mt-4 max-w-md text-stone">{p.line}</p>
-                  <span className="type-label mt-8 flex items-center gap-2 text-copper">
-                    Start here
-                    <ArrowRight
-                      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                      strokeWidth={1.5}
-                    />
-                  </span>
-                </button>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Agent Three Pillars (Pinned GSAP) */}
-      <ThreePillars defaultAudience="agents" allowToggle={false} pinned />
-
-      {/* Culture & Training Cards + 5-Column Strip */}
-      <section className="bg-ivory py-24 md:py-32">
-        <div className="container-monogram">
-          <Reveal>
-            <div className="flex items-center gap-4">
-              <span className="h-px w-10 bg-copper" />
-              <span className="type-label text-copper">
-                {brokerage.agentsPage.cultureHeadline}
+        <div className="container-kw relative z-10">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/40 bg-kw-red/15 px-4 py-1.5">
+              <span className="h-2 w-2 rounded-full bg-kw-red-bright" />
+              <span className="type-label text-kw-red-bright">
+                {agentsPage.hero.eyebrow}
               </span>
             </div>
-          </Reveal>
-          <h2 className="type-display-md mt-6 max-w-2xl text-ink">
-            <SplitWords text={brokerage.agentsPage.cultureSubheadline} />
-          </h2>
 
-          <div className="mt-14 grid gap-8 md:grid-cols-2">
-            {brokerage.agentsPage.cultureCards.map((card, idx) => (
-              <Reveal key={card.title} delay={0.08 * idx} y={28}>
-                <div className="flex h-full flex-col border hairline-light bg-white p-8 md:p-10">
-                  <Layers className="h-6 w-6 text-copper" strokeWidth={1.25} />
-                  <h3 className="type-label mt-6 text-ink">{card.title}</h3>
-                  <p className="type-body mt-4 text-stone">{card.body}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+            <h1 className="type-display-xl mt-6 text-white text-balance">
+              <SplitChars
+                text={agentsPage.hero.headline}
+                delay={0.15}
+                stagger={0.015}
+              />
+            </h1>
 
-          <div className="mt-16 grid gap-px border hairline-light bg-ivory-deep sm:grid-cols-2 lg:grid-cols-5">
-            {FIVE_ADVANTAGES.map((item, idx) => (
-              <Reveal key={item.title} delay={0.08 * idx} y={24}>
-                <div className="flex h-full flex-col gap-5 bg-ivory p-7">
-                  <item.icon className="h-6 w-6 text-copper" strokeWidth={1} />
-                  <p className="type-label text-ink">{item.title}</p>
-                </div>
-              </Reveal>
-            ))}
+            <p className="type-lead mt-6 max-w-2xl text-stone-dark">
+              {agentsPage.hero.subhead}
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <button
+                type="button"
+                onClick={scrollToForm}
+                className="group inline-flex items-center gap-3.5 rounded-full bg-kw-red py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-lift-dark transition-all hover:bg-kw-red-bright"
+              >
+                <span>Talk to Russie</span>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+                </span>
+              </button>
+
+              <Link
+                to="/about#leadership"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:border-white hover:bg-white hover:text-ink"
+              >
+                Meet Our Leadership
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Family of Companies Advantage */}
-      <section className="border-t hairline-dark bg-ink py-24 md:py-32">
-        <div className="container-monogram">
-          <div className="grid gap-14 lg:grid-cols-2 lg:items-center">
+      {/* §6.2 Why KW Success (Four Promises — Cool Sky Mist Bento Grid) */}
+      <section className="bg-mist py-24 text-ink md:py-32">
+        <div className="container-kw">
+          <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
             <div>
               <Reveal>
-                <div className="flex items-center gap-4">
-                  <span className="h-px w-10 bg-copper" />
-                  <span className="type-label text-copper">
-                    In-House Partner Advantage
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                    01
+                  </span>
+                  <span className="type-label text-kw-red">Why KW Success</span>
+                </div>
+              </Reveal>
+              <h2 className="type-display-lg mt-5 max-w-3xl text-ink">
+                <SplitWords text="FOUR PROMISES TO EVERY AGENT." />
+              </h2>
+            </div>
+            <Reveal delay={0.15}>
+              <p className="type-body max-w-md text-charcoal">
+                Real estate is how you fund the life you want. Here is the
+                standard we hold ourselves to for every agent in our Market
+                Center.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {agentsPage.whyPromises.map((card, idx) => {
+              const Icon = PROMISE_ICONS[idx % PROMISE_ICONS.length];
+              const isDark = idx === 0 || idx === 3;
+              return (
+                <Reveal key={card.title} delay={0.07 * idx} y={24}>
+                  <div
+                    className={cn(
+                      "flex h-full flex-col justify-between rounded-3xl border p-8 transition-all duration-300",
+                      isDark
+                        ? "border-ink/10 bg-ink text-snow shadow-lift"
+                        : "border-ink/10 bg-white text-ink shadow-card hover:border-kw-red/50"
+                    )}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span
+                          className={cn(
+                            "flex h-11 w-11 items-center justify-center rounded-2xl",
+                            isDark
+                              ? "bg-kw-red text-white"
+                              : "bg-kw-red/10 text-kw-red"
+                          )}
+                        >
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        <span
+                          className={cn(
+                            "text-xs font-bold uppercase tracking-widest",
+                            isDark ? "text-stone-dark" : "text-kw-gray"
+                          )}
+                        >
+                          0{idx + 1}
+                        </span>
+                      </div>
+                      <h3
+                        className={cn(
+                          "mt-7 text-xl font-bold leading-snug",
+                          isDark ? "text-white" : "text-ink"
+                        )}
+                      >
+                        {card.title}
+                      </h3>
+                      <p
+                        className={cn(
+                          "mt-3 text-sm leading-relaxed",
+                          isDark ? "text-stone-dark" : "text-charcoal"
+                        )}
+                      >
+                        {card.body}
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* §6.3 What Makes Us Different + §6.4 Become a Trusted Advisor (Dark Slate) */}
+      <section className="bg-ink py-24 text-snow md:py-32">
+        <div className="container-kw">
+          <div className="grid gap-12 lg:grid-cols-12">
+            {/* Left: §6.3 Four Comparison Lines */}
+            <div className="lg:col-span-7">
+              <Reveal>
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                    02
+                  </span>
+                  <span className="type-label text-kw-red-bright">
+                    What Makes Us Different
                   </span>
                 </div>
               </Reveal>
-              <h2 className="type-display-md mt-6 text-ivory">
-                {brokerage.agentsPage.familyHeadline}
+
+              <h2 className="type-display-lg mt-5 text-white">
+                <SplitWords text="BUILT FOR DEPTH, NOT VOLUME." />
               </h2>
-              <Reveal delay={0.15}>
-                <p className="type-body mt-6 max-w-xl text-stone-dark">
-                  {brokerage.agentsPage.familyBody}
-                </p>
+
+              <div className="mt-10 space-y-4">
+                {agentsPage.differences.map((diff, idx) => (
+                  <Reveal key={diff.bold} delay={0.06 * idx} y={16}>
+                    <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-slate-card/70 p-6 transition-colors hover:border-kw-red/60">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-kw-red text-xs font-extrabold text-white">
+                        0{idx + 1}
+                      </span>
+                      <p className="text-base leading-relaxed text-stone-dark">
+                        <strong className="font-bold text-white">
+                          {diff.bold}
+                        </strong>{" "}
+                        {diff.rest}
+                      </p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: §6.4 Become a Trusted Advisor Card */}
+            <div className="lg:col-span-5 lg:self-center">
+              <Reveal delay={0.2}>
+                <div className="relative overflow-hidden rounded-3xl border-2 border-kw-red bg-gradient-to-b from-slate-card to-ink-deep p-8 shadow-lift-dark md:p-10">
+                  <span className="type-label text-kw-red-bright">
+                    {agentsPage.trustedAdvisor.eyebrow}
+                  </span>
+                  <h3 className="type-display-md mt-4 text-white">
+                    {agentsPage.trustedAdvisor.headline}
+                  </h3>
+                  <p className="type-body mt-5 leading-relaxed text-stone-dark">
+                    {agentsPage.trustedAdvisor.body}
+                  </p>
+                  <div className="mt-8 border-t border-white/10 pt-6">
+                    <button
+                      type="button"
+                      onClick={scrollToForm}
+                      className="group inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-colors hover:text-kw-red-bright"
+                    >
+                      <span>Start the Conversation</span>
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-kw-red text-white transition-transform duration-300 group-hover:rotate-45">
+                        <ArrowUpRight className="h-4 w-4" />
+                      </span>
+                    </button>
+                  </div>
+                </div>
               </Reveal>
             </div>
-
-            <div className="grid gap-6 sm:grid-cols-2">
-              <Link
-                to="/services/mortgage"
-                data-cursor="Explore"
-                className="group border hairline-dark bg-ink-deep p-8 transition-colors hover:border-copper"
-              >
-                <span className="type-label text-copper">Lending Partner</span>
-                <h3 className="type-display-md !text-[1.4rem] mt-4 text-ivory group-hover:text-copper">
-                  Unity Home Loans
-                </h3>
-                <p className="type-body-sm mt-3 text-stone-dark">
-                  In-house loan officers who sit in your Market Center and help
-                  your buyers win offers.
-                </p>
-              </Link>
-
-              <Link
-                to="/services/title"
-                data-cursor="Explore"
-                className="group border hairline-dark bg-ink-deep p-8 transition-colors hover:border-copper"
-              >
-                <span className="type-label text-copper">Title &amp; Escrow</span>
-                <h3 className="type-display-md !text-[1.4rem] mt-4 text-ivory group-hover:text-copper">
-                  Amicus Title
-                </h3>
-                <p className="type-body-sm mt-3 text-stone-dark">
-                  Proactive title search, escrow, and smooth settlement
-                  coordinated directly with your team.
-                </p>
-              </Link>
-            </div>
-          </div>
-
-          <div className="mt-12">
-            <AffiliatedDisclosure tone="dark" />
           </div>
         </div>
       </section>
 
-      {/* Interactive Join / Talk to Russie Form */}
-      <section
-        id="join-form"
-        className="scroll-mt-28 bg-ivory py-24 md:py-32"
-      >
-        <div className="container-monogram grid gap-14 lg:grid-cols-2 lg:gap-20">
-          <div>
+      {/* §5.4 Agent Three Pillars (Cool Sky Mist Section — Agent Pillars Only) */}
+      <ThreePillars mode="agents" tone="light" />
+
+      {/* §6.5 What Every Agent Gets (Deep Slate 9-Tile Bento Grid + Launch Coaching) */}
+      <section className="bg-ink-deep py-24 text-snow md:py-32">
+        <div className="container-kw">
+          <div className="max-w-3xl">
             <Reveal>
-              <div className="flex items-center gap-4">
-                <span className="h-px w-10 bg-copper" />
-                <span className="type-label text-copper">
-                  Confidential Inquiry
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                  04
+                </span>
+                <span className="type-label text-kw-red-bright">
+                  Tools, Coaching &amp; Support
                 </span>
               </div>
             </Reveal>
-            <h2 className="type-display-md mt-6 text-ink">
-              <SplitWords text={brokerage.agentsPage.formHeadline} />
+
+            <h2 className="type-display-lg mt-5 text-white">
+              <SplitWords text="WHAT EVERY AGENT GETS." />
             </h2>
-            <Reveal delay={0.15}>
-              <p className="type-body mt-6 max-w-md text-stone">
-                {brokerage.agentsPage.formSubheadline}
-              </p>
-            </Reveal>
-
-            <div className="mt-10 flex flex-wrap gap-3">
-              {AGENT_PATHS.map((p) => (
-                <button
-                  key={p.key}
-                  type="button"
-                  onClick={() => setSelectedPath(p.key)}
-                  className={cn(
-                    "rounded-full border px-5 py-2.5 text-[0.72rem] font-medium uppercase tracking-[0.22em] transition-colors duration-300",
-                    selectedPath === p.key
-                      ? "border-copper bg-copper text-ink"
-                      : "border-ink/30 text-ink hover:border-copper hover:text-copper"
-                  )}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-
-            <AnimatePresence mode="wait">
-              {activePath && (
-                <motion.p
-                  key={activePath.key}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.3, ease: EASE }}
-                  className="type-body-sm mt-6 text-stone"
-                >
-                  {activePath.line}
-                </motion.p>
-              )}
-            </AnimatePresence>
+            <p className="type-lead mt-4 text-stone-dark">
+              {agentsPage.whatEveryAgentGetsIntro}
+            </p>
           </div>
 
-          <Reveal delay={0.2} y={30}>
-            {submitted ? (
-              <div className="flex h-full flex-col items-start justify-center border hairline-light bg-white p-10">
-                <span className="inline-block h-4 w-4 rotate-45 bg-copper" />
-                <p className="type-display-md mt-6 text-ink">
-                  Thank you
-                  {name.trim() ? `, ${name.trim().split(" ")[0]}` : ""}.
-                </p>
-                <p className="type-body mt-4 max-w-md text-stone">
-                  Your confidential note is on its way to Russie Edwards. We
-                  will reach out personally to schedule a conversation.
-                </p>
-              </div>
-            ) : (
-              <form
-                onSubmit={onSubmit}
-                className="flex flex-col gap-6 border hairline-light bg-white p-8 md:p-12"
-              >
-                <input
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Full name"
-                  aria-label="Full name"
-                  className="border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper"
-                />
-                <input
-                  required
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
-                  aria-label="Email"
-                  className="border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper"
-                />
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Phone (optional)"
-                  aria-label="Phone"
-                  className="border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper"
-                />
-                <select
-                  value={licenseStatus}
-                  onChange={(e) => setLicenseStatus(e.target.value)}
-                  aria-label="License status"
-                  className="appearance-none border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors focus:border-copper"
-                >
-                  <option value="Licensed in Utah">Licensed in Utah</option>
-                  <option value="In Real Estate School">
-                    Currently in Real Estate School
-                  </option>
-                  <option value="Licensed in Another State">
-                    Licensed in Another State
-                  </option>
-                  <option value="Exploring a Career in Real Estate">
-                    Exploring a Career in Real Estate
-                  </option>
-                </select>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Tell Russie a little about your business goals and what you're looking for"
-                  aria-label="Your note"
-                  rows={3}
-                  className="border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper"
-                />
-                <motion.button
-                  type="submit"
-                  disabled={submitting}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ duration: 0.2, ease: EASE }}
-                  className="mt-2 self-start rounded-full bg-copper px-10 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright disabled:opacity-40"
-                >
-                  {submitting ? "Sending…" : "Send Confidential Note"}
-                </motion.button>
-                {activePath && (
-                  <p className="type-body-sm text-stone/80">
-                    Routes to: {activePath.routesTo}
+          {/* 9 Tiles Grid */}
+          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {agentsPage.whatEveryAgentGets.map((tile, idx) => {
+              const Icon = TILE_ICONS[idx % TILE_ICONS.length];
+              return (
+                <Reveal key={tile.title} delay={0.04 * idx} y={20}>
+                  <div className="group flex h-full flex-col justify-between rounded-2xl border border-white/10 bg-ink p-7 transition-all duration-300 hover:border-kw-red/60 hover:bg-slate-card">
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-kw-red/15 text-kw-red-bright group-hover:bg-kw-red group-hover:text-white">
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        {tile.badge && (
+                          <span className="rounded-full border border-kw-red/40 bg-kw-red/15 px-3 py-0.5 text-[0.62rem] font-bold uppercase tracking-wider text-kw-red-bright">
+                            {tile.badge}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="mt-5 text-lg font-bold text-white">
+                        {tile.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-stone-dark">
+                        {tile.body}
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+
+          {/* §6.5 New Agents Callout: Launch Productivity Coaching */}
+          <Reveal delay={0.2}>
+            <div className="mt-8 flex flex-col items-start justify-between gap-6 rounded-3xl border border-kw-red/50 bg-gradient-to-r from-kw-red/20 via-ink to-ink p-8 sm:flex-row sm:items-center md:p-10">
+              <div className="flex items-start gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-kw-red text-white">
+                  <Rocket className="h-6 w-6" />
+                </span>
+                <div>
+                  <span className="type-label text-kw-red-bright">
+                    {agentsPage.newAgentsCallout.label}
+                  </span>
+                  <h3 className="mt-1 text-xl font-bold text-white">
+                    {agentsPage.newAgentsCallout.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-stone-dark">
+                    {agentsPage.newAgentsCallout.body}
                   </p>
-                )}
-              </form>
-            )}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={scrollToForm}
+                className="shrink-0 rounded-full bg-kw-red px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-kw-red-bright"
+              >
+                Ask About Launch Coaching
+              </button>
+            </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* §6.6 Find Your Path (Cool Sky Mist 3-Column Section) */}
+      <section className="bg-mist py-24 text-ink md:py-32">
+        <div className="container-kw">
+          <div className="text-center">
+            <Reveal>
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                  05
+                </span>
+                <span className="type-label text-kw-red">Find Your Path</span>
+              </div>
+            </Reveal>
+            <h2 className="type-display-lg mx-auto mt-5 max-w-3xl text-ink">
+              <SplitWords text="WHEREVER YOU ARE IN YOUR CAREER." />
+            </h2>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {agentsPage.findYourPath.map((stage, idx) => (
+              <Reveal key={stage.title} delay={0.08 * idx} y={24}>
+                <div className="flex h-full flex-col justify-between rounded-3xl border border-ink/10 bg-white p-8 shadow-card md:p-10">
+                  <div>
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-ink text-xs font-bold text-white">
+                      0{idx + 1}
+                    </span>
+                    <h3 className="mt-6 text-2xl font-bold text-ink">
+                      {stage.title}
+                    </h3>
+                    <p className="mt-3 text-base text-charcoal">{stage.body}</p>
+                  </div>
+                  <div className="mt-8 border-t border-ink/10 pt-5">
+                    <button
+                      type="button"
+                      onClick={scrollToForm}
+                      className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-kw-red transition-colors hover:text-ink"
+                    >
+                      <span>Talk to Russie About This Path</span>
+                      <ArrowUpRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* §6.7 Agent Stories (hidden by flag showAgentStories=false until real) */}
+      {flags.showAgentStories && (
+        <section className="bg-ink py-20 text-snow">
+          <div className="container-kw text-center">
+            <h2 className="type-display-md">Agent Stories</h2>
+          </div>
+        </section>
+      )}
+
+      {/* §6.8 CTA: Talk to Russie (Dark Slate Split Form) */}
+      <section
+        id="talk-to-russie"
+        className="bg-ink py-24 text-snow md:py-32"
+      >
+        <div className="container-kw">
+          <div className="grid items-start gap-12 lg:grid-cols-12">
+            {/* Left: Russie Edwards Card */}
+            <div className="lg:col-span-5">
+              <Reveal>
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                    06
+                  </span>
+                  <span className="type-label text-kw-red-bright">
+                    Confidential Conversation
+                  </span>
+                </div>
+              </Reveal>
+
+              <h2 className="type-display-md mt-5 text-white text-balance">
+                {agentsPage.cta.headline}
+              </h2>
+              <p className="type-body mt-4 text-stone-dark">
+                {agentsPage.cta.body}
+              </p>
+
+              {/* Russie Edwards Profile Card */}
+              <div className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-ink-deep p-6 shadow-lift-dark">
+                <div className="flex items-center gap-5">
+                  <img
+                    src={agentsPage.cta.leaderPhoto}
+                    alt={agentsPage.cta.leaderName}
+                    className="h-24 w-24 rounded-2xl object-cover object-top"
+                  />
+                  <div>
+                    <span className="type-label text-kw-red-bright">
+                      Your Point of Contact
+                    </span>
+                    <h3 className="mt-1 text-xl font-bold text-white">
+                      {agentsPage.cta.leaderName}
+                    </h3>
+                    <p className="text-sm text-stone-dark">
+                      {agentsPage.cta.leaderTitle}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-6 space-y-2.5 border-t border-white/10 pt-5 text-sm">
+                  <a
+                    href={`mailto:${agentsPage.cta.leaderEmail}`}
+                    className="flex items-center gap-2.5 text-snow transition-colors hover:text-kw-red-bright"
+                  >
+                    <Mail className="h-4 w-4 text-kw-red" />
+                    <span>{agentsPage.cta.leaderEmail}</span>
+                  </a>
+                  <a
+                    href={`tel:${agentsPage.cta.leaderPhone.replace(/[^0-9]/g, "")}`}
+                    className="flex items-center gap-2.5 text-snow transition-colors hover:text-kw-red-bright"
+                  >
+                    <Phone className="h-4 w-4 text-kw-red" />
+                    <span>{agentsPage.cta.leaderPhone}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: §6.8 Form (name, email, phone, current brokerage, years licensed, message) */}
+            <div className="lg:col-span-7">
+              <div className="rounded-3xl border border-white/10 bg-slate-card p-8 shadow-lift-dark md:p-10">
+                {submittedTo ? (
+                  <div className="py-12 text-center">
+                    <CheckCircle2 className="mx-auto h-12 w-12 text-kw-red-bright" />
+                    <h3 className="mt-5 text-2xl font-bold text-white">
+                      Thank You — Your Message Is on Its Way
+                    </h3>
+                    <p className="mt-3 text-sm text-stone-dark">
+                      Routed directly to{" "}
+                      <span className="font-semibold text-white">
+                        {submittedTo}
+                      </span>
+                      . Russie will reach out shortly for a confidential
+                      conversation.
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-5">
+                    {/* Honeypot */}
+                    <input
+                      type="text"
+                      name="company_website"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                      tabIndex={-1}
+                      autoComplete="off"
+                      className="hidden"
+                    />
+
+                    <div className="grid gap-5 sm:grid-cols-2">
+                      <div>
+                        <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                          Full Name *
+                        </label>
+                        <input
+                          required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="Your name"
+                          className={inputCls}
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                          Email Address *
+                        </label>
+                        <input
+                          required
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="you@example.com"
+                          className={inputCls}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-5 sm:grid-cols-3">
+                      <div>
+                        <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          placeholder="(801) 555-0199"
+                          className={inputCls}
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                          Current Brokerage (Optional)
+                        </label>
+                        <input
+                          value={currentBrokerage}
+                          onChange={(e) => setCurrentBrokerage(e.target.value)}
+                          placeholder="Optional"
+                          className={inputCls}
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                          Years Licensed
+                        </label>
+                        <select
+                          value={yearsLicensed}
+                          onChange={(e) => setYearsLicensed(e.target.value)}
+                          className={inputCls}
+                        >
+                          <option value="">Select stage</option>
+                          <option value="Pre-licensing / New">
+                            Pre-licensing / Brand New
+                          </option>
+                          <option value="1–2 years">1–2 years</option>
+                          <option value="3–5 years">3–5 years</option>
+                          <option value="5–10 years">5–10 years</option>
+                          <option value="10+ years">10+ years</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                        How Can We Help You Grow?
+                      </label>
+                      <textarea
+                        rows={4}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Tell Russie a bit about your goals…"
+                        className={inputCls}
+                      />
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
+                      <span className="text-xs text-stone-dark">
+                        100% confidential · Routed directly to Russie Edwards
+                      </span>
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="group inline-flex items-center gap-3.5 rounded-full bg-kw-red py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright disabled:opacity-50"
+                      >
+                        <span>
+                          {submitting
+                            ? "Sending…"
+                            : "Book Confidential Conversation"}
+                        </span>
+                        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
+                          <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+                        </span>
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </>
