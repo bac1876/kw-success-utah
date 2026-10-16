@@ -7,21 +7,20 @@ module.exports = {
       colors: {
         copper: "#B87333",
         "copper-bright": "#D09454",
-        ink: "#1F2326",
-        "ink-deep": "#16191C",
-        ivory: "#FAFAF8",
-        "ivory-deep": "#EEF2F5",
-        stone: "#828282",
+        ink: "#121413",
+        "ink-deep": "#0C0D0C",
+        ivory: "#F5F1EA",
+        "ivory-deep": "#EAE3D6",
+        stone: "#8A857C",
         "stone-dark": "#A9A49A",
         "luxe-gold": "#C9A24B",
         sage: "#7A8B6F",
         "kw-red": "#B40101",
-        "kw-red-bright": "#D11919",
+        "kw-red-deep": "#8F0000",
         charcoal: "#4D4D4D",
         "kw-gray": "#828282",
-        "kw-ink": "#1F2326",
-        snow: "#FAFAF8",
-        mist: "#EEF2F5",
+        snow: "#F5F1EA",
+        mist: "#EAE3D6",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -65,14 +64,15 @@ module.exports = {
       },
       fontFamily: {
         sans: ["Jost", "ui-sans-serif", "system-ui", "sans-serif"],
-        serif: ["Jost", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["Jost", "ui-sans-serif", "system-ui", "sans-serif"],
+        serif: ["'Cormorant Garamond'", "Georgia", "serif"],
       },
       maxWidth: {
         container: "1320px",
       },
       boxShadow: {
-        lift: "0 20px 50px rgba(31,35,38,.08)",
-        "lift-lg": "0 24px 60px rgba(31,35,38,.14)",
+        lift: "0 24px 60px rgba(0,0,0,.35)",
+        card: "0 12px 32px rgba(0,0,0,.18)",
       },
       keyframes: {
         "accordion-down": {
@@ -113,4 +113,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

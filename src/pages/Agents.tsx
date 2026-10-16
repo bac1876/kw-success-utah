@@ -1,178 +1,227 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
-  Bot,
-  Building2,
-  CheckCircle2,
+  Award,
+  BookOpen,
   Compass,
-  GraduationCap,
-  HeartHandshake,
-  Laptop,
-  LayoutGrid,
-  Mail,
-  Phone,
-  Sparkles,
+  Handshake,
+  Layers,
   TrendingUp,
   Users,
 } from "lucide-react";
-import { activeBrokerage } from "@/brokerages";
+import { brokerage } from "@/brokerages";
 import ThreePillars from "@/components/ThreePillars";
+import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
-import { submitLeadForm } from "@/lib/leads";
+import { submitLead } from "@/lib/leads";
+import { cn } from "@/lib/utils";
 
-/**
- * §6 For Agents (/agents) — Primary audience.
- * - §6.1 Hero: BUILD A BUSINESS THAT FUNDS YOUR LIFE BY DESIGN.
- * - §6.2 Why KW Success (four promises): four cards
- * - §6.3 What makes us different: four comparison lines
- * - §5.4 reuse: Three Pillars in Agent terms only (mode="agents")
- * - §6.4 Become a Trusted Advisor
- * - §6.5 What every agent gets: 9 tiles + Launch productivity coaching callout for new agents
- * - §6.6 Find your path: 3 columns
- * - §6.7 Agent stories: hidden by flag showAgentStories=false
- * - §6.8 CTA: Talk to Russie (confidential conversation form with name, email, phone, current brokerage (optional), years licensed, message)
- * - Rule: No economics anywhere on the public site: no splits, caps or fees.
- */
+const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
-const TILE_ICONS = [
-  Users,
-  Building2,
-  HeartHandshake,
-  GraduationCap,
-  Bot,
-  Compass,
-  Sparkles,
-  Laptop,
-  LayoutGrid,
+const AGENT_PATHS = [
+  {
+    key: "Experienced Agent",
+    label: "Experienced Agent",
+    icon: TrendingUp,
+    line: "Keep more of what you earn, plug into in-house mortgage & title, and scale with proven systems.",
+    routesTo: "Russie Edwards · Team Leader (russie@unitedagentservices.biz)",
+  },
+  {
+    key: "Team / Group",
+    label: "Producing Team",
+    icon: Users,
+    line: "Leverage leadership coaching, recruiting support, and a full family of companies at one table.",
+    routesTo: "Russie Edwards & Marcus Green · Leadership Team",
+  },
+  {
+    key: "New / Newly Licensed",
+    label: "New or Aspiring Agent",
+    icon: Compass,
+    line: "Launch your business with structured mentorship, contract mastery, and daily accountability.",
+    routesTo: "Russie Edwards · Team Leader (russie@unitedagentservices.biz)",
+  },
+];
+
+const FIVE_ADVANTAGES = [
+  { icon: BookOpen, title: "Technology & KW Command" },
+  { icon: TrendingUp, title: "Wealth-Building & Profit Share" },
+  { icon: Users, title: "Masterminds & Collaboration" },
+  { icon: Award, title: "Daily Coaching & Accountability" },
+  { icon: Handshake, title: "In-House Mortgage & Title" },
 ];
 
 export default function Agents() {
-  const { agentsPage, flags } = activeBrokerage;
-
+  const [selectedPath, setSelectedPath] = useState<string | null>(
+    "Experienced Agent"
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [currentBrokerage, setCurrentBrokerage] = useState("");
-  const [yearsLicensed, setYearsLicensed] = useState("");
+  const [licenseStatus, setLicenseStatus] = useState("Licensed in Utah");
   const [message, setMessage] = useState("");
-  const [honeypot, setHoneypot] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const activePath = AGENT_PATHS.find((p) => p.key === selectedPath);
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || submitting) return;
     setSubmitting(true);
-    await submitLeadForm({
-      topic: "I'm an agent",
-      name,
-      email,
-      phone,
-      currentBrokerage,
-      yearsLicensed,
-      message,
+    await submitLead({
+      topic: "Joining KW Success (Agent)",
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      licenseStatus: `${selectedPath ?? "Agent"} — ${licenseStatus}`,
+      message: message.trim(),
       sourcePage: "/agents",
-      honeypot,
     });
     setSubmitting(false);
-    setDone(true);
+    setSubmitted(true);
   };
-
-  const scrollToForm = () => {
-    document
-      .getElementById("talk-to-russie")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const inputCls =
-    "w-full border hairline-light bg-snow px-4 py-3.5 text-[0.95rem] text-kw-ink outline-none transition-colors placeholder:text-kw-gray focus:border-kw-red";
 
   return (
     <>
-      {/* §6.1 Hero */}
+      {/* Hero */}
       <section
-        className="relative flex min-h-[60vh] flex-col items-center justify-center overflow-hidden bg-kw-ink text-white"
+        className="relative flex min-h-[58vh] flex-col items-center justify-center overflow-hidden bg-ink"
         style={{ marginTop: -HEADER_H, paddingTop: HEADER_H }}
       >
         <div className="relative z-10 flex flex-col items-center px-6 py-24 text-center">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.7 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
             className="flex items-center gap-4"
           >
-            <span className="h-0.5 w-10 bg-kw-red" />
-            <span className="type-label text-kw-red-bright">
-              {agentsPage.hero.eyebrow}
+            <span className="h-px w-10 bg-copper" />
+            <span className="type-label text-copper">
+              {brokerage.agentsPage.heroEyebrow}
             </span>
-            <span className="h-0.5 w-10 bg-kw-red" />
+            <span className="h-px w-10 bg-copper" />
           </motion.div>
 
-          <h1 className="type-display-lg mt-7 max-w-4xl text-white text-balance">
+          <h1 className="type-display-lg mt-8 max-w-4xl text-ivory text-balance">
             <SplitWords
-              text={agentsPage.hero.headline}
-              stagger={0.04}
-              delay={0.3}
+              text={brokerage.agentsPage.heroHeadline}
+              stagger={0.05}
+              delay={0.4}
             />
           </h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85, duration: 0.75 }}
-            className="type-lead mt-7 max-w-2xl text-white/85 text-balance"
+            initial={{ opacity: 0, filter: "blur(10px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
+            transition={{ delay: 1.0, duration: 0.8 }}
+            className="type-lead mt-8 max-w-2xl text-white/80 text-balance"
           >
-            {agentsPage.hero.subhead}
+            {brokerage.agentsPage.heroSubheadline}
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.05, duration: 0.65 }}
+            transition={{ delay: 1.2, duration: 0.7, ease: EASE }}
             className="mt-10"
           >
-            <button
-              type="button"
-              onClick={scrollToForm}
-              className="inline-flex items-center gap-2.5 bg-kw-red px-8 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-white transition-colors hover:bg-kw-red-bright"
+            <a
+              href="#join-form"
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("join-form")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="inline-block rounded-full bg-copper px-9 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright"
             >
-              Talk to Russie <ArrowRight className="h-4 w-4" />
-            </button>
+              Talk to Russie Edwards
+            </a>
           </motion.div>
         </div>
       </section>
 
-      {/* §6.2 Why KW Success (four promises) */}
-      <section className="bg-snow py-24 md:py-32">
+      {/* Three Ways In (Career Paths) */}
+      <section className="bg-ivory py-24 md:py-32">
         <div className="container-monogram">
           <Reveal>
             <div className="flex items-center gap-4">
-              <span className="h-0.5 w-10 bg-kw-red" />
-              <span className="type-label text-kw-red">WHY KW SUCCESS</span>
+              <span className="h-px w-10 bg-copper" />
+              <span className="type-label text-copper">Your Path Here</span>
             </div>
           </Reveal>
-          <h2 className="type-display-md mt-5 text-kw-ink">
-            Four Promises to Every Agent.
+
+          <div className="mt-12 grid gap-8 lg:grid-cols-3">
+            {AGENT_PATHS.map((p, idx) => (
+              <Reveal key={p.key} delay={0.1 * idx} y={40}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedPath(p.key);
+                    document
+                      .getElementById("join-form")
+                      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
+                  className="group flex h-full w-full flex-col items-start border bg-white p-10 text-left transition-colors hairline-light hover:border-copper md:p-12"
+                >
+                  <p.icon className="h-8 w-8 text-copper" strokeWidth={1} />
+                  <h2 className="type-display-md !text-[1.6rem] mt-8 text-ink">
+                    {p.label}
+                  </h2>
+                  <p className="type-body mt-4 max-w-md text-stone">{p.line}</p>
+                  <span className="type-label mt-8 flex items-center gap-2 text-copper">
+                    Start here
+                    <ArrowRight
+                      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                      strokeWidth={1.5}
+                    />
+                  </span>
+                </button>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Agent Three Pillars (Pinned GSAP) */}
+      <ThreePillars defaultAudience="agents" allowToggle={false} pinned />
+
+      {/* Culture & Training Cards + 5-Column Strip */}
+      <section className="bg-ivory py-24 md:py-32">
+        <div className="container-monogram">
+          <Reveal>
+            <div className="flex items-center gap-4">
+              <span className="h-px w-10 bg-copper" />
+              <span className="type-label text-copper">
+                {brokerage.agentsPage.cultureHeadline}
+              </span>
+            </div>
+          </Reveal>
+          <h2 className="type-display-md mt-6 max-w-2xl text-ink">
+            <SplitWords text={brokerage.agentsPage.cultureSubheadline} />
           </h2>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {agentsPage.whyPromises.map((card, i) => (
-              <Reveal key={card.title} delay={0.08 * i} y={28}>
-                <div className="flex h-full flex-col justify-between border hairline-light bg-white p-8 shadow-sm transition-shadow hover:shadow-lift">
-                  <div>
-                    <span className="inline-flex h-8 w-8 items-center justify-center bg-kw-red text-[0.75rem] font-semibold text-white">
-                      0{i + 1}
-                    </span>
-                    <h3 className="mt-6 text-[1.1rem] font-semibold leading-snug text-kw-ink">
-                      {card.title}
-                    </h3>
-                    <p className="type-body-sm mt-3 text-charcoal">
-                      {card.body}
-                    </p>
-                  </div>
-                  <span className="mt-6 block h-0.5 w-10 bg-kw-red" />
+          <div className="mt-14 grid gap-8 md:grid-cols-2">
+            {brokerage.agentsPage.cultureCards.map((card, idx) => (
+              <Reveal key={card.title} delay={0.08 * idx} y={28}>
+                <div className="flex h-full flex-col border hairline-light bg-white p-8 md:p-10">
+                  <Layers className="h-6 w-6 text-copper" strokeWidth={1.25} />
+                  <h3 className="type-label mt-6 text-ink">{card.title}</h3>
+                  <p className="type-body mt-4 text-stone">{card.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <div className="mt-16 grid gap-px border hairline-light bg-ivory-deep sm:grid-cols-2 lg:grid-cols-5">
+            {FIVE_ADVANTAGES.map((item, idx) => (
+              <Reveal key={item.title} delay={0.08 * idx} y={24}>
+                <div className="flex h-full flex-col gap-5 bg-ivory p-7">
+                  <item.icon className="h-6 w-6 text-copper" strokeWidth={1} />
+                  <p className="type-label text-ink">{item.title}</p>
                 </div>
               </Reveal>
             ))}
@@ -180,402 +229,210 @@ export default function Agents() {
         </div>
       </section>
 
-      {/* §6.3 What makes us different */}
-      <section className="border-y hairline-light bg-mist py-24 md:py-32">
+      {/* Family of Companies Advantage */}
+      <section className="border-t hairline-dark bg-ink py-24 md:py-32">
         <div className="container-monogram">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:items-center lg:gap-20">
+          <div className="grid gap-14 lg:grid-cols-2 lg:items-center">
             <div>
               <Reveal>
                 <div className="flex items-center gap-4">
-                  <span className="h-0.5 w-10 bg-kw-red" />
-                  <span className="type-label text-kw-red">
-                    OUR OPERATING STANDARD
+                  <span className="h-px w-10 bg-copper" />
+                  <span className="type-label text-copper">
+                    In-House Partner Advantage
                   </span>
                 </div>
               </Reveal>
-              <h2 className="type-display-md mt-5 text-kw-ink">
-                What Makes Us Different.
+              <h2 className="type-display-md mt-6 text-ivory">
+                {brokerage.agentsPage.familyHeadline}
               </h2>
               <Reveal delay={0.15}>
-                <p className="type-body mt-5 text-charcoal">
-                  Built in Layton for Northern Utah agents who want real coaching, real community, and real leverage.
+                <p className="type-body mt-6 max-w-xl text-stone-dark">
+                  {brokerage.agentsPage.familyBody}
                 </p>
               </Reveal>
             </div>
 
-            <div className="flex flex-col divide-y hairline-light border hairline-light bg-white px-6 shadow-sm md:px-10">
-              {agentsPage.differences.map((d, i) => (
-                <Reveal key={d.bold} delay={0.08 * i} y={16}>
-                  <div className="flex items-start gap-4 py-6">
-                    <CheckCircle2
-                      className="mt-0.5 h-5 w-5 shrink-0 text-kw-red"
-                      strokeWidth={1.75}
-                    />
-                    <p className="type-body text-charcoal">
-                      <strong className="font-semibold text-kw-ink">
-                        {d.bold}
-                      </strong>{" "}
-                      {d.rest}
-                    </p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* §5.4 Reuse: Three Pillars in Agent terms only */}
-      <ThreePillars mode="agents" />
-
-      {/* §6.4 Become a Trusted Advisor */}
-      <section className="bg-kw-ink py-24 text-white md:py-32">
-        <div className="container-monogram text-center">
-          <Reveal>
-            <div className="flex items-center justify-center gap-4">
-              <span className="h-0.5 w-10 bg-kw-red" />
-              <span className="type-label text-kw-red-bright">
-                {agentsPage.trustedAdvisor.eyebrow}
-              </span>
-              <span className="h-0.5 w-10 bg-kw-red" />
-            </div>
-          </Reveal>
-          <h2 className="type-display-lg mx-auto mt-7 max-w-3xl text-white">
-            <SplitWords text={agentsPage.trustedAdvisor.headline} />
-          </h2>
-          <Reveal delay={0.2}>
-            <p className="type-lead mx-auto mt-8 max-w-3xl text-white/85 text-balance">
-              {agentsPage.trustedAdvisor.body}
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* §6.5 What every agent gets */}
-      <section className="bg-snow py-24 md:py-32">
-        <div className="container-monogram">
-          <div className="max-w-3xl">
-            <Reveal>
-              <div className="flex items-center gap-4">
-                <span className="h-0.5 w-10 bg-kw-red" />
-                <span className="type-label text-kw-red">
-                  WHAT EVERY AGENT GETS
-                </span>
-              </div>
-            </Reveal>
-            <h2 className="type-display-md mt-5 text-kw-ink">
-              Tools, Leadership, and Support Built Around You.
-            </h2>
-            <Reveal delay={0.15}>
-              <p className="type-lead mt-4 text-charcoal">
-                {agentsPage.whatEveryAgentGetsIntro}
-              </p>
-            </Reveal>
-          </div>
-
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {agentsPage.whatEveryAgentGets.map((tile, i) => {
-              const Icon = TILE_ICONS[i % TILE_ICONS.length];
-              return (
-                <Reveal key={tile.title} delay={0.05 * i} y={20}>
-                  <div className="flex h-full flex-col border hairline-light bg-white p-7 shadow-sm">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center bg-mist text-kw-red">
-                        <Icon className="h-5 w-5" strokeWidth={1.6} />
-                      </div>
-                      {tile.badge && (
-                        <span className="border border-kw-red/40 bg-kw-red/5 px-2.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-kw-red">
-                          {tile.badge}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="mt-5 text-[1.02rem] font-semibold text-kw-ink">
-                      {tile.title}
-                    </h3>
-                    <p className="type-body-sm mt-2 text-charcoal">
-                      {tile.body}
-                    </p>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
-
-          {/* For new agents callout (§6.5) */}
-          <Reveal delay={0.2}>
-            <div className="mt-10 flex flex-col justify-between gap-6 border-l-4 border-kw-red bg-mist p-8 md:flex-row md:items-center md:p-10">
-              <div>
-                <span className="type-label text-kw-red">
-                  {agentsPage.newAgentsCallout.label}
-                </span>
-                <h3 className="mt-2 text-[1.2rem] font-semibold text-kw-ink">
-                  {agentsPage.newAgentsCallout.title}
-                </h3>
-                <p className="type-body mt-1 text-charcoal">
-                  {agentsPage.newAgentsCallout.body}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={scrollToForm}
-                className="shrink-0 bg-kw-red px-7 py-3.5 text-[0.74rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-kw-red-bright"
+            <div className="grid gap-6 sm:grid-cols-2">
+              <Link
+                to="/services/mortgage"
+                data-cursor="Explore"
+                className="group border hairline-dark bg-ink-deep p-8 transition-colors hover:border-copper"
               >
-                Ask About Launch Coaching
-              </button>
+                <span className="type-label text-copper">Lending Partner</span>
+                <h3 className="type-display-md !text-[1.4rem] mt-4 text-ivory group-hover:text-copper">
+                  Unity Home Loans
+                </h3>
+                <p className="type-body-sm mt-3 text-stone-dark">
+                  In-house loan officers who sit in your Market Center and help
+                  your buyers win offers.
+                </p>
+              </Link>
+
+              <Link
+                to="/services/title"
+                data-cursor="Explore"
+                className="group border hairline-dark bg-ink-deep p-8 transition-colors hover:border-copper"
+              >
+                <span className="type-label text-copper">Title &amp; Escrow</span>
+                <h3 className="type-display-md !text-[1.4rem] mt-4 text-ivory group-hover:text-copper">
+                  Amicus Title
+                </h3>
+                <p className="type-body-sm mt-3 text-stone-dark">
+                  Proactive title search, escrow, and smooth settlement
+                  coordinated directly with your team.
+                </p>
+              </Link>
             </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* §6.6 Find your path */}
-      <section className="border-t hairline-light bg-mist py-24 md:py-32">
-        <div className="container-monogram">
-          <div className="text-center">
-            <Reveal>
-              <div className="flex items-center justify-center gap-4">
-                <span className="h-0.5 w-10 bg-kw-red" />
-                <span className="type-label text-kw-red">FIND YOUR PATH</span>
-                <span className="h-0.5 w-10 bg-kw-red" />
-              </div>
-            </Reveal>
-            <h2 className="type-display-md mt-5 text-kw-ink">
-              Wherever You Are in Your Career, We Meet You There.
-            </h2>
           </div>
 
-          <div className="mt-14 grid gap-8 md:grid-cols-3">
-            {agentsPage.findYourPath.map((stage, i) => (
-              <Reveal key={stage.title} delay={0.1 * i} y={24}>
-                <div className="flex h-full flex-col justify-between border hairline-light bg-white p-8 shadow-sm md:p-10">
-                  <div>
-                    <TrendingUp
-                      className="h-6 w-6 text-kw-red"
-                      strokeWidth={1.75}
-                    />
-                    <h3 className="type-display-md mt-6 text-kw-ink">
-                      {stage.title}
-                    </h3>
-                    <p className="type-body mt-3 text-charcoal">{stage.body}</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={scrollToForm}
-                    className="type-label mt-8 inline-flex items-center gap-2 text-kw-red transition-colors hover:text-kw-ink"
-                  >
-                    Start the Conversation <ArrowRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </Reveal>
-            ))}
+          <div className="mt-12">
+            <AffiliatedDisclosure tone="dark" />
           </div>
         </div>
       </section>
 
-      {/* §6.7 Agent stories (hidden by flag showAgentStories=false until real) */}
-      {flags.showAgentStories && (
-        <section className="bg-snow py-20">
-          <div className="container-monogram text-center">
-            <p className="type-label text-kw-red">Agent Stories</p>
-          </div>
-        </section>
-      )}
-
-      {/* §6.8 CTA: Talk to Russie */}
+      {/* Interactive Join / Talk to Russie Form */}
       <section
-        id="talk-to-russie"
-        className="scroll-mt-24 border-t hairline-light bg-snow py-24 md:py-32"
+        id="join-form"
+        className="scroll-mt-28 bg-ivory py-24 md:py-32"
       >
-        <div className="container-monogram grid gap-14 lg:grid-cols-[1fr_1.25fr] lg:gap-20">
+        <div className="container-monogram grid gap-14 lg:grid-cols-2 lg:gap-20">
           <div>
             <Reveal>
               <div className="flex items-center gap-4">
-                <span className="h-0.5 w-10 bg-kw-red" />
-                <span className="type-label text-kw-red">TALK TO RUSSIE</span>
+                <span className="h-px w-10 bg-copper" />
+                <span className="type-label text-copper">
+                  Confidential Inquiry
+                </span>
               </div>
             </Reveal>
-
-            <h2 className="type-display-md mt-6 text-kw-ink">
-              <SplitWords text={agentsPage.cta.headline} />
+            <h2 className="type-display-md mt-6 text-ink">
+              <SplitWords text={brokerage.agentsPage.formHeadline} />
             </h2>
-
             <Reveal delay={0.15}>
-              <p className="type-lead mt-5 text-charcoal">
-                {agentsPage.cta.body}
+              <p className="type-body mt-6 max-w-md text-stone">
+                {brokerage.agentsPage.formSubheadline}
               </p>
             </Reveal>
 
-            {/* Russie Edwards card */}
-            <Reveal delay={0.25}>
-              <div className="mt-10 flex flex-col gap-5 border hairline-light bg-white p-6 shadow-sm sm:flex-row sm:items-center">
-                <img
-                  src={agentsPage.cta.leaderPhoto}
-                  alt={agentsPage.cta.leaderName}
-                  className="h-24 w-24 shrink-0 object-cover object-top"
-                />
-                <div>
-                  <h3 className="text-[1.1rem] font-semibold text-kw-ink">
-                    {agentsPage.cta.leaderName}
-                  </h3>
-                  <p className="text-[0.8rem] font-medium uppercase tracking-[0.14em] text-kw-red">
-                    {agentsPage.cta.leaderTitle}
-                  </p>
-                  <div className="mt-3 flex flex-col gap-1.5 text-[0.86rem] text-charcoal">
-                    <a
-                      href={`mailto:${agentsPage.cta.leaderEmail}`}
-                      className="inline-flex items-center gap-2 hover:text-kw-red"
-                    >
-                      <Mail className="h-3.5 w-3.5 text-kw-red" />
-                      {agentsPage.cta.leaderEmail}
-                    </a>
-                    <a
-                      href={`tel:${agentsPage.cta.leaderPhone.replace(/\D/g, "")}`}
-                      className="inline-flex items-center gap-2 hover:text-kw-red"
-                    >
-                      <Phone className="h-3.5 w-3.5 text-kw-red" />
-                      {agentsPage.cta.leaderPhone}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
+            <div className="mt-10 flex flex-wrap gap-3">
+              {AGENT_PATHS.map((p) => (
+                <button
+                  key={p.key}
+                  type="button"
+                  onClick={() => setSelectedPath(p.key)}
+                  className={cn(
+                    "rounded-full border px-5 py-2.5 text-[0.72rem] font-medium uppercase tracking-[0.22em] transition-colors duration-300",
+                    selectedPath === p.key
+                      ? "border-copper bg-copper text-ink"
+                      : "border-ink/30 text-ink hover:border-copper hover:text-copper"
+                  )}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+
+            <AnimatePresence mode="wait">
+              {activePath && (
+                <motion.p
+                  key={activePath.key}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.3, ease: EASE }}
+                  className="type-body-sm mt-6 text-stone"
+                >
+                  {activePath.line}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Form fields (§6.8): name, email, phone, current brokerage (optional), years licensed, message */}
-          <Reveal delay={0.2} y={24}>
-            <div className="border hairline-light bg-white p-8 shadow-lift md:p-12">
-              {done ? (
-                <div className="py-12 text-center">
-                  <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-kw-red text-white">
-                    <CheckCircle2 className="h-6 w-6" />
-                  </span>
-                  <h3 className="type-display-md mt-6 text-kw-ink">
-                    Thank you, {name.trim().split(" ")[0]}.
-                  </h3>
-                  <p className="type-body mx-auto mt-3 max-w-md text-charcoal">
-                    Your confidential message has been routed directly to{" "}
-                    <strong>{agentsPage.cta.leaderName}</strong> (
-                    {agentsPage.cta.leaderEmail}). She will reach out to you personally.
+          <Reveal delay={0.2} y={30}>
+            {submitted ? (
+              <div className="flex h-full flex-col items-start justify-center border hairline-light bg-white p-10">
+                <span className="inline-block h-4 w-4 rotate-45 bg-copper" />
+                <p className="type-display-md mt-6 text-ink">
+                  Thank you
+                  {name.trim() ? `, ${name.trim().split(" ")[0]}` : ""}.
+                </p>
+                <p className="type-body mt-4 max-w-md text-stone">
+                  Your confidential note is on its way to Russie Edwards. We
+                  will reach out personally to schedule a conversation.
+                </p>
+              </div>
+            ) : (
+              <form
+                onSubmit={onSubmit}
+                className="flex flex-col gap-6 border hairline-light bg-white p-8 md:p-12"
+              >
+                <input
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Full name"
+                  aria-label="Full name"
+                  className="border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper"
+                />
+                <input
+                  required
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email"
+                  aria-label="Email"
+                  className="border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper"
+                />
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Phone (optional)"
+                  aria-label="Phone"
+                  className="border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper"
+                />
+                <select
+                  value={licenseStatus}
+                  onChange={(e) => setLicenseStatus(e.target.value)}
+                  aria-label="License status"
+                  className="appearance-none border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors focus:border-copper"
+                >
+                  <option value="Licensed in Utah">Licensed in Utah</option>
+                  <option value="In Real Estate School">
+                    Currently in Real Estate School
+                  </option>
+                  <option value="Licensed in Another State">
+                    Licensed in Another State
+                  </option>
+                  <option value="Exploring a Career in Real Estate">
+                    Exploring a Career in Real Estate
+                  </option>
+                </select>
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Tell Russie a little about your business goals and what you're looking for"
+                  aria-label="Your note"
+                  rows={3}
+                  className="border-b hairline-light bg-transparent pb-3 text-[0.95rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper"
+                />
+                <motion.button
+                  type="submit"
+                  disabled={submitting}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2, ease: EASE }}
+                  className="mt-2 self-start rounded-full bg-copper px-10 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright disabled:opacity-40"
+                >
+                  {submitting ? "Sending…" : "Send Confidential Note"}
+                </motion.button>
+                {activePath && (
+                  <p className="type-body-sm text-stone/80">
+                    Routes to: {activePath.routesTo}
                   </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                  {/* Honeypot spam protection (§11) */}
-                  <input
-                    type="text"
-                    name="website_url_hp"
-                    value={honeypot}
-                    onChange={(e) => setHoneypot(e.target.value)}
-                    tabIndex={-1}
-                    autoComplete="off"
-                    className="hidden"
-                    aria-hidden="true"
-                  />
-
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label className="type-label mb-2 block text-kw-ink">
-                        Name *
-                      </label>
-                      <input
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Your full name"
-                        className={inputCls}
-                      />
-                    </div>
-                    <div>
-                      <label className="type-label mb-2 block text-kw-ink">
-                        Email *
-                      </label>
-                      <input
-                        required
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="you@example.com"
-                        className={inputCls}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid gap-5 sm:grid-cols-3">
-                    <div>
-                      <label className="type-label mb-2 block text-kw-ink">
-                        Phone *
-                      </label>
-                      <input
-                        required
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="(801) 555-0199"
-                        className={inputCls}
-                      />
-                    </div>
-                    <div>
-                      <label className="type-label mb-2 block text-kw-ink">
-                        Current Brokerage
-                      </label>
-                      <input
-                        value={currentBrokerage}
-                        onChange={(e) => setCurrentBrokerage(e.target.value)}
-                        placeholder="Optional"
-                        className={inputCls}
-                      />
-                    </div>
-                    <div>
-                      <label className="type-label mb-2 block text-kw-ink">
-                        Years Licensed
-                      </label>
-                      <select
-                        value={yearsLicensed}
-                        onChange={(e) => setYearsLicensed(e.target.value)}
-                        className={inputCls}
-                      >
-                        <option value="">Select…</option>
-                        <option value="New / Getting Licensed">
-                          New / Getting Licensed
-                        </option>
-                        <option value="1–2 years">1–2 years</option>
-                        <option value="3–5 years">3–5 years</option>
-                        <option value="6–10 years">6–10 years</option>
-                        <option value="10+ years">10+ years</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="type-label mb-2 block text-kw-ink">
-                      Message
-                    </label>
-                    <textarea
-                      rows={4}
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="What does your next chapter look like?"
-                      className={inputCls}
-                    />
-                  </div>
-
-                  <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="inline-flex items-center gap-2 bg-kw-red px-9 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-white transition-colors hover:bg-kw-red-bright disabled:opacity-60"
-                    >
-                      {submitting
-                        ? "Sending…"
-                        : "Book a Confidential Conversation"}
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
-                    <span className="text-[0.76rem] text-kw-gray">
-                      100% confidential · Routes directly to Russie Edwards
-                    </span>
-                  </div>
-                </form>
-              )}
-            </div>
+                )}
+              </form>
+            )}
           </Reveal>
         </div>
       </section>

@@ -1,190 +1,208 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Facebook, Instagram, Star } from "lucide-react";
-import { activeBrokerage } from "@/brokerages";
+import { ExternalLink, Facebook, Instagram, Star } from "lucide-react";
+import { brokerage } from "@/brokerages";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
 import SampleChip from "@/components/SampleChip";
-
-/**
- * §13 Footer:
- * - KW Success logo (reversed) with the line "You define Success. The relationship is how we get there."
- * - Columns:
- *   - Explore: For Agents · Buy & Sell · About · Areas Served · Contact
- *   - Family of Companies: Unity Home Loans · Amicus Title
- *   - Connect: Facebook · Instagram · Google Reviews
- * - Affiliated Business Disclosure automatically shown because Unity Home Loans & Amicus Title
- *   (affiliated: true) are displayed by name in the footer (§5.2).
- * - Legal line [SHAWN REVIEW]: © 2026 KW Success Keller Williams Realty · 1572 N Woodland Park Dr., Suite 500, Layton, UT 84041 · Each Keller Williams office is independently owned and operated · Equal Housing Opportunity · REALTOR®
- * - Links: Privacy · Terms · Affiliated Business Disclosure · Accessibility
- */
-
-const EXPLORE_LINKS = [
-  { label: "For Agents", to: "/agents" },
-  { label: "Buy & Sell", to: "/clients" },
-  { label: "About", to: "/about" },
-  { label: "Areas Served", to: "/areas-served" },
-  { label: "Contact", to: "/contact" },
-];
+import Watermark from "@/components/motion/Watermark";
 
 export default function Footer() {
-  const { logos, name, tagline, externalLinks, disclosures, flags } =
-    activeBrokerage;
-
-  const familyLinks = [
-    { label: "Unity Home Loans", to: "/services/mortgage" },
-    { label: "Amicus Title", to: "/services/title" },
-    ...(flags.showInsurancePartner
-      ? [{ label: "Insurance", to: "/services/insurance" }]
-      : []),
-  ];
-
-  const socialLinks = [
-    {
-      label: "Facebook",
-      href: externalLinks.socials.facebook,
-      icon: Facebook,
-    },
-    {
-      label: "Instagram",
-      href: externalLinks.socials.instagram,
-      icon: Instagram,
-    },
-    {
-      label: "Google Reviews",
-      href: externalLinks.socials.googleReviews,
-      icon: Star,
-    },
-  ];
+  const { brand, office, partners, social, disclosures } = brokerage;
 
   return (
-    <footer className="relative overflow-hidden border-t hairline-dark bg-kw-ink text-white">
+    <footer className="relative overflow-hidden border-t hairline-dark bg-black">
       <div className="container-monogram relative grid gap-12 py-20 md:grid-cols-2 lg:grid-cols-4">
-        {/* Column 1: Reversed KW Success Logo + Tagline (§13) */}
-        <div className="lg:col-span-1">
-          <Link to="/" className="inline-block">
+        {/* Column 1 — Brand */}
+        <div>
+          <Link to="/" className="inline-flex flex-col items-start gap-3">
             <img
-              src={logos.reversed}
-              alt={name}
+              src={brand.logos.reversed}
+              alt={brand.name}
               className="h-12 w-auto object-contain"
             />
           </Link>
-          <p className="type-body-sm mt-6 max-w-xs text-white/85">
-            {tagline}
+          <p className="type-serif-accent !text-[1.2rem] mt-6 max-w-xs text-ivory/90">
+            {brand.tagline}
           </p>
-          <p className="mt-3 text-[0.78rem] text-stone-dark">
-            {activeBrokerage.contact.fullAddress}
+          <p className="type-body-sm mt-3 max-w-xs text-stone-dark">
+            Serving Davis, Weber, and Morgan Counties alongside the greater Salt
+            Lake Metro since {brand.foundedYear}.
           </p>
         </div>
 
-        {/* Column 2: Explore */}
+        {/* Column 2 — Explore */}
         <div>
-          <p className="type-label text-kw-red-bright">Explore</p>
-          <ul className="mt-6 space-y-3.5">
-            {EXPLORE_LINKS.map((l) => (
-              <li key={l.to}>
+          <p className="type-label text-copper">Explore</p>
+          <ul className="mt-6 space-y-3">
+            {[
+              { label: "For Agents", to: "/agents" },
+              { label: "Buy & Sell", to: "/clients" },
+              { label: "About & Leadership", to: "/about" },
+              { label: "Areas Served Map", to: "/areas-served" },
+              { label: "Contact Us", to: "/contact" },
+              { label: "Agent Login", to: "/login/agent" },
+            ].map((item) => (
+              <li key={item.to}>
                 <Link
-                  to={l.to}
-                  className="type-body-sm text-white/80 transition-colors hover:text-white"
+                  to={item.to}
+                  className="type-body-sm text-stone-dark transition-colors hover:text-copper"
                 >
-                  {l.label}
+                  {item.label}
                 </Link>
               </li>
             ))}
             <li>
-              <Link
-                to="/login/agent"
-                className="type-body-sm text-white/70 transition-colors hover:text-white"
+              <a
+                href={brokerage.search.buyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="type-body-sm inline-flex items-center gap-1.5 text-stone-dark transition-colors hover:text-copper"
               >
-                Agent Login
+                Search Utah Homes
+                <ExternalLink className="h-3.5 w-3.5 text-copper" />
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 3 — Family of Companies */}
+        <div>
+          <p className="type-label text-copper">Family of Companies</p>
+          <ul className="mt-6 space-y-4">
+            <li>
+              <Link to="/services/mortgage" className="group block">
+                <span className="type-body-sm block text-ivory transition-colors group-hover:text-copper">
+                  {partners.mortgage.name}
+                </span>
+                <span className="text-[0.78rem] font-light text-stone-dark/70 transition-colors group-hover:text-copper/80">
+                  {partners.mortgage.role}
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/services/title" className="group block">
+                <span className="type-body-sm block text-ivory transition-colors group-hover:text-copper">
+                  {partners.title.name}
+                </span>
+                <span className="text-[0.78rem] font-light text-stone-dark/70 transition-colors group-hover:text-copper/80">
+                  {partners.title.role}
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="group block">
+                <span className="type-body-sm block text-ivory transition-colors group-hover:text-copper">
+                  KW Success Keller Williams Realty
+                </span>
+                <span className="text-[0.78rem] font-light text-stone-dark/70 transition-colors group-hover:text-copper/80">
+                  Real Estate · Layton Market Center
+                </span>
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Column 3: Family of Companies */}
+        {/* Column 4 — Connect */}
         <div>
-          <p className="type-label text-kw-red-bright">Family of Companies</p>
-          <ul className="mt-6 space-y-3.5">
-            {familyLinks.map((f) => (
-              <li key={f.to}>
-                <Link
-                  to={f.to}
-                  className="type-body-sm text-white/80 transition-colors hover:text-white"
-                >
-                  {f.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+          <p className="type-label text-copper">Connect</p>
+          <div className="type-body-sm mt-6 space-y-2 text-stone-dark">
+            <p className="font-medium text-ivory">{office.name}</p>
+            <p>{office.street}</p>
+            <p>
+              {office.city}, {office.state} {office.zip}
+            </p>
+            <p className="pt-1">
+              <a
+                href={`tel:${office.phone.replace(/[^0-9]/g, "")}`}
+                className="text-ivory transition-colors hover:text-copper"
+              >
+                {office.phone}
+              </a>{" "}
+              {office.phonePlaceholder && (
+                <SampleChip label="Confirm #" className="ml-1" />
+              )}
+            </p>
+          </div>
 
-        {/* Column 4: Connect */}
-        <div>
-          <p className="type-label text-kw-red-bright">Connect</p>
-          <ul className="mt-6 space-y-3.5">
-            {socialLinks.map((s) => (
-              <li key={s.label}>
-                <a
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="type-body-sm inline-flex items-center gap-2 text-white/80 transition-colors hover:text-white"
-                >
-                  <s.icon className="h-4 w-4 text-kw-red-bright" strokeWidth={1.6} />
-                  <span>{s.label}</span>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-white/50" />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <Link
+            to="/contact"
+            className="btn-sweep mt-6 inline-block rounded-full border border-copper px-6 py-2.5 text-[0.72rem] font-medium uppercase tracking-[0.22em] text-copper transition-colors hover:text-ink"
+          >
+            Contact Us
+          </Link>
 
-          <div className="mt-7">
-            <Link
-              to="/contact"
-              className="inline-block border border-white/30 px-6 py-2.5 text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:border-kw-red hover:bg-kw-red"
+          <p className="type-body-sm mt-4">
+            <a
+              href={`mailto:${office.generalEmail}`}
+              className="text-stone-dark transition-colors hover:text-copper"
             >
-              Contact Us
-            </Link>
+              {office.generalEmail}
+            </a>
+          </p>
+
+          <div className="mt-6 flex gap-3">
+            <a
+              href={social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-copper/50 text-copper transition-colors hover:bg-copper hover:text-ink"
+            >
+              <Instagram className="h-4 w-4" strokeWidth={1.25} />
+            </a>
+            <a
+              href={social.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-copper/50 text-copper transition-colors hover:bg-copper hover:text-ink"
+            >
+              <Facebook className="h-4 w-4" strokeWidth={1.25} />
+            </a>
+            <a
+              href={social.googleReviews}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Google Reviews"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-copper/50 text-copper transition-colors hover:bg-copper hover:text-ink"
+            >
+              <Star className="h-4 w-4" strokeWidth={1.25} />
+            </a>
           </div>
         </div>
       </div>
 
-      {/* §5.2 Affiliated Business Disclosure automatically displayed because Unity Home Loans & Amicus Title are named in the footer */}
-      <div className="container-monogram pb-10">
+      {/* Affiliated Business Disclosure */}
+      <div className="container-monogram pb-8">
         <AffiliatedDisclosure tone="dark" />
       </div>
 
-      {/* Legal crawl (§13) */}
-      <div className="border-t hairline-dark bg-ink-deep">
-        <div className="container-monogram flex flex-col items-center justify-between gap-4 py-6 text-center lg:flex-row lg:text-left">
-          <div className="flex flex-wrap items-center justify-center gap-2 text-[0.74rem] text-stone-dark lg:justify-start">
-            <span>{disclosures.footerLegalLine}</span>
-            <SampleChip label="SHAWN REVIEW" variant="shawn-review" />
-          </div>
+      {/* Giant SVG Watermark */}
+      <div className="container-monogram -mb-2 mt-4">
+        <Watermark word="KW SUCCESS" />
+      </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-5 text-[0.74rem] text-stone-dark">
+      {/* Legal Bar */}
+      <div className="border-t hairline-dark">
+        <div className="container-monogram flex flex-col items-center justify-between gap-4 py-6 text-center md:flex-row md:text-left">
+          <p className="max-w-2xl text-[0.72rem] text-stone-dark">
+            © {new Date().getFullYear()} {disclosures.legalFooterText}{" "}
+            <SampleChip label="SHAWN REVIEW" variant="review" className="ml-1" />
+          </p>
+          <p className="text-[0.72rem] text-stone-dark">
+            Equal Housing Opportunity · REALTOR®
+          </p>
+          <div className="flex gap-5 text-[0.72rem]">
             <Link
               to="/privacy"
-              className="transition-colors hover:text-white"
+              className="text-stone-dark transition-colors hover:text-copper"
             >
               Privacy
             </Link>
             <Link
               to="/terms"
-              className="transition-colors hover:text-white"
+              className="text-stone-dark transition-colors hover:text-copper"
             >
               Terms
-            </Link>
-            <Link
-              to={disclosures.affiliatedPdfUrl}
-              className="transition-colors hover:text-white"
-            >
-              Affiliated Business Disclosure
-            </Link>
-            <Link
-              to="/accessibility"
-              className="transition-colors hover:text-white"
-            >
-              Accessibility
             </Link>
           </div>
         </div>

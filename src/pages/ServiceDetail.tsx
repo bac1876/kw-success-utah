@@ -1,21 +1,23 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, MapPin } from "lucide-react";
+import { CheckCircle2, Mail, MapPin } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
 import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
+import SplitChars from "@/components/motion/SplitChars";
+import BlurUp from "@/components/motion/BlurUp";
+import DuskCard from "@/components/motion/DuskCard";
+import Magnetic from "@/components/motion/Magnetic";
 import { HEADER_H } from "@/components/Navbar";
 
-/**
- * §10 Partner pages (/services/mortgage, /services/title)
- * - Use Monogram's service-page pattern with a logo, a short intro, "why it matters at the table," and a contact button.
- * - Unity Home Loans (lending): logo plus 2–3 sentences. Marcus/Unity to supply final copy [PLACEHOLDER].
- * - Amicus Title (title & escrow): logo plus 2–3 sentences. Marcus/Amicus to supply final copy [PLACEHOLDER].
- * - Insurance (/services/insurance): hidden by flag showInsurancePartner=false; redirects to / when flag is off.
- * - Each page shows the Affiliated Business Disclosure in full [SHAWN REVIEW], including the required statement in capitals:
- *   "YOU ARE NOT REQUIRED TO USE THE LISTED PROVIDER(S)…"
- */
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const SERVICE_IMAGES: Record<string, string> = {
+  mortgage: "/service-mortgage.jpg",
+  title: "/service-title.jpg",
+  insurance: "/service-insurance.jpg",
+};
 
 export default function ServiceDetail() {
   const { slug = "" } = useParams<{ slug: string }>();
@@ -30,138 +32,193 @@ export default function ServiceDetail() {
   }
 
   const partner = partners[slug];
+  const serviceImg = SERVICE_IMAGES[slug] ?? "/service-title.jpg";
 
   return (
     <>
       {/* Hero */}
       <section
-        className="relative flex min-h-[48vh] flex-col items-center justify-center overflow-hidden bg-kw-ink text-white"
+        className="relative flex min-h-[48vh] flex-col items-center justify-center overflow-hidden bg-ink"
         style={{ marginTop: -HEADER_H, paddingTop: HEADER_H }}
       >
+        <div className="absolute inset-0">
+          <img
+            src={serviceImg}
+            alt=""
+            className="h-full w-full object-cover opacity-30"
+          />
+          <div className="overlay-hero absolute inset-0" />
+        </div>
+
         <div className="relative z-10 flex flex-col items-center px-6 py-24 text-center">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.7 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
             className="flex items-center gap-4"
           >
-            <span className="h-0.5 w-10 bg-kw-red" />
-            <span className="type-label text-kw-red-bright">
-              {partner.roleLabel}
-            </span>
-            <span className="h-0.5 w-10 bg-kw-red" />
+            <span className="h-px w-10 bg-copper" />
+            <span className="type-label text-copper">{partner.roleLabel}</span>
+            <span className="h-px w-10 bg-copper" />
           </motion.div>
 
-          <h1 className="type-display-lg mt-7 max-w-4xl text-white">
-            <SplitWords
-              text={partner.companyName}
-              stagger={0.05}
-              delay={0.3}
-            />
+          <h1 className="type-display-lg mt-8 text-ivory">
+            <SplitChars text={partner.companyName} delay={0.4} />
           </h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75, duration: 0.75 }}
-            className="type-lead mt-6 max-w-2xl text-white/85 text-balance"
+            initial={{ opacity: 0, filter: "blur(10px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
+            transition={{ delay: 0.9, duration: 0.8 }}
+            className="type-serif-accent mt-6 max-w-2xl text-stone-dark"
           >
             {partner.heroHeadline}
           </motion.p>
         </div>
       </section>
 
-      {/* Main Content: Logo + Short Intro + Why It Matters at the Table + Contact Button */}
-      <section className="bg-snow py-24 md:py-32">
-        <div className="container-monogram">
-          <div className="grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:items-start lg:gap-20">
-            {/* Left: Partner Logo + Intro + Highlights */}
-            <div>
-              <Reveal>
-                <div className="inline-flex items-center border hairline-light bg-white p-6 shadow-sm">
-                  <img
-                    src={partner.logo}
-                    alt={`${partner.companyName} logo`}
-                    className="h-16 w-auto max-w-[260px] object-contain"
-                  />
-                </div>
-              </Reveal>
-
-              {partner.isPlaceholderCopy && (
-                <div className="mt-6">
-                  <SampleChip label="PLACEHOLDER: Final Partner Copy Pending from Marcus / Partner" />
-                </div>
-              )}
-
-              <Reveal delay={0.1}>
-                <p className="type-lead mt-6 text-kw-ink">
-                  {partner.introCopy}
-                </p>
-              </Reveal>
-
-              <Reveal delay={0.2}>
-                <p className="type-body-sm mt-6 flex items-center gap-2 text-charcoal">
-                  <MapPin className="h-4 w-4 text-kw-red" strokeWidth={1.75} />
-                  <span>
-                    Serving clients across Weber, Davis &amp; Morgan Counties ·{" "}
-                    {contact.cityStateZip}
-                  </span>
-                </p>
-              </Reveal>
-
-              <div className="mt-8 divide-y hairline-light border-y hairline-light bg-white px-6">
-                {partner.highlights.map((item, i) => (
-                  <Reveal key={item} delay={0.1 + 0.06 * i} y={14}>
-                    <div className="flex items-center gap-3.5 py-4">
-                      <CheckCircle2
-                        className="h-4 w-4 shrink-0 text-kw-red"
-                        strokeWidth={1.75}
-                      />
-                      <span className="type-body-sm font-medium text-kw-ink">
-                        {item}
-                      </span>
-                    </div>
-                  </Reveal>
-                ))}
+      {/* Main Content */}
+      <section className="bg-ivory py-24 md:py-32">
+        <div className="container-monogram grid gap-14 lg:grid-cols-2 lg:gap-20">
+          {/* Left: Logo + Story + Highlights */}
+          <div>
+            <Reveal>
+              <div className="flex items-center gap-4">
+                <span className="h-px w-10 bg-copper" />
+                <span className="type-label text-copper">
+                  Part of Our Family of Companies
+                </span>
               </div>
-            </div>
+            </Reveal>
 
-            {/* Right: "Why It Matters at the Table" + Contact CTA */}
-            <div className="flex flex-col gap-8">
-              <Reveal delay={0.15} y={24}>
-                <div className="border hairline-light bg-white p-8 shadow-lift md:p-10">
-                  <div className="flex items-center gap-3">
-                    <span className="h-0.5 w-8 bg-kw-red" />
-                    <span className="type-label text-kw-red">
-                      {partner.whyItMattersHeadline}
-                    </span>
+            <h2 className="type-display-md mt-5 text-ink">
+              <SplitWords text="Part of One Relationship." />
+            </h2>
+
+            <Reveal delay={0.1}>
+              <div className="mt-8 inline-flex items-center border hairline-light bg-white p-6">
+                <img
+                  src={partner.logo}
+                  alt={`${partner.companyName} logo`}
+                  className="h-14 w-auto max-w-[240px] object-contain"
+                />
+              </div>
+            </Reveal>
+
+            {partner.isPlaceholderCopy && (
+              <div className="mt-5">
+                <SampleChip label="PLACEHOLDER: Final Partner Copy Pending" />
+              </div>
+            )}
+
+            <Reveal delay={0.15}>
+              <p className="type-body mt-6 text-stone">{partner.introCopy}</p>
+            </Reveal>
+
+            <Reveal delay={0.25}>
+              <p className="type-body-sm mt-6 flex items-center gap-2 text-ink/70">
+                <MapPin className="h-4 w-4 text-copper" strokeWidth={1.5} />
+                Serving Weber, Davis &amp; Morgan Counties ·{" "}
+                {contact.cityStateZip}
+              </p>
+            </Reveal>
+
+            <div className="mt-8">
+              {partner.highlights.map((item, i) => (
+                <Reveal key={item} delay={0.1 + 0.08 * i} y={16}>
+                  <div className="flex items-center gap-4 border-t py-4 last:border-b hairline-light">
+                    <CheckCircle2
+                      className="h-4 w-4 shrink-0 text-copper"
+                      strokeWidth={1.5}
+                    />
+                    <span className="type-body-sm text-ink/80">{item}</span>
                   </div>
-                  <h2 className="type-display-md mt-5 text-kw-ink">
-                    Everyone at One Table.
-                  </h2>
-                  <p className="type-body mt-4 text-charcoal">
-                    {partner.whyItMattersBody}
-                  </p>
-
-                  <div className="mt-8 border-t hairline-light pt-6">
-                    <Link
-                      to={`/contact?topic=${encodeURIComponent(partner.contactTopic.toLowerCase())}`}
-                      className="inline-flex items-center gap-2.5 bg-kw-red px-8 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-white transition-colors hover:bg-kw-red-bright"
-                    >
-                      Connect With Us <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </div>
-              </Reveal>
-
-              {/* §10 Full Affiliated Business Disclosure in capitals [SHAWN REVIEW] */}
-              {partner.affiliated && (
-                <Reveal delay={0.25} y={20}>
-                  <AffiliatedDisclosure tone="light" showFullLegal />
                 </Reveal>
-              )}
+              ))}
             </div>
+
+            {/* Why It Matters at the Table */}
+            <Reveal delay={0.3} y={24}>
+              <div className="mt-10 border hairline-light bg-white p-8 md:p-10">
+                <p className="type-label text-copper">
+                  {partner.whyItMattersHeadline}
+                </p>
+                <h3 className="mt-4 font-serif text-[1.6rem] italic leading-snug text-ink">
+                  Everyone at One Table.
+                </h3>
+                <p className="type-body-sm mt-3 text-stone">
+                  {partner.whyItMattersBody}
+                </p>
+              </div>
+            </Reveal>
           </div>
+
+          {/* Right: BlurUp DuskCard Image + Main Contact Card + Affiliated Disclosure */}
+          <div className="flex flex-col gap-8 lg:pt-12">
+            <BlurUp className="mb-2">
+              <div className="aspect-[3/2] overflow-hidden border hairline-light">
+                <DuskCard src={serviceImg} alt={partner.companyName} />
+              </div>
+            </BlurUp>
+
+            <Reveal delay={0.3} y={30}>
+              <div className="bg-ink p-8 md:p-10">
+                <p className="type-label flex items-center gap-2 text-copper">
+                  Main Contact <SampleChip label="Sample" />
+                </p>
+                <a
+                  href={`mailto:${contact.generalEmail}`}
+                  className="mt-5 flex items-center gap-2 text-[0.9rem] font-light text-ivory/85 transition-colors hover:text-copper"
+                >
+                  <Mail className="h-4 w-4 text-copper" strokeWidth={1.5} />
+                  {contact.generalEmail}
+                </a>
+                <p className="type-body-sm mt-3 text-stone-dark">
+                  Connect with {partner.companyName} alongside your KW Success
+                  advisor.
+                </p>
+                <Magnetic className="mt-7 inline-block">
+                  <Link
+                    to={`/contact/${slug}`}
+                    className="btn-sweep inline-block rounded-full border border-copper px-7 py-3 text-[0.74rem] font-medium uppercase tracking-[0.24em] text-copper transition-colors duration-300 hover:text-ink"
+                  >
+                    Contact Us →
+                  </Link>
+                </Magnetic>
+              </div>
+            </Reveal>
+
+            {/* §10 Full Affiliated Business Disclosure in capitals [SHAWN REVIEW] */}
+            {partner.affiliated && (
+              <Reveal delay={0.35} y={24}>
+                <AffiliatedDisclosure tone="light" showFullLegal />
+              </Reveal>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA Band */}
+      <section className="border-t bg-ink py-24 hairline-dark md:py-32">
+        <div className="container-monogram flex flex-col items-center text-center">
+          <motion.span
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, amount: 0.8 }}
+            transition={{ duration: 1.2, ease: EASE }}
+            className="h-px w-24 origin-left bg-copper"
+          />
+          <h2 className="type-display-md mt-8 max-w-3xl text-ivory">
+            <SplitWords text="One Conversation Opens Every Door." />
+          </h2>
+          <Reveal delay={0.2}>
+            <Link
+              to={`/contact/${slug}`}
+              className="mt-10 inline-block rounded-full bg-copper px-10 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright"
+            >
+              Contact Us
+            </Link>
+          </Reveal>
         </div>
       </section>
     </>

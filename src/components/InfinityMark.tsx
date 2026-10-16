@@ -1,14 +1,9 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-/** Shared lemniscate path used everywhere the infinity mark appears (N6). */
-export const INFINITY_PATH =
+const INFINITY_D =
   "M60 30 C60 13 38 13 30 30 C22 47 0 47 0 30 C0 13 22 13 30 30 C38 47 60 47 60 30 Z";
 
-/**
- * The Monogram infinity mark — draws its stroke on entry.
- * Used on the homepage Promise timeline (H4) and the KW Offices page (N6).
- */
 export function InfinityMark({
   className,
   strokeWidth = 2.5,
@@ -29,7 +24,7 @@ export function InfinityMark({
       viewport={{ once: true, amount: 0.8 }}
     >
       <motion.path
-        d={INFINITY_PATH}
+        d={INFINITY_D}
         stroke="currentColor"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
@@ -43,24 +38,18 @@ export function InfinityMark({
   );
 }
 
-const LOOP_LABELS = [
+const FOUR_CORNERS = [
   { text: "Transact", x: 15, y: 6 },
   { text: "Move", x: 105, y: 6 },
   { text: "Life", x: 15, y: 74 },
   { text: "Search", x: 105, y: 74 },
-] as const;
+];
 
-/**
- * Draft of the four-part infinity graphic (H9): Transact · Move · Life ·
- * Search around the continuous loop, in Monogram copper. Replaced 1:1 the
- * moment the client's own graphic arrives (B1).
- */
 export function FourPartInfinity({ className }: { className?: string }) {
   const reduced = useReducedMotion();
   return (
     <div className={cn("flex flex-col items-center", className)}>
       <motion.svg
-        /* R2-Q1: viewBox widened so the outer labels (TRANSACT / SEARCH) no longer clip at the edges */
         viewBox="-14 0 148 80"
         fill="none"
         className="w-full max-w-[460px]"
@@ -70,7 +59,6 @@ export function FourPartInfinity({ className }: { className?: string }) {
         whileInView="visible"
         viewport={{ once: true, amount: 0.5 }}
       >
-        {/* Lemniscate scaled to the wider viewBox */}
         <motion.path
           d="M118 40 C118 12 74 12 60 40 C46 68 2 68 2 40 C2 12 46 12 60 40 C74 68 118 68 118 40 Z"
           stroke="#B87333"
@@ -82,7 +70,6 @@ export function FourPartInfinity({ className }: { className?: string }) {
           }}
           transition={{ duration: 2.2, ease: "easeInOut" }}
         />
-        {/* Center node — the mark of the relationship */}
         <motion.rect
           x={56.5}
           y={36.5}
@@ -97,11 +84,11 @@ export function FourPartInfinity({ className }: { className?: string }) {
           transition={{ delay: reduced ? 0 : 1.6, duration: 0.5 }}
           style={{ transformBox: "fill-box", transformOrigin: "center" }}
         />
-        {LOOP_LABELS.map((l, i) => (
+        {FOUR_CORNERS.map((item, idx) => (
           <motion.text
-            key={l.text}
-            x={l.x}
-            y={l.y}
+            key={item.text}
+            x={item.x}
+            y={item.y}
             textAnchor="middle"
             fill="#8A857C"
             fontSize={5.4}
@@ -112,9 +99,12 @@ export function FourPartInfinity({ className }: { className?: string }) {
               hidden: { opacity: reduced ? 1 : 0 },
               visible: { opacity: 1 },
             }}
-            transition={{ delay: reduced ? 0 : 0.9 + i * 0.25, duration: 0.6 }}
+            transition={{
+              delay: reduced ? 0 : 0.9 + idx * 0.25,
+              duration: 0.6,
+            }}
           >
-            {l.text.toUpperCase()}
+            {item.text.toUpperCase()}
           </motion.text>
         ))}
       </motion.svg>

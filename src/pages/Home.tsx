@@ -4,15 +4,23 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
-import { activeBrokerage } from "@/brokerages";
+import { ArrowRight, ChevronDown, ExternalLink } from "lucide-react";
+import { brokerage } from "@/brokerages";
 import FourSeats from "@/components/FourSeats";
 import ThreePillars from "@/components/ThreePillars";
+import { FourPartInfinity, InfinityMark } from "@/components/InfinityMark";
 import StatsBand from "@/components/StatsBand";
-import TestimonialCarousel from "@/components/TestimonialCarousel";
-import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
+import Magnetic from "@/components/motion/Magnetic";
+import { introDelay } from "@/components/motion/Preloader";
+import Spotlight from "@/components/motion/Spotlight";
+import SplitChars from "@/components/motion/SplitChars";
+import ScrollWords from "@/components/motion/ScrollWords";
+import Parallax from "@/components/motion/Parallax";
+import JourneyRail from "@/components/motion/JourneyRail";
+import MouseTrail from "@/components/motion/MouseTrail";
+import Ticker from "@/components/motion/Ticker";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -20,12 +28,12 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
 /* ------------------------------------------------------------------ */
-/* §5.1 Hero                                                           */
+/* Section 1 — Sticky Curtain Hero + Spotlight                        */
 /* ------------------------------------------------------------------ */
 
 function HeroBackground() {
   const root = useRef<HTMLDivElement>(null);
-  const { hero } = activeBrokerage.home;
+  const wait = introDelay();
 
   useGSAP(
     () => {
@@ -42,20 +50,31 @@ function HeroBackground() {
         gsap.fromTo(
           wrap,
           { clipPath: "inset(0% 0 100% 0)" },
-          { clipPath: "inset(0% 0 0% 0)", duration: 1.3, ease: "power3.inOut" }
+          {
+            clipPath: "inset(0% 0 0% 0)",
+            duration: 1.4,
+            ease: "power3.inOut",
+            delay: wait * 0.6,
+          }
         );
         gsap.fromTo(
           img,
-          { scale: 1.12 },
-          { scale: 1, duration: 1.3, ease: "power3.inOut" }
+          { scale: 1.15 },
+          {
+            scale: 1,
+            duration: 1.4,
+            ease: "power3.inOut",
+            delay: wait * 0.6,
+          }
         );
         gsap.to(img, {
           yPercent: 18,
+          scale: 1.08,
           ease: "none",
           scrollTrigger: {
-            trigger: root.current,
+            trigger: document.documentElement,
             start: "top top",
-            end: "bottom top",
+            end: () => `+=${window.innerHeight}`,
             scrub: true,
           },
         });
@@ -69,361 +88,278 @@ function HeroBackground() {
       <div data-hero-clip className="h-full w-full will-change-transform">
         <img
           data-hero-img
-          src={hero.image}
-          alt={hero.imageAlt}
-          className="h-[115%] w-full object-cover object-center will-change-transform"
+          src="/hero-home.jpg"
+          alt="Luxury Northern Utah residence at dusk along the Wasatch Front"
+          className="h-[115%] w-full object-cover will-change-transform"
         />
       </div>
-      {/* §3.2 Treatment: bright, clear sky with light gradient overlay so text stays readable */}
       <div className="overlay-hero absolute inset-0" />
+      <Spotlight src="/hero-home.jpg" />
     </div>
   );
 }
 
 function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { hero } = activeBrokerage.home;
-  const { logos, name } = activeBrokerage;
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, -50]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.9], [1, 0]);
+  const wait = introDelay();
+  const { scrollY } = useScroll();
+  const vh = typeof window !== "undefined" ? window.innerHeight : 900;
+  const contentY = useTransform(scrollY, [0, vh], [0, -90]);
+  const contentOpacity = useTransform(scrollY, [0, vh * 0.75], [1, 0]);
+  const shadeOpacity = useTransform(scrollY, [0, vh], [0, 0.55]);
 
   const scrollTo = (selector: string) => {
     const el = document.querySelector(selector);
     if (!el) return;
-    if (window.__lenis)
+    if (window.__lenis) {
       window.__lenis.scrollTo(el as HTMLElement, { offset: -HEADER_H });
-    else (el as HTMLElement).scrollIntoView({ behavior: "smooth" });
+    } else {
+      (el as HTMLElement).scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[96dvh] flex-col overflow-hidden"
+      className="sticky top-0 z-0 flex h-[100dvh] flex-col overflow-hidden"
       style={{ marginTop: -HEADER_H }}
     >
       <HeroBackground />
+      <motion.div
+        style={{ opacity: shadeOpacity }}
+        className="pointer-events-none absolute inset-0 z-[15] bg-ink"
+      />
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-10 bg-ink"
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 0 }}
+        transition={{ duration: 0.6, delay: wait * 0.5 }}
+      />
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-20 flex flex-1 flex-col items-center justify-center px-6 pb-24 pt-[150px] text-center"
+        className="relative z-20 flex flex-1 flex-col items-center justify-center px-6 pb-24 pt-[140px] text-center"
       >
-        {/* §5.1 KW Success logo centered (reversed version over the photo) */}
         <motion.img
-          src={logos.reversed}
-          alt={name}
-          className="mt-4 h-16 w-auto max-w-[280px] object-contain drop-shadow-md md:h-20 md:max-w-[340px]"
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.25, duration: 1.1, ease: EASE }}
+          src={brokerage.brand.logos.reversed}
+          alt={brokerage.brand.name}
+          className="mt-6 h-[110px] w-auto max-w-full object-contain md:h-[135px]"
+          initial={{ opacity: 0, scale: 0.96, filter: "blur(6px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{ delay: 0.3 + wait, duration: 1.4, ease: EASE }}
         />
 
-        {/* §5.1 Headline: You define Success. The relationship is how we get there. */}
-        <motion.h1
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55, duration: 0.9, ease: EASE }}
-          className="type-display-lg mt-8 max-w-4xl text-white drop-shadow-sm text-balance"
-        >
-          {hero.headline}
-        </motion.h1>
+        <p className="type-serif-accent mt-6 max-w-3xl text-ivory text-balance">
+          <SplitChars
+            text={brokerage.hero.headline}
+            delay={0.8 + wait}
+          />
+        </p>
 
         <motion.span
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ delay: 0.85, duration: 1.0, ease: EASE }}
-          className="mt-7 h-0.5 w-20 origin-center bg-kw-red"
+          transition={{ delay: 1.0 + wait, duration: 1.2, ease: EASE }}
+          className="mt-8 h-px w-20 origin-left bg-copper"
         />
 
-        {/* §5.1 Subhead */}
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.95, duration: 0.85, ease: EASE }}
-          className="type-lead mt-7 max-w-2xl font-normal text-white/95 drop-shadow-sm text-balance"
+          transition={{ delay: 1.05 + wait, duration: 0.9, ease: EASE }}
+          className="type-lead mt-8 max-w-2xl text-white/85 text-balance"
         >
-          {hero.subhead}
+          {brokerage.hero.subheadline}
         </motion.p>
 
-        {/* §5.1 Buttons (two doors): I'm an Agent -> /agents | I'm Buying or Selling -> /clients */}
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.65, ease: EASE }}
+            transition={{ delay: 1.2 + wait, duration: 0.7, ease: EASE }}
           >
-            <Link
-              to={hero.primaryCta.to}
-              className="inline-flex items-center gap-2.5 bg-kw-red px-8 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-white shadow-lift transition-colors duration-300 hover:bg-kw-red-bright"
-            >
-              {hero.primaryCta.label}
-              <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
-            </Link>
+            <Magnetic>
+              <Link
+                to={brokerage.hero.primaryCta.to}
+                className="inline-block rounded-full bg-copper px-8 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright"
+              >
+                {brokerage.hero.primaryCta.label}
+              </Link>
+            </Magnetic>
           </motion.div>
-
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.65, ease: EASE }}
+            transition={{ delay: 1.3 + wait, duration: 0.7, ease: EASE }}
           >
-            <Link
-              to={hero.secondaryCta.to}
-              className="inline-flex items-center gap-2.5 border-2 border-white bg-kw-ink/40 px-8 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-white backdrop-blur-sm transition-colors duration-300 hover:bg-white hover:text-kw-ink"
-            >
-              {hero.secondaryCta.label}
-              <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
-            </Link>
+            <Magnetic>
+              <Link
+                to={brokerage.hero.secondaryCta.to}
+                className="inline-block rounded-full border border-white/50 px-8 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-white transition-colors duration-300 hover:border-white hover:bg-white hover:text-ink"
+              >
+                {brokerage.hero.secondaryCta.label}
+              </Link>
+            </Magnetic>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* §5.1 Corner caption: Serving Weber, Davis & Morgan Counties */}
-      <div className=" absolute bottom-7 left-6 z-20 flex flex-wrap items-center gap-3 md:left-10">
-        <p className="text-[0.8rem] font-medium uppercase tracking-[0.18em] text-white/90">
-          {hero.cornerCaption}
-        </p>
-        {hero.isPlaceholderImage && (
-          <SampleChip
-            label="PLACEHOLDER: Wasatch / Ogden Valley Stock Photo"
-            className="border-white/40 bg-kw-ink/70 text-white"
-          />
-        )}
-      </div>
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6 + wait, duration: 0.8 }}
+        className="type-body-sm absolute bottom-8 left-6 z-20 text-stone-dark md:left-10"
+      >
+        {brokerage.hero.eyebrow}
+      </motion.p>
 
-      {/* Scroll indicator */}
-      <button
+      <motion.button
         type="button"
         aria-label="Scroll to Everyone at One Table"
         onClick={() => scrollTo("#connected")}
-        className="absolute bottom-7 right-6 z-20 flex h-12 w-8 flex-col items-center justify-start md:right-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6 + wait, duration: 0.8 }}
+        className="absolute bottom-8 right-6 z-20 flex h-14 w-8 flex-col items-center justify-start md:right-10"
       >
-        <span className="relative h-10 w-px bg-white/40">
-          <span className="animate-scroll-dot absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-kw-red" />
+        <span className="relative h-12 w-px bg-white/25">
+          <span className="animate-scroll-dot absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-copper" />
         </span>
-        <ChevronDown className="mt-1 h-4 w-4 text-white" strokeWidth={1.75} />
-      </button>
+        <ChevronDown
+          className="mt-1 h-3.5 w-3.5 text-copper"
+          strokeWidth={1.5}
+        />
+      </motion.button>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* §5.2 "Everyone at One Table"                                        */
+/* Section 2 — Connected Homeownership ("Everyone at One Table")       */
 /* ------------------------------------------------------------------ */
 
-function EveryoneAtOneTable() {
-  const { oneTable } = activeBrokerage.home;
-
+function Connected() {
   return (
-    <section id="connected" className="bg-snow py-24 md:py-32">
+    <section id="connected" className="bg-ivory py-24 md:py-32">
       <div className="container-monogram">
         <div className="text-center">
           <Reveal>
             <div className="flex items-center justify-center gap-4">
-              <span className="h-0.5 w-10 bg-kw-red" />
-              <span className="type-label text-kw-red">{oneTable.eyebrow}</span>
-              <span className="h-0.5 w-10 bg-kw-red" />
-            </div>
-          </Reveal>
-
-          <h2 className="type-display-lg mx-auto mt-7 max-w-4xl text-kw-ink text-balance">
-            <SplitWords text={oneTable.headline} />
-          </h2>
-
-          <Reveal delay={0.2}>
-            <p className="type-lead mx-auto mt-8 max-w-3xl text-charcoal text-balance">
-              {oneTable.body}
-            </p>
-          </Reveal>
-        </div>
-
-        <div className="mt-16">
-          <Reveal>
-            <p className="type-serif-accent text-center text-kw-ink">
-              {oneTable.subhead}
-            </p>
-          </Reveal>
-
-          <div className="mt-10">
-            <FourSeats tone="light" />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* §5.3 The Success Idea                                               */
-/* ------------------------------------------------------------------ */
-
-function TheSuccessIdea() {
-  const { successIdea } = activeBrokerage.home;
-
-  return (
-    <section id="thesis" className="border-y hairline-light bg-mist py-24 md:py-32">
-      <div className="container-monogram">
-        <div className="text-center">
-          <Reveal>
-            <div className="flex items-center justify-center gap-4">
-              <span className="h-0.5 w-10 bg-kw-red" />
-              <span className="type-label text-kw-red">
-                {successIdea.eyebrow}
+              <span className="h-px w-10 bg-copper" />
+              <span className="type-label text-copper">
+                {brokerage.oneTable.eyebrow}
               </span>
-              <span className="h-0.5 w-10 bg-kw-red" />
+              <span className="h-px w-10 bg-copper" />
             </div>
           </Reveal>
-
-          <h2 className="type-display-lg mx-auto mt-7 max-w-4xl text-kw-ink text-balance">
-            <SplitWords text={successIdea.headline} />
+          <h2 className="type-display-lg mx-auto mt-8 max-w-4xl text-ink text-balance">
+            <SplitWords text={brokerage.oneTable.headline} />
           </h2>
-
-          <Reveal delay={0.2}>
-            <p className="type-lead mx-auto mt-8 max-w-3xl text-charcoal text-balance">
-              {successIdea.body}
+          <Reveal delay={0.25}>
+            <p className="type-lead mx-auto mt-10 max-w-3xl text-stone text-balance">
+              {brokerage.oneTable.subheadline}
             </p>
           </Reveal>
         </div>
 
-        {/* Two-column split (new; replaces Monogram's infinity loop) */}
-        <div className="mt-16 grid gap-8 md:grid-cols-2">
-          <Reveal delay={0.1} y={24}>
-            <div className="flex h-full flex-col justify-between border hairline-light bg-white p-8 shadow-sm md:p-12">
-              <div>
-                <span className="type-label text-kw-red">
-                  {successIdea.forAgentsTitle}
-                </span>
-                <span className="mt-3 block h-0.5 w-12 bg-kw-red" />
-                <p className="type-body mt-6 text-charcoal">
-                  {successIdea.forAgentsBody}
-                </p>
-              </div>
-              <div className="mt-8 border-t hairline-light pt-5">
-                <Link
-                  to="/agents"
-                  className="type-label inline-flex items-center gap-2 text-kw-ink transition-colors hover:text-kw-red"
-                >
-                  Explore For Agents
-                  <ArrowRight className="h-4 w-4 text-kw-red" />
-                </Link>
-              </div>
-            </div>
+        <div className="mt-20">
+          <Reveal>
+            <p className="type-serif-accent text-center text-ink/80">
+              {brokerage.oneTable.centerLabel}
+            </p>
           </Reveal>
 
-          <Reveal delay={0.2} y={24}>
-            <div className="flex h-full flex-col justify-between border hairline-light bg-white p-8 shadow-sm md:p-12">
-              <div>
-                <span className="type-label text-kw-red">
-                  {successIdea.forClientsTitle}
-                </span>
-                <span className="mt-3 block h-0.5 w-12 bg-kw-red" />
-                <p className="type-body mt-6 text-charcoal">
-                  {successIdea.forClientsBody}
-                </p>
-              </div>
-              <div className="mt-8 border-t hairline-light pt-5">
-                <Link
-                  to="/clients"
-                  className="type-label inline-flex items-center gap-2 text-kw-ink transition-colors hover:text-kw-red"
-                >
-                  Explore Buy &amp; Sell
-                  <ArrowRight className="h-4 w-4 text-kw-red" />
-                </Link>
-              </div>
-            </div>
-          </Reveal>
+          <Parallax distance={-28} className="mt-12">
+            <FourSeats tone="light" />
+          </Parallax>
         </div>
-
-        {/* §5.3 Visual: simple line diagram of the chain:
-            KW Success invests in agents -> Agents invest in clients -> Everyone builds success by design. */}
-        <Reveal delay={0.3}>
-          <div className="mx-auto mt-14 max-w-4xl border hairline-light bg-white px-6 py-8 shadow-sm md:px-10">
-            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-              {successIdea.chainSteps.map((step, i) => (
-                <div
-                  key={step}
-                  className="flex flex-col items-center gap-4 md:flex-row"
-                >
-                  <div className="flex items-center gap-3 text-center md:text-left">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-kw-red text-[0.72rem] font-semibold text-white">
-                      {i + 1}
-                    </span>
-                    <span className="text-[0.86rem] font-semibold uppercase tracking-[0.12em] text-kw-ink">
-                      {step}
-                    </span>
-                  </div>
-                  {i < successIdea.chainSteps.length - 1 && (
-                    <ArrowRight
-                      className="h-5 w-5 rotate-90 text-kw-red md:rotate-0"
-                      strokeWidth={1.75}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* §5.5 Our Promise                                                    */
+/* Section 3 — The Thesis (ScrollWords + FourPartInfinity)             */
 /* ------------------------------------------------------------------ */
 
-function OurPromise() {
-  const { promise } = activeBrokerage.home;
-
+function Thesis() {
   return (
-    <section className="bg-kw-ink py-24 text-white md:py-36">
+    <section id="thesis" className="border-t hairline-light bg-ivory py-28 md:py-40">
       <div className="container-monogram text-center">
         <Reveal>
           <div className="flex items-center justify-center gap-4">
-            <span className="h-0.5 w-10 bg-kw-red" />
-            <span className="type-label text-kw-red-bright">
-              {promise.eyebrow}
-            </span>
-            <span className="h-0.5 w-10 bg-kw-red" />
+            <span className="h-px w-10 bg-copper" />
+            <span className="type-label text-copper">The KW Success Standard</span>
+            <span className="h-px w-10 bg-copper" />
           </div>
         </Reveal>
-
-        <h2 className="type-display-lg mx-auto mt-7 max-w-4xl text-white text-balance">
-          <SplitWords text={promise.headline} />
+        <h2 className="type-display-lg mx-auto mt-8 max-w-4xl text-ink text-balance">
+          <SplitWords text="A Home Is More Than a Transaction." />
         </h2>
+        <ScrollWords
+          className="type-lead mx-auto mt-10 max-w-3xl text-stone"
+          text="It is a lifelong journey shaped by *trust,* *guidance,* and *relationship.* Since 1997, KW Success has united *real estate,* *mortgage,* and *title* under one roof so Northern Utah families and agents thrive for *the life of the home.*"
+        />
+        <Reveal delay={0.35}>
+          <FourPartInfinity className="mx-auto mt-16" />
+        </Reveal>
+        <motion.span
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.4, delay: 0.3, ease: EASE }}
+          className="mx-auto mt-12 block h-px w-32 origin-center bg-copper"
+        />
+      </div>
+    </section>
+  );
+}
 
-        <Reveal delay={0.2}>
-          <p className="type-lead mx-auto mt-8 max-w-3xl text-white/85 text-balance">
-            {promise.body}
+/* ------------------------------------------------------------------ */
+/* Section 5 — Our Promise (1997 → ∞ timeline)                        */
+/* ------------------------------------------------------------------ */
+
+function PromiseSection() {
+  return (
+    <section className="sticky top-0 z-0 bg-ink py-28 md:py-40">
+      <div className="container-monogram text-center">
+        <Reveal>
+          <div className="flex items-center justify-center gap-4">
+            <span className="h-px w-10 bg-copper" />
+            <span className="type-label text-copper">Our Promise</span>
+            <span className="h-px w-10 bg-copper" />
+          </div>
+        </Reveal>
+        <h2 className="type-display-lg mx-auto mt-8 max-w-4xl text-ivory text-balance">
+          <SplitWords text="The Relationship Is the Product." />
+        </h2>
+        <Reveal delay={0.25}>
+          <p className="type-lead mx-auto mt-10 max-w-3xl text-ivory/70 text-balance">
+            Homeownership and career growth should feel personal, trusted, and
+            intentionally supported across every market cycle. We don&apos;t
+            disappear at the closing table — we stay, one relationship at a
+            time.
           </p>
         </Reveal>
 
-        {/* §5.5 Timeline line: 1997 ———— today | Caption: Nearly three decades of success stories. */}
-        <Reveal delay={0.3} y={20}>
-          <div className="mx-auto mt-16 max-w-2xl">
+        <Reveal delay={0.3} y={24}>
+          <div className="mx-auto mt-20 max-w-3xl">
             <div className="flex items-center gap-5">
-              <span className="type-label text-white">
-                {promise.timelineStart}
-              </span>
-              <div className="relative h-px flex-1 bg-white/20">
+              <span className="type-label text-copper">1997</span>
+              <div className="relative h-px flex-1 bg-line-dark">
                 <motion.span
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true, amount: 0.8 }}
-                  transition={{ duration: 1.6, ease: EASE }}
-                  className="absolute inset-0 origin-left bg-kw-red"
+                  viewport={{ once: true, amount: 0.9 }}
+                  transition={{ duration: 1.8, ease: EASE }}
+                  className="absolute inset-0 origin-left bg-copper"
                 />
-                <span className="absolute -top-[3px] right-0 h-[7px] w-[7px] rotate-45 bg-kw-red" />
+                <span className="absolute -top-[3px] right-0 h-[7px] w-[7px] rotate-45 bg-copper" />
               </div>
-              <span className="type-label text-kw-red-bright">
-                {promise.timelineEnd}
-              </span>
+              <InfinityMark className="h-7 text-copper" />
             </div>
-            <p className="type-serif-accent mt-8 text-white/90">
-              {promise.timelineCaption}
+            <p className="type-serif-accent mt-10 text-ivory/80">
+              Built one relationship at a time across the Wasatch Front.
             </p>
           </div>
         </Reveal>
@@ -433,164 +369,243 @@ function OurPromise() {
 }
 
 /* ------------------------------------------------------------------ */
-/* §5.7 Home Search                                                    */
+/* Section 7 — Dual Audience Paths + Home Search Strip                 */
 /* ------------------------------------------------------------------ */
 
-const TABS = ["Buy", "Sell", "Rent"] as const;
+const SEARCH_TABS = ["Buy", "Sell", "Rent"] as const;
 
-export function HomeSearchBox() {
-  const [tab, setTab] = useState<(typeof TABS)[number]>("Buy");
+function SearchStrip() {
+  const [tab, setTab] = useState<(typeof SEARCH_TABS)[number]>("Buy");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
   const [beds, setBeds] = useState("");
   const navigate = useNavigate();
-  const { externalLinks } = activeBrokerage;
-  const { search } = activeBrokerage.home;
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    // §5.7 Sell tab: goes to /contact?topic=selling
     if (tab === "Sell") {
-      navigate("/contact?topic=selling");
+      navigate("/contact?intent=Selling");
       return;
     }
-
-    // §5.7 v1 behavior: "Begin Your Search" opens current KW Success kw.com search in a new tab
-    const url = new URL(externalLinks.searchHomesUrl);
-    if (location.trim()) url.searchParams.set("q", location.trim());
-    if (price) url.searchParams.set("maxPrice", price);
-    if (beds) url.searchParams.set("beds", beds);
-    window.open(url.toString(), "_blank", "noopener,noreferrer");
+    const base =
+      tab === "Rent" ? brokerage.search.rentUrl : brokerage.search.buyUrl;
+    const params = new URLSearchParams();
+    if (location.trim()) params.set("q", location.trim());
+    if (price) params.set("max", price);
+    if (beds) params.set("beds", beds);
+    const url = params.toString() ? `${base}?${params.toString()}` : base;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const fieldCls =
-    "w-full border hairline-light bg-snow px-4 py-3 text-[0.92rem] text-kw-ink outline-none transition-colors placeholder:text-kw-gray focus:border-kw-red";
+    "w-full border hairline-light bg-white/60 px-4 py-3 text-[0.9rem] font-light text-ink outline-none transition-colors placeholder:text-stone focus:border-copper";
 
   return (
-    <div className="border hairline-light bg-white shadow-lift">
-      {/* Buy / Sell / Rent Tabs */}
-      <div className="flex border-b hairline-light bg-mist/50">
-        {TABS.map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTab(t)}
-            className={cn(
-              "relative flex-1 px-6 py-4 text-[0.76rem] font-semibold uppercase tracking-[0.26em] transition-colors sm:flex-none sm:px-10",
-              tab === t ? "bg-white text-kw-ink" : "text-kw-gray hover:text-kw-red"
-            )}
-          >
-            {t}
-            {tab === t && (
-              <motion.span
-                layoutId="search-tab-underline"
-                className="absolute inset-x-0 bottom-0 h-[2px] bg-kw-red"
-                transition={{ type: "spring", stiffness: 500, damping: 40 }}
-              />
-            )}
-          </button>
-        ))}
-      </div>
+    <div className="relative">
+      <motion.div
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.9, ease: EASE }}
+      >
+        <div className="border hairline-light bg-ivory shadow-lift">
+          <div className="flex border-b hairline-light">
+            {SEARCH_TABS.map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setTab(t)}
+                className={cn(
+                  "relative flex-1 px-6 py-4 text-[0.78rem] font-medium uppercase tracking-[0.3em] transition-colors sm:flex-none sm:px-10",
+                  tab === t ? "text-ink" : "text-stone hover:text-copper"
+                )}
+              >
+                {t}
+                {tab === t && (
+                  <motion.span
+                    layoutId="search-tab-underline"
+                    className="absolute inset-x-0 bottom-0 h-[2px] bg-copper"
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 40,
+                    }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
 
-      {tab === "Sell" ? (
-        <div className="flex flex-col items-center justify-between gap-6 p-6 sm:flex-row md:p-8">
-          <div>
-            <p className="text-[1.05rem] font-semibold text-kw-ink">
-              Thinking about selling your home in Northern Utah?
-            </p>
-            <p className="type-body-sm mt-1 text-charcoal">
-              Connect with a KW Success Trusted Advisor for a personalized market valuation and selling strategy.
-            </p>
-          </div>
-          <Link
-            to="/contact?topic=selling"
-            className="inline-flex shrink-0 items-center gap-2 bg-kw-red px-8 py-3.5 text-[0.78rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-kw-red-bright"
+          <form
+            onSubmit={submit}
+            className="grid gap-4 p-6 md:grid-cols-[1.4fr_1fr_0.8fr_1.1fr] md:items-end md:p-8"
           >
-            Talk to an Advisor <ArrowRight className="h-4 w-4" />
-          </Link>
+            <div>
+              <label className="type-label mb-2 block text-stone">
+                Utah Location
+              </label>
+              <input
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Layton, Kaysville, Ogden, Bountiful, or ZIP"
+                className={fieldCls}
+              />
+            </div>
+            <div>
+              <label className="type-label mb-2 block text-stone">
+                Price Range
+              </label>
+              <select
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className={fieldCls}
+              >
+                <option value="">Any price</option>
+                <option value="450000">Up to $450K</option>
+                <option value="650000">Up to $650K</option>
+                <option value="850000">Up to $850K</option>
+                <option value="1200000">Up to $1.2M</option>
+                <option value="2000000">Up to $2M+</option>
+              </select>
+            </div>
+            <div>
+              <label className="type-label mb-2 block text-stone">Beds</label>
+              <select
+                value={beds}
+                onChange={(e) => setBeds(e.target.value)}
+                className={fieldCls}
+              >
+                <option value="">Any</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              className="flex items-center justify-center gap-2 bg-copper px-8 py-3.5 text-[0.8rem] font-medium uppercase tracking-[0.24em] text-ink transition-colors duration-300 hover:bg-copper-bright"
+            >
+              {tab === "Sell" ? (
+                <>
+                  Request Valuation{" "}
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
+                </>
+              ) : (
+                <>
+                  Begin Your Search{" "}
+                  <ExternalLink className="h-4 w-4" strokeWidth={1.5} />
+                </>
+              )}
+            </button>
+          </form>
         </div>
-      ) : (
-        <form
-          onSubmit={submit}
-          className="grid gap-4 p-6 md:grid-cols-[1.4fr_1fr_0.8fr_1.1fr] md:items-end md:p-8"
-        >
-          <div>
-            <label className="type-label mb-2 block text-charcoal">
-              Location
-            </label>
-            <input
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="Layton, Ogden, Kaysville, Bountiful…"
-              className={fieldCls}
-            />
-          </div>
-          <div>
-            <label className="type-label mb-2 block text-charcoal">
-              Price Range
-            </label>
-            <select
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              className={fieldCls}
-            >
-              <option value="">Any price</option>
-              <option value="400000">Up to $400K</option>
-              <option value="600000">Up to $600K</option>
-              <option value="800000">Up to $800K</option>
-              <option value="1000000">Up to $1M</option>
-              <option value="1500000">Up to $1.5M+</option>
-            </select>
-          </div>
-          <div>
-            <label className="type-label mb-2 block text-charcoal">Beds</label>
-            <select
-              value={beds}
-              onChange={(e) => setBeds(e.target.value)}
-              className={fieldCls}
-            >
-              <option value="">Any</option>
-              <option value="1">1+</option>
-              <option value="2">2+</option>
-              <option value="3">3+</option>
-              <option value="4">4+</option>
-              <option value="5">5+</option>
-            </select>
-          </div>
-          <button
-            type="submit"
-            className="flex items-center justify-center gap-2 bg-kw-red px-7 py-3.5 text-[0.78rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors duration-300 hover:bg-kw-red-bright"
-          >
-            {search.buttonLabel}
-            <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} />
-          </button>
-        </form>
-      )}
+      </motion.div>
     </div>
   );
 }
 
-function HomeSearchSection() {
-  const { search } = activeBrokerage.home;
-
+function DualAudienceAndSearch() {
   return (
-    <section id="home-search" className="bg-snow py-24 md:py-32">
+    <section
+      id="home-search"
+      className="relative z-10 bg-ivory py-24 shadow-[0_-30px_60px_-30px_rgba(0,0,0,.6)] md:py-32"
+    >
       <div className="container-monogram">
-        <div className="text-center">
-          <Reveal>
-            <div className="flex items-center justify-center gap-4">
-              <span className="h-0.5 w-10 bg-kw-red" />
-              <span className="type-label text-kw-red">{search.eyebrow}</span>
-              <span className="h-0.5 w-10 bg-kw-red" />
+        {/* Dual Audience Cards: Agents & Clients */}
+        <div className="grid gap-8 lg:grid-cols-2">
+          <Reveal y={30}>
+            <div className="flex h-full flex-col justify-between border hairline-light bg-white p-10 md:p-14">
+              <div>
+                <div className="flex items-center gap-4">
+                  <span className="h-px w-10 bg-copper" />
+                  <span className="type-label text-copper">
+                    {brokerage.agentCta.eyebrow}
+                  </span>
+                </div>
+                <h3 className="type-display-md mt-6 text-ink">
+                  {brokerage.agentCta.headline}
+                </h3>
+                <p className="type-body mt-5 text-stone">
+                  {brokerage.agentCta.body}
+                </p>
+              </div>
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <Link
+                  to={brokerage.agentCta.primaryCta.to}
+                  className="btn-sweep inline-block rounded-full border border-copper px-8 py-3.5 text-[0.75rem] font-medium uppercase tracking-[0.26em] text-copper transition-colors duration-300 hover:text-ink"
+                >
+                  {brokerage.agentCta.primaryCta.label}
+                </Link>
+                <Link
+                  to={brokerage.agentCta.secondaryCta.to}
+                  className="nav-link-line type-label text-ink transition-colors hover:text-copper"
+                >
+                  {brokerage.agentCta.secondaryCta.label} →
+                </Link>
+              </div>
             </div>
           </Reveal>
-          <h2 className="type-display-lg mx-auto mt-7 max-w-4xl text-kw-ink text-balance">
-            <SplitWords text={search.headline} />
+
+          <Reveal delay={0.12} y={30}>
+            <div className="flex h-full flex-col justify-between border hairline-dark bg-ink p-10 md:p-14">
+              <div>
+                <div className="flex items-center gap-4">
+                  <span className="h-px w-10 bg-copper" />
+                  <span className="type-label text-copper">
+                    {brokerage.clientCta.eyebrow}
+                  </span>
+                </div>
+                <h3 className="type-display-md mt-6 text-ivory">
+                  {brokerage.clientCta.headline}
+                </h3>
+                <p className="type-body mt-5 text-stone-dark">
+                  {brokerage.clientCta.body}
+                </p>
+              </div>
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <a
+                  href={brokerage.clientCta.primaryCta.to}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-copper px-8 py-3.5 text-[0.75rem] font-medium uppercase tracking-[0.26em] text-ink transition-colors duration-300 hover:bg-copper-bright"
+                >
+                  {brokerage.clientCta.primaryCta.label}
+                  <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.5} />
+                </a>
+                <Link
+                  to={brokerage.clientCta.secondaryCta.to}
+                  className="nav-link-line type-label text-ivory transition-colors hover:text-copper"
+                >
+                  {brokerage.clientCta.secondaryCta.label} →
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Search Strip */}
+        <div className="mt-24 text-center">
+          <Reveal>
+            <div className="flex items-center justify-center gap-4">
+              <span className="h-px w-10 bg-copper" />
+              <span className="type-label text-copper">When You&apos;re Ready</span>
+              <span className="h-px w-10 bg-copper" />
+            </div>
+          </Reveal>
+          <h2 className="type-display-lg mx-auto mt-8 max-w-4xl text-ink text-balance">
+            <SplitWords text="Guidance for Wherever You Are in the Journey." />
           </h2>
+          <Reveal delay={0.25}>
+            <p className="type-lead mx-auto mt-8 max-w-2xl text-stone text-balance">
+              Whether you&apos;re exploring Northern Utah neighborhoods, buying,
+              selling, or planning ahead, your advisor is ready when you are.
+            </p>
+          </Reveal>
         </div>
 
         <div className="mt-14">
-          <HomeSearchBox />
+          <SearchStrip />
         </div>
       </div>
     </section>
@@ -598,77 +613,149 @@ function HomeSearchSection() {
 }
 
 /* ------------------------------------------------------------------ */
-/* §5.9 Closing CTA                                                    */
+/* Section 9 — Leadership Preview (Editorial Portrait Grid)            */
 /* ------------------------------------------------------------------ */
 
-function ClosingCTA() {
-  const { closingCta } = activeBrokerage.home;
+function LeadershipPreview() {
+  const featured = brokerage.leadership.slice(0, 4);
 
   return (
-    <section className="border-t hairline-light bg-mist py-24 md:py-32">
-      <div className="container-monogram text-center">
-        <Reveal>
-          <span className="mx-auto block h-0.5 w-16 bg-kw-red" />
-        </Reveal>
-        <h2 className="type-display-lg mx-auto mt-8 max-w-4xl text-kw-ink text-balance">
-          <SplitWords text={closingCta.headline} />
-        </h2>
-        <Reveal delay={0.2}>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              to={closingCta.primaryCta.to}
-              className="inline-flex items-center gap-2 bg-kw-red px-9 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-white transition-colors duration-300 hover:bg-kw-red-bright"
-            >
-              {closingCta.primaryCta.label}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to={closingCta.secondaryCta.to}
-              className="inline-flex items-center gap-2 border-2 border-kw-ink bg-white px-9 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-kw-ink transition-colors duration-300 hover:bg-kw-ink hover:text-white"
-            >
-              {closingCta.secondaryCta.label}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+    <section className="bg-ink py-28 md:py-40">
+      <div className="container-monogram">
+        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <Reveal>
+              <div className="flex items-center gap-4">
+                <span className="h-px w-10 bg-copper" />
+                <span className="type-label text-copper">
+                  Leadership &amp; Stewardship
+                </span>
+              </div>
+            </Reveal>
+            <h2 className="type-display-lg mt-6 max-w-2xl text-ivory">
+              <SplitWords text="Meet the Leaders Behind the Table." />
+            </h2>
           </div>
-        </Reveal>
+          <Reveal delay={0.2}>
+            <Link
+              to="/about#leadership"
+              className="btn-sweep inline-flex items-center gap-2 rounded-full border border-copper px-8 py-3.5 text-[0.75rem] font-medium uppercase tracking-[0.26em] text-copper transition-colors duration-300 hover:text-ink"
+            >
+              Meet All {brokerage.leadership.length} Leaders →
+            </Link>
+          </Reveal>
+        </div>
+
+        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {featured.map((leader, idx) => (
+            <Reveal key={leader.id} delay={0.08 * idx} y={32}>
+              <Link
+                to="/about#leadership"
+                data-cursor="Meet"
+                className="group block"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden border hairline-dark bg-ink-deep">
+                  <img
+                    src={leader.headshot}
+                    alt={leader.name}
+                    className="h-full w-full object-cover object-top grayscale-[25%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                    loading="lazy"
+                  />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-3 border border-copper opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  />
+                </div>
+                <div className="mt-5">
+                  <h3 className="text-[1.15rem] font-medium text-ivory transition-colors group-hover:text-copper">
+                    {leader.name}
+                  </h3>
+                  <p className="type-label mt-1.5 text-copper">
+                    {leader.role}
+                  </p>
+                </div>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Home Page (§5 section order)                                        */
+/* Section 10 — Footer CTA (MouseTrail + Ticker)                       */
+/* ------------------------------------------------------------------ */
+
+function FooterCTA() {
+  return (
+    <MouseTrail
+      images={[
+        "/interior-a.jpg",
+        "/interior-b.jpg",
+        "/interior-c.jpg",
+        "/interior-d.jpg",
+        "/luxe-estate.jpg",
+        "/listing-03.jpg",
+        "/listing-06.jpg",
+        "/listing-09.jpg",
+      ]}
+      className="relative overflow-hidden bg-black py-28 md:py-36"
+    >
+      <Ticker word="KW SUCCESS" />
+      <div className="container-monogram relative z-10 text-center">
+        <Reveal>
+          <span className="mx-auto inline-block h-3.5 w-3.5 rotate-45 bg-copper" />
+        </Reveal>
+        <h2 className="type-display-lg mx-auto mt-10 max-w-4xl text-ivory text-balance">
+          <SplitWords text="One Conversation Opens Every Door." />
+        </h2>
+        <Reveal delay={0.25}>
+          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Magnetic radius={120}>
+              <Link
+                to="/contact"
+                className="inline-block rounded-full bg-copper px-10 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:bg-copper-bright"
+              >
+                Start a Conversation
+              </Link>
+            </Magnetic>
+            <Magnetic radius={120}>
+              <Link
+                to="/areas-served"
+                className="inline-block rounded-full border border-white/40 px-10 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.28em] text-ivory transition-colors duration-300 hover:border-copper hover:text-copper"
+              >
+                Explore Network Map
+              </Link>
+            </Magnetic>
+          </div>
+        </Reveal>
+      </div>
+    </MouseTrail>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Page                                                                */
 /* ------------------------------------------------------------------ */
 
 export default function Home() {
-  const { flags } = activeBrokerage;
-
   return (
     <>
-      {/* §5.1 Hero */}
       <Hero />
-      {/* §5.2 Everyone at One Table */}
-      <EveryoneAtOneTable />
-      {/* §5.3 The Success Idea */}
-      <TheSuccessIdea />
-      {/* §5.4 The Three Pillars */}
-      <ThreePillars mode="toggle" />
-      {/* §5.5 Our Promise */}
-      <OurPromise />
-      {/* §5.6 Stats band + Best of State badge */}
-      <StatsBand />
-      {/* §5.7 Home search */}
-      <HomeSearchSection />
-      {/* §5.8 Testimonials (hidden by flag showTestimonials=false until real) */}
-      {flags.showTestimonials && (
-        <section className="bg-kw-ink py-28 text-white md:py-40">
-          <div className="container-monogram">
-            <TestimonialCarousel />
-          </div>
-        </section>
-      )}
-      {/* §5.9 Closing CTA */}
-      <ClosingCTA />
+      <div className="relative z-10 shadow-[0_-40px_80px_-30px_rgba(0,0,0,.7)]">
+        <Connected />
+        <Thesis />
+        <ThreePillars defaultAudience="agents" allowToggle pinned />
+        <PromiseSection />
+        <div className="relative z-10">
+          <JourneyRail />
+          <DualAudienceAndSearch />
+          <StatsBand />
+          <LeadershipPreview />
+          <FooterCTA />
+        </div>
+      </div>
     </>
   );
 }

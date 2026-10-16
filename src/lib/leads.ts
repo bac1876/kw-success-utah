@@ -1,14 +1,20 @@
 import { activeBrokerage } from "@/brokerages";
 
 export interface LeadSubmissionPayload {
-  topic: "I'm an agent" | "Buying" | "Selling" | "General";
+  topic:
+    | "I'm an agent"
+    | "Joining KW Success (Agent)"
+    | "Buying"
+    | "Selling"
+    | "General";
   name: string;
   email: string;
   phone?: string;
   currentBrokerage?: string;
   yearsLicensed?: string;
+  licenseStatus?: string;
   message?: string;
-  sourcePage: string;
+  sourcePage?: string;
   honeypot?: string;
 }
 
@@ -46,7 +52,8 @@ export async function submitLeadForm(
   }
 
   const routeTarget =
-    payload.topic === "I'm an agent"
+    payload.topic === "I'm an agent" ||
+    payload.topic === "Joining KW Success (Agent)"
       ? routing.agentInquiry
       : payload.topic === "Buying" || payload.topic === "Selling"
         ? routing.buyingSelling
@@ -64,10 +71,11 @@ export async function submitLeadForm(
     email: payload.email.trim(),
     phone: payload.phone?.trim() || null,
     current_brokerage: payload.currentBrokerage?.trim() || null,
-    years_licensed: payload.yearsLicensed?.trim() || null,
+    years_licensed:
+      payload.yearsLicensed?.trim() || payload.licenseStatus?.trim() || null,
     message: payload.message?.trim() || null,
     routed_to_email: routeTarget.email,
-    source_page: payload.sourcePage,
+    source_page: payload.sourcePage ?? "/contact",
     submitted_at: new Date().toISOString(),
   };
 
@@ -103,3 +111,6 @@ export async function submitLeadForm(
     storedInSupabase,
   };
 }
+
+export const submitLead = submitLeadForm;
+
