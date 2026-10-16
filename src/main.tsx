@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
 import MotionNotice from "./components/motion/MotionNotice.tsx";
@@ -41,7 +42,9 @@ const motionState = initMotionPreference();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
-    <MotionNotice {...motionState} />
+    <BrowserRouter>
+      <App />
+      <MotionNotice {...motionState} />
+    </BrowserRouter>
   </StrictMode>
 );
