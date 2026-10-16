@@ -28,6 +28,7 @@ export default function App() {
         <Route path="services/:slug" element={<ServiceDetail />} />
         <Route path="contact" element={<Contact />} />
         <Route path="contact/:service" element={<Contact />} />
+        <Route path="login" element={<Navigate to="/login/agent" replace />} />
         <Route path="login/:kind" element={<Login />} />
         <Route
           path="affiliated-business-disclosure"
