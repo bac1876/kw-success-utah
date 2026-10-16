@@ -13,7 +13,6 @@ import {
 import { activeBrokerage } from "@/brokerages";
 import FourSeats from "@/components/FourSeats";
 import ThreePillars from "@/components/ThreePillars";
-import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
@@ -97,10 +96,6 @@ export default function Clients() {
               >
                 Talk to Us
               </Link>
-
-              {externalLinks.findAgentIsPlaceholder && (
-                <SampleChip label="PLACEHOLDER: Confirm Roster URL" />
-              )}
             </div>
           </div>
         </div>
@@ -255,10 +250,9 @@ export default function Clients() {
               </Link>
             </div>
 
-            {/* §7 Fair Housing Note [SHAWN REVIEW] */}
+            {/* §7 Fair Housing Note */}
             <div className="mx-auto mt-10 flex max-w-2xl flex-wrap items-center justify-center gap-2 border-t border-white/10 pt-6 text-xs text-stone-dark">
               <span>{disclosures.fairHousingNote}</span>
-              <SampleChip label="SHAWN REVIEW" variant="review" />
             </div>
           </div>
         </div>

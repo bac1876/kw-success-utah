@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, ExternalLink, Facebook, Instagram, MapPin, Phone, Star } from "lucide-react";
 import { brokerage } from "@/brokerages";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
-import SampleChip from "@/components/SampleChip";
 
 export default function Footer() {
   const { brand, office, partners, social, disclosures } = brokerage;
@@ -154,7 +153,6 @@ export default function Footer() {
               >
                 {office.phone}
               </a>
-              {office.phonePlaceholder && <SampleChip label="PLACEHOLDER" />}
             </div>
 
             <p className="text-xs text-stone-dark">
@@ -188,8 +186,7 @@ export default function Footer() {
       <div className="border-t border-white/10 bg-black/30">
         <div className="container-kw flex flex-col items-center justify-between gap-4 py-6 text-center md:flex-row md:text-left">
           <p className="max-w-3xl text-xs text-stone-dark">
-            {disclosures.legalFooterText}{" "}
-            <SampleChip label="SHAWN REVIEW" variant="review" className="ml-1" />
+            {disclosures.legalFooterText}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-5 text-xs">
             <Link

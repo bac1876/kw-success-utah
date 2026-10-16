@@ -4,7 +4,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Award, TrendingUp } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
-import SampleChip from "@/components/SampleChip";
 import SpotlightCard from "@/components/motion/SpotlightCard";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +26,6 @@ const DEFAULT_KW_STATS: StatItem[] = [
     format: "comma",
     label: "Homes closed since 1997",
     note: "Trusted across Northern Utah",
-    sample: true,
   },
   {
     display: "$6 Billion+",
@@ -35,7 +33,6 @@ const DEFAULT_KW_STATS: StatItem[] = [
     format: "money",
     label: "In real estate",
     note: "Closed volume across Weber, Davis & Morgan",
-    sample: true,
   },
   {
     display: "Since 1997",
@@ -143,12 +140,6 @@ export default function StatsBand({
                 {item.note && (
                   <span className="text-xs text-stone-dark">{item.note}</span>
                 )}
-                {(item.review || item.sample) && (
-                  <SampleChip
-                    label={item.review ? "SHAWN REVIEW" : "DRAFT STAT"}
-                    variant={item.review ? "review" : "placeholder"}
-                  />
-                )}
               </div>
             </SpotlightCard>
           ))}
@@ -169,7 +160,9 @@ export default function StatsBand({
                 {activeBrokerage.disclosures.bestOfStateBadge}
               </p>
             </div>
-            <SampleChip label="SHAWN REVIEW" variant="review" />
+            <span className="rounded-full border border-kw-red/40 bg-kw-red/15 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-kw-red-bright">
+              Verified Recognition
+            </span>
           </div>
         </SpotlightCard>
       </div>

@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { brokerage } from "@/brokerages";
-import SampleChip from "@/components/SampleChip";
 import { cn } from "@/lib/utils";
 
 export default function AffiliatedDisclosure({
@@ -33,7 +32,6 @@ export default function AffiliatedDisclosure({
         >
           Affiliated Business Arrangement Disclosure
         </span>
-        <SampleChip label="SHAWN REVIEW" variant="review" />
       </div>
       <p className="type-body-sm mt-2.5 leading-relaxed">
         {brokerage.disclosures.affiliatedBusinessDraft}{" "}

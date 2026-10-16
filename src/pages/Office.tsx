@@ -2,7 +2,6 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
 import ListingCard from "@/components/ListingCard";
-import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import { useSearchOverlay } from "@/components/SearchOverlay";
@@ -43,17 +42,13 @@ function ComplianceLine({
       {office.broker ? (
         <span>{office.broker}, Designated Managing Broker</span>
       ) : (
-        <span className="flex items-center gap-2">
-          Designated Managing Broker <SampleChip label="Name pending" />
-        </span>
+        <span>Designated Managing Broker</span>
       )}
       <span className="text-copper/50">·</span>
       {office.address && office.address.length > 0 ? (
         <span>{office.address.join(", ")}</span>
       ) : (
-        <span className="flex items-center gap-2">
-          Office address <SampleChip label="Address pending" />
-        </span>
+        <span>Market Center Office</span>
       )}
     </div>
   );
@@ -250,9 +245,6 @@ export default function Office() {
                 target={office.siteUrl ? "_blank" : undefined}
                 rel={office.siteUrl ? "noopener noreferrer" : undefined}
                 className="type-label flex items-center gap-2 text-stone-dark transition-colors hover:text-copper"
-                title={
-                  office.siteUrl ? undefined : "Office site link coming soon"
-                }
               >
                 Office Website
                 <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} />

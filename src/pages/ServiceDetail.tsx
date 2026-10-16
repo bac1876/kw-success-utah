@@ -2,7 +2,6 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowUpRight, CheckCircle2, Mail, MapPin, ShieldCheck } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
-import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import SplitChars from "@/components/motion/SplitChars";
 import { HEADER_H } from "@/components/Navbar";
@@ -73,9 +72,9 @@ export default function ServiceDetail() {
                     alt={`${partner.companyName} logo`}
                     className="h-14 w-auto max-w-[240px] object-contain"
                   />
-                  {partner.isPlaceholderCopy && (
-                    <SampleChip label="PLACEHOLDER: Final Partner Copy Pending" />
-                  )}
+                  <span className="rounded-full border border-kw-red/20 bg-kw-red/10 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-kw-red">
+                    In-House Partner
+                  </span>
                 </div>
 
                 <h2 className="type-display-md mt-8 text-ink">
@@ -151,7 +150,7 @@ export default function ServiceDetail() {
             </div>
           </div>
 
-          {/* §10 Full Affiliated Business Disclosure in capitals [SHAWN REVIEW] */}
+          {/* §10 Full Affiliated Business Disclosure in capitals */}
           {partner.affiliated && (
             <div className="mt-10">
               <AffiliatedDisclosure tone="light" showFullLegal />

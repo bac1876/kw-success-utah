@@ -39,7 +39,7 @@ export default function HomeServices() {
             className="flex items-center gap-4"
           >
             <span className="h-px w-10 bg-copper" />
-            <span className="type-label text-copper">Coming Soon</span>
+            <span className="type-label text-copper">Home Services Concierge</span>
             <span className="h-px w-10 bg-copper" />
           </motion.div>
 

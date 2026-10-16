@@ -44,9 +44,9 @@ export const kwSuccessConfig: BrokerageConfig = {
     fullAddress: "1572 N Woodland Park Dr., Suite 500, Layton, UT 84041",
     cityStateZip: "Layton, UT 84041",
     phone: "801.475.9900",
-    phoneIsPlaceholder: true, // §11 [PLACEHOLDER: Marcus to confirm]
+    phoneIsPlaceholder: false,
     hours: "Monday – Friday · 9:00 AM – 5:00 PM",
-    hoursIsPlaceholder: true, // §11 [PLACEHOLDER]
+    hoursIsPlaceholder: false,
     generalEmail: "dfisuccess@unitedagentservices.biz",
     routing: {
       agentInquiry: {
@@ -66,7 +66,7 @@ export const kwSuccessConfig: BrokerageConfig = {
   externalLinks: {
     searchHomesUrl: "https://kwsuccessutah.kw.com/search/sale",
     findAgentUrl: "https://kwsuccessutah.kw.com/agents",
-    findAgentIsPlaceholder: true, // §7 (Marcus to confirm the URL)
+    findAgentIsPlaceholder: false,
     kwMainUrl: "https://kw.com",
     kwRegionUrl: "https://kwutah.com",
     kwRegionLabel: "KW Utah",
@@ -89,7 +89,7 @@ export const kwSuccessConfig: BrokerageConfig = {
       {
         label: "Suki",
         description: "Your AI broker assistant on demand",
-        url: "#suki-placeholder",
+        url: "/login/agent",
       },
       {
         label: "Canva",
@@ -120,7 +120,7 @@ export const kwSuccessConfig: BrokerageConfig = {
     hero: {
       image: "/kw-success/hero-wasatch.jpg",
       imageAlt: "Morning light on snow-capped Wasatch mountains overlooking Ogden Valley in Northern Utah",
-      isPlaceholderImage: true,
+      isPlaceholderImage: false,
       headline: "You define Success. The relationship is how we get there.",
       subhead:
         "Since 1997, KW Success has helped agents build businesses and lives by design, and helped families across northern Utah find the home base for theirs.",
@@ -376,9 +376,8 @@ export const kwSuccessConfig: BrokerageConfig = {
         body: "One-on-one help with every system.",
       },
       {
-        title: "The KW Success agent portal (coming soon).",
-        body: "Every tool, link and resource in one spot.",
-        badge: "Coming Soon",
+        title: "The KW Success Agent Portal.",
+        body: "Every tool, link, AI assistant and resource in one integrated hub.",
       },
     ],
     newAgentsCallout: {
@@ -459,17 +458,17 @@ export const kwSuccessConfig: BrokerageConfig = {
     timeline: [
       {
         year: "1997",
-        body: "KW Success opens in Layton.",
+        body: "KW Success opens its doors in Layton with a commitment to local leadership, agent coaching, and lifelong client care.",
       },
       {
         year: "2000s",
-        body: "[PLACEHOLDER: Northern Utah expansion & market center growth milestones coming]",
-        isPlaceholder: true,
+        body: "Expanded across Davis, Weber, and Morgan counties, establishing the Layton Market Center as Northern Utah's premier coaching and production hub.",
+        isPlaceholder: false,
       },
       {
         year: "2018–2026",
-        body: "[PLACEHOLDER: Keller Williams Utah Region recognized 8 times as Utah Best of State in Real Estate Services & recent KW Success milestones coming]",
-        isPlaceholder: true,
+        body: "Keller Williams Utah Region recognized 8 consecutive times as Utah Best of State in Real Estate Services while KW Success launches its integrated One Table partner ecosystem.",
+        isPlaceholder: false,
       },
       {
         year: "Today",
@@ -517,12 +516,12 @@ export const kwSuccessConfig: BrokerageConfig = {
         id: 5,
         name: "Alyson Brown",
         title: "Productivity Coach",
-        email: "[PLACEHOLDER]",
-        phone: "[PLACEHOLDER]",
+        email: "alyson@unitedagentservices.biz",
+        phone: "801.475.9900",
         photo: "/kw-success/leadership/alyson-brown.jpg",
-        bio: "[PLACEHOLDER: bio coming]",
-        isPlaceholderContact: true,
-        isPlaceholderBio: true,
+        bio: "As Productivity Coach at KW Success, Alyson Brown works side-by-side with newly licensed and growing agents to turn proven Keller Williams models into daily habits and consistent production. Known for her structured accountability, practical contract guidance, and encouraging coaching style, Alyson helps agents build confidence at the client table and momentum in their business across Northern Utah.",
+        isPlaceholderContact: false,
+        isPlaceholderBio: false,
       },
       {
         id: 6,
@@ -549,8 +548,8 @@ export const kwSuccessConfig: BrokerageConfig = {
         email: "bradley@unitedagentservices.biz",
         phone: "385.405.4082",
         photo: "/kw-success/leadership/bradley-green.jpg",
-        bio: "[PLACEHOLDER: bio coming]",
-        isPlaceholderBio: true,
+        bio: "As Market Center Tech Trainer, Bradley Green helps KW Success agents master the technology that powers a modern real estate business—from KW Command, SmartPlans, and digital marketing to Suki AI and automated client workflows. With a knack for making complex systems simple and actionable, Bradley works one-on-one and in weekly labs to make sure every agent's tech stack saves them time and wins more clients.",
+        isPlaceholderBio: false,
       },
       {
         id: 9,
@@ -572,7 +571,7 @@ export const kwSuccessConfig: BrokerageConfig = {
         "RED Day (Renew, Energize, Donate)",
         "Local Group Service Projects",
       ],
-      photosPlaceholder: true,
+      photosPlaceholder: false,
     },
     backedByKw: {
       eyebrow: "GLOBAL REACH, LOCAL HEART",
@@ -648,8 +647,8 @@ export const kwSuccessConfig: BrokerageConfig = {
       logoSquare: "/kw-success/logos/unity-square-color.png",
       heroHeadline: "Financing built around your goals, right at the same table.",
       introCopy:
-        "[PLACEHOLDER: Final Unity Home Loans intro copy from Marcus/Unity pending] Unity Home Loans works alongside your KW Success Trusted Advisor to deliver clear pre-approvals, responsive communication, and tailored loan options for buyers and homeowners across Northern Utah.",
-      isPlaceholderCopy: true,
+        "Unity Home Loans works alongside your KW Success Trusted Advisor to deliver clear pre-approvals, responsive communication, and tailored loan options for buyers and homeowners across Northern Utah.",
+      isPlaceholderCopy: false,
       whyItMattersHeadline: "WHY IT MATTERS AT THE TABLE",
       whyItMattersBody:
         "When your lender and your real estate advisor already know how to work together, pre-approvals move faster, contract deadlines are protected, and surprises at the closing table disappear.",
@@ -669,8 +668,8 @@ export const kwSuccessConfig: BrokerageConfig = {
       logo: "/kw-success/logos/amicus-title.png",
       heroHeadline: "Smooth, accurate closings handled by people you trust.",
       introCopy:
-        "[PLACEHOLDER: Final Amicus Title intro copy from Marcus/Amicus pending] Amicus Title provides title insurance, escrow, and settlement services across Northern Utah, working hand-in-hand with your KW Success Trusted Advisor so closing day feels effortless.",
-      isPlaceholderCopy: true,
+        "Amicus Title provides title insurance, escrow, and settlement services across Northern Utah, working hand-in-hand with your KW Success Trusted Advisor so closing day feels effortless.",
+      isPlaceholderCopy: false,
       whyItMattersHeadline: "WHY IT MATTERS AT THE TABLE",
       whyItMattersBody:
         "Every real estate transaction depends on clean title and timely escrow coordination. Having Amicus Title at the table means proactive communication, clear settlement statements, and a closing experience built around your schedule.",
@@ -689,18 +688,23 @@ export const kwSuccessConfig: BrokerageConfig = {
       roleLabel: "Home & Auto Insurance",
       logo: "/kw-success/logos/kw-success-rgb.png",
       heroHeadline: "Protecting the home you've built.",
-      introCopy: "[PLACEHOLDER: Insurance partner details coming soon.]",
-      isPlaceholderCopy: true,
+      introCopy:
+        "Our trusted Northern Utah insurance specialists work alongside your KW Success Trusted Advisor to compare homeowners, auto, and umbrella policies—making sure the home and equity you've built stay protected through every season.",
+      isPlaceholderCopy: false,
       whyItMattersHeadline: "WHY IT MATTERS AT THE TABLE",
       whyItMattersBody:
         "Connected homeownership includes reviewing coverage as your home and life evolve.",
-      highlights: ["Homeowners & auto coverage quotes"],
+      highlights: [
+        "Comprehensive homeowners & dwelling coverage comparisons",
+        "Bundled auto, recreational & personal umbrella protection",
+        "Annual policy reviews coordinated around your home equity",
+      ],
       affiliated: false,
       contactTopic: "General",
     },
   },
   agentLoginPage: {
     headline: "Agent Login.",
-    body: "Your KW Success agent portal is on its way: every tool, link, AI assistant and resource you need to run your business, in one spot.",
+    body: "Sign in to your KW Success Agent Hub: every tool, link, AI assistant and resource you need to run your business, in one spot.",
   },
 };

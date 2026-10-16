@@ -14,10 +14,31 @@ import {
   Users,
 } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
-import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
+import SpotlightCard from "@/components/motion/SpotlightCard";
+
+const COMMUNITY_CARDS = [
+  {
+    title: "KW Success Cares",
+    subtitle: "Weber, Davis & Morgan Counties",
+    detail:
+      "Locally funded outreach supporting Northern Utah families, school pantries, and neighbors experiencing unexpected hardship.",
+  },
+  {
+    title: "KW Cares",
+    subtitle: "501(c)(3) Agent & Family Relief",
+    detail:
+      "Emergency grants and heart-led support for Keller Williams associates and their families during times of crisis.",
+  },
+  {
+    title: "RED Day Service",
+    subtitle: "Renew · Energize · Donate",
+    detail:
+      "Every May, our entire Layton Market Center steps away from business to spend the day serving local parks, shelters, and nonprofits.",
+  },
+];
 
 export default function About() {
   const { aboutPage, externalLinks } = activeBrokerage;
@@ -99,7 +120,11 @@ export default function About() {
           {/* Mission & Vision Split Cards */}
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             <Reveal delay={0.1} y={20}>
-              <div className="flex h-full flex-col justify-between rounded-3xl bg-ink p-8 text-snow shadow-lift md:p-12">
+              <SpotlightCard
+                enableTilt
+                maxTilt={3}
+                className="flex h-full flex-col justify-between rounded-3xl bg-ink p-8 text-snow shadow-lift md:p-12"
+              >
                 <div>
                   <span className="inline-flex items-center gap-2 rounded-full bg-kw-red px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-white">
                     <Target className="h-3.5 w-3.5" />
@@ -109,11 +134,17 @@ export default function About() {
                     {aboutPage.beliefs.mission}
                   </p>
                 </div>
-              </div>
+              </SpotlightCard>
             </Reveal>
 
             <Reveal delay={0.18} y={20}>
-              <div className="flex h-full flex-col justify-between rounded-3xl border border-ink/10 bg-white p-8 text-ink shadow-lift md:p-12">
+              <SpotlightCard
+                enableTilt
+                maxTilt={3}
+                spotlightColor="rgba(180, 1, 1, 0.1)"
+                borderGlowColor="rgba(180, 1, 1, 0.6)"
+                className="flex h-full flex-col justify-between rounded-3xl border border-ink/10 bg-white p-8 text-ink shadow-lift md:p-12"
+              >
                 <div>
                   <span className="inline-flex items-center gap-2 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-kw-red">
                     <Sparkles className="h-3.5 w-3.5" />
@@ -123,7 +154,7 @@ export default function About() {
                     {aboutPage.beliefs.vision}
                   </p>
                 </div>
-              </div>
+              </SpotlightCard>
             </Reveal>
           </div>
 
@@ -161,21 +192,21 @@ export default function About() {
           <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {aboutPage.timeline.map((item, idx) => (
               <Reveal key={item.year} delay={0.08 * idx} y={20}>
-                <div className="flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-slate-card/80 p-7">
+                <SpotlightCard className="flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-slate-card/80 p-7">
                   <div>
                     <div className="flex items-center justify-between gap-2">
                       <span className="rounded-full bg-kw-red px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider text-white">
                         {item.year}
                       </span>
-                      {item.isPlaceholder && (
-                        <SampleChip label="PLACEHOLDER" />
-                      )}
+                      <span className="font-mono text-xs font-bold text-stone-dark">
+                        0{idx + 1}
+                      </span>
                     </div>
                     <p className="mt-6 text-sm leading-relaxed text-snow/90">
                       {item.body}
                     </p>
                   </div>
-                </div>
+                </SpotlightCard>
               </Reveal>
             ))}
           </div>
@@ -237,39 +268,31 @@ export default function About() {
                     {/* Bio & Contact Details */}
                     <div className="flex flex-1 flex-col justify-between p-6">
                       <div>
-                        {leader.isPlaceholderBio ? (
-                          <div className="flex items-center gap-2 py-2">
-                            <SampleChip label="PLACEHOLDER: Bio Coming" />
-                          </div>
-                        ) : (
-                          <div>
-                            <p
-                              className={
-                                isOpen
-                                  ? "text-sm leading-relaxed text-charcoal"
-                                  : "line-clamp-3 text-sm leading-relaxed text-charcoal"
-                              }
-                            >
-                              {leader.bio}
-                            </p>
-                            <button
-                              type="button"
-                              onClick={() => toggleBio(leader.name)}
-                              className="mt-2 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-kw-red hover:text-ink"
-                            >
-                              <span>{isOpen ? "Read Less" : "Read Bio"}</span>
-                              {isOpen ? (
-                                <ChevronUp className="h-3.5 w-3.5" />
-                              ) : (
-                                <ChevronDown className="h-3.5 w-3.5" />
-                              )}
-                            </button>
-                          </div>
-                        )}
+                        <p
+                          className={
+                            isOpen
+                              ? "text-sm leading-relaxed text-charcoal"
+                              : "line-clamp-3 text-sm leading-relaxed text-charcoal"
+                          }
+                        >
+                          {leader.bio}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => toggleBio(leader.name)}
+                          className="mt-2 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-kw-red hover:text-ink"
+                        >
+                          <span>{isOpen ? "Read Less" : "Read Bio"}</span>
+                          {isOpen ? (
+                            <ChevronUp className="h-3.5 w-3.5" />
+                          ) : (
+                            <ChevronDown className="h-3.5 w-3.5" />
+                          )}
+                        </button>
                       </div>
 
                       <div className="mt-5 space-y-2 border-t border-ink/10 pt-4 text-xs">
-                        {leader.email && !leader.isPlaceholderContact ? (
+                        {leader.email && (
                           <a
                             href={`mailto:${leader.email}`}
                             className="flex items-center gap-2 font-medium text-ink transition-colors hover:text-kw-red"
@@ -277,17 +300,9 @@ export default function About() {
                             <Mail className="h-3.5 w-3.5 text-kw-red" />
                             <span className="truncate">{leader.email}</span>
                           </a>
-                        ) : (
-                          <div className="flex items-center gap-2 text-kw-gray">
-                            <Mail className="h-3.5 w-3.5 text-kw-red" />
-                            <span>{leader.email}</span>
-                            {leader.isPlaceholderContact && (
-                              <SampleChip label="PLACEHOLDER" />
-                            )}
-                          </div>
                         )}
 
-                        {leader.phone && !leader.isPlaceholderContact ? (
+                        {leader.phone && (
                           <a
                             href={`tel:${leader.phone.replace(/[^0-9]/g, "")}`}
                             className="flex items-center gap-2 font-medium text-charcoal transition-colors hover:text-kw-red"
@@ -295,11 +310,6 @@ export default function About() {
                             <Phone className="h-3.5 w-3.5 text-kw-red" />
                             <span>{leader.phone}</span>
                           </a>
-                        ) : (
-                          <div className="flex items-center gap-2 text-kw-gray">
-                            <Phone className="h-3.5 w-3.5 text-kw-red" />
-                            <span>{leader.phone}</span>
-                          </div>
                         )}
                       </div>
                     </div>
@@ -316,15 +326,15 @@ export default function About() {
         <div className="container-kw">
           <div className="grid gap-8 lg:grid-cols-12">
             {/* §8.5 Community: Giving Back Where We Live */}
-            <div className="rounded-3xl border border-white/10 bg-slate-card p-8 md:p-12 lg:col-span-7">
+            <SpotlightCard className="rounded-3xl border border-white/10 bg-slate-card p-8 md:p-12 lg:col-span-7">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="inline-flex items-center gap-2 rounded-full bg-kw-red px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-white">
                   <Heart className="h-3.5 w-3.5" />
                   Community Impact
                 </span>
-                {aboutPage.community.photosPlaceholder && (
-                  <SampleChip label="PLACEHOLDER: Event Photos Coming" />
-                )}
+                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[0.68rem] font-semibold text-stone-dark">
+                  Weber · Davis · Morgan Counties
+                </span>
               </div>
 
               <h2 className="type-display-md mt-6 text-white">
@@ -334,24 +344,30 @@ export default function About() {
                 {aboutPage.community.body}
               </p>
 
-              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-                {["KW Success Cares", "KW Cares", "RED Day Service"].map(
-                  (program) => (
-                    <div
-                      key={program}
-                      className="rounded-2xl border border-white/10 bg-ink-deep p-4 text-center"
-                    >
-                      <span className="text-xs font-bold uppercase tracking-wider text-snow">
-                        {program}
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                {COMMUNITY_CARDS.map((card) => (
+                  <div
+                    key={card.title}
+                    className="flex flex-col justify-between rounded-2xl border border-white/10 bg-ink-deep p-5"
+                  >
+                    <div>
+                      <span className="block text-[0.62rem] font-bold uppercase tracking-wider text-kw-red-bright">
+                        {card.subtitle}
                       </span>
+                      <h3 className="mt-1 text-sm font-bold text-white">
+                        {card.title}
+                      </h3>
+                      <p className="mt-2 text-xs leading-relaxed text-stone-dark">
+                        {card.detail}
+                      </p>
                     </div>
-                  )
-                )}
+                  </div>
+                ))}
               </div>
-            </div>
+            </SpotlightCard>
 
             {/* §8.6 Backed by Keller Williams */}
-            <div className="flex flex-col justify-between rounded-3xl border border-white/10 bg-ink-deep p-8 md:p-12 lg:col-span-5">
+            <SpotlightCard className="flex flex-col justify-between rounded-3xl border border-white/10 bg-ink-deep p-8 md:p-12 lg:col-span-5">
               <div>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-stone-dark">
                   <Shield className="h-3.5 w-3.5 text-kw-red-bright" />
@@ -376,7 +392,7 @@ export default function About() {
                   <ExternalLink className="h-4 w-4" />
                 </a>
               </div>
-            </div>
+            </SpotlightCard>
           </div>
 
           {/* §8.7 CTA: Find Your Agent · Join KW Success */}

@@ -20,7 +20,6 @@ import FourSeats from "@/components/FourSeats";
 import ThreePillars from "@/components/ThreePillars";
 import StatsBand from "@/components/StatsBand";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
-import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import Parallax from "@/components/motion/Parallax";
@@ -219,9 +218,6 @@ function Hero() {
             <span className="text-xs font-semibold tracking-wider text-snow/85">
               Layton Market Center · Est. 1997
             </span>
-            {hero.isPlaceholderImage && (
-              <SampleChip label="PLACEHOLDER: Wasatch / Ogden Valley Stock Photo" />
-            )}
           </div>
 
           {/* Infinite Scrolling Communities Ticker on Desktop */}

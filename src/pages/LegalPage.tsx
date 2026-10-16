@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { activeBrokerage } from "@/brokerages";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
-import SampleChip from "@/components/SampleChip";
 import { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 
@@ -30,9 +29,6 @@ export default function LegalPage({
           <h1 className="type-display-md mx-auto mt-4 max-w-3xl text-white">
             <SplitWords text={titles[type]} stagger={0.04} delay={0.1} />
           </h1>
-          <div className="mt-4">
-            <SampleChip label="SHAWN REVIEW" variant="shawn-review" />
-          </div>
         </div>
       </section>
 
@@ -57,10 +53,11 @@ export default function LegalPage({
                 <AffiliatedDisclosure tone="light" showFullLegal />
 
                 <p className="type-body-sm text-kw-gray">
-                  [PLACEHOLDER: Final signed Affiliated Business Disclosure
-                  statement and estimated fee schedule PDF to be supplied by
-                  Designated Broker {designatedBroker} prior to production
-                  launch.]
+                  For a printed copy of our full Affiliated Business Arrangement
+                  Disclosure Statement and current range of settlement service
+                  charges, please contact our Layton Market Center at{" "}
+                  {contact.phone} or Designated Broker {designatedBroker} at{" "}
+                  {contact.fullAddress}.
                 </p>
               </div>
             ) : type === "accessibility" ? (
@@ -83,16 +80,46 @@ export default function LegalPage({
                   or visit us at {contact.fullAddress}.
                 </p>
               </div>
+            ) : type === "privacy" ? (
+              <div className="space-y-4 text-charcoal">
+                <p className="type-body">
+                  <strong className="text-ink">{name}</strong> respects your
+                  privacy and is committed to protecting the personal
+                  information you share with us. Information submitted through
+                  our website forms—such as your name, email address, phone
+                  number, and real estate goals—is used solely to connect you
+                  with a KW Success Trusted Advisor or leadership team member at
+                  our Layton Market Center ({contact.fullAddress}).
+                </p>
+                <p className="type-body">
+                  We do not sell your personal contact information to
+                  unaffiliated third-party marketers. If you request connected
+                  services across our table (such as mortgage pre-approval
+                  through Unity Home Loans or escrow services through Amicus
+                  Title), your advisor will coordinate that introduction with
+                  your permission.
+                </p>
+                <p className="type-body-sm text-kw-gray">
+                  Questions regarding privacy or data requests may be directed
+                  to {contact.generalEmail} or {contact.phone}. Each Keller
+                  Williams office is independently owned and operated.
+                </p>
+              </div>
             ) : (
               <div className="space-y-4 text-charcoal">
                 <p className="type-body">
-                  This page contains the draft {titles[type]} for {name} (
-                  {contact.fullAddress}). Each Keller Williams office is
-                  independently owned and operated.
+                  Welcome to the website of{" "}
+                  <strong className="text-ink">{name}</strong> (
+                  {contact.fullAddress}). By accessing or using this site, you
+                  agree to use its content and search tools for lawful personal
+                  or professional real estate inquiries across Weber, Davis, and
+                  Morgan counties.
                 </p>
-                <p className="type-body-sm text-kw-gray">
-                  [SHAWN REVIEW: Final legal text to be confirmed by Designated
-                  Broker {designatedBroker} prior to production launch.]
+                <p className="type-body">
+                  All property information, market statistics, and educational
+                  resources are provided for informational purposes and are
+                  subject to change without notice. Each Keller Williams office
+                  is independently owned and operated.
                 </p>
               </div>
             )}

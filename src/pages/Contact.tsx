@@ -12,7 +12,6 @@ import {
   Star,
 } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
-import SampleChip from "@/components/SampleChip";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
 import { submitLeadForm, type LeadSubmissionPayload } from "@/lib/leads";
@@ -167,17 +166,11 @@ export default function Contact() {
                     >
                       {contact.phone}
                     </a>
-                    {contact.phoneIsPlaceholder && (
-                      <SampleChip label="PLACEHOLDER: Marcus to Confirm" />
-                    )}
                   </div>
 
                   <div className="flex items-center gap-3">
                     <Clock className="h-4 w-4 shrink-0 text-kw-red" />
                     <span>{contact.hours}</span>
-                    {contact.hoursIsPlaceholder && (
-                      <SampleChip label="PLACEHOLDER" />
-                    )}
                   </div>
 
                   <div className="flex items-center gap-3">

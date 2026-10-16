@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, ExternalLink, MapPin } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
-import SampleChip from "@/components/SampleChip";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
@@ -110,7 +109,6 @@ export default function AreasServed() {
                 <span className="text-xs text-charcoal">
                   Towns listed per Fair Housing standards
                 </span>
-                <SampleChip label="SHAWN REVIEW" variant="review" />
               </div>
             </Reveal>
           </div>
