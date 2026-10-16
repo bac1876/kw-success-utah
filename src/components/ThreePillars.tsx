@@ -329,87 +329,89 @@ export default function ThreePillars({
                       : "border-ink/10 bg-white shadow-card hover:border-kw-red/50"
                   )}
                 >
-                  {/* Top accent bar */}
-                  <div className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-kw-red via-kw-red-bright to-kw-red transition-transform duration-300 group-hover:scale-x-100" />
+                  <div className="flex h-full flex-col justify-between">
+                    <div>
+                      {/* Top accent bar — positioned higher with clean breathing space before the number badge */}
+                      <div className="-mt-2 mb-5 h-1 w-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-kw-red via-kw-red-bright to-kw-red transition-transform duration-300 group-hover:scale-x-100" />
 
-                  <div>
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-center gap-3">
-                        <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-kw-red/40 bg-kw-red/15 text-lg font-extrabold text-kw-red-bright transition-colors duration-300 group-hover:bg-kw-red group-hover:text-white">
-                          {item.num}
-                        </span>
-                        <Icon
-                          className={cn(
-                            "h-5 w-5 transition-colors",
-                            dark
-                              ? "text-stone-dark group-hover:text-kw-red-bright"
-                              : "text-kw-gray group-hover:text-kw-red"
-                          )}
-                        />
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-kw-red/40 bg-kw-red/15 text-lg font-extrabold text-kw-red-bright transition-colors duration-300 group-hover:bg-kw-red group-hover:text-white">
+                            {item.num}
+                          </span>
+                          <Icon
+                            className={cn(
+                              "h-5 w-5 transition-colors",
+                              dark
+                                ? "text-stone-dark group-hover:text-kw-red-bright"
+                                : "text-kw-gray group-hover:text-kw-red"
+                            )}
+                          />
+                        </div>
+
+                        <PillarGraphic index={idx} hovered={hovered} />
                       </div>
 
-                      <PillarGraphic index={idx} hovered={hovered} />
+                      <h3
+                        className={cn(
+                          "mt-6 text-2xl font-bold tracking-tight transition-transform duration-300 group-hover:-translate-y-0.5",
+                          dark ? "text-white" : "text-ink"
+                        )}
+                      >
+                        {item.title}
+                      </h3>
+
+                      <p
+                        className={cn(
+                          "type-body mt-4 leading-relaxed",
+                          dark ? "text-stone-dark" : "text-charcoal"
+                        )}
+                      >
+                        {item.body}
+                      </p>
+
+                      {/* Key Pillar Takeaways */}
+                      <div className="mt-6 flex flex-wrap gap-2">
+                        {tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className={cn(
+                              "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[0.68rem] font-semibold transition-colors",
+                              dark
+                                ? "border-white/10 bg-ink-deep/80 text-snow/85 group-hover:border-kw-red/40"
+                                : "border-ink/10 bg-mist text-ink group-hover:border-kw-red/40"
+                            )}
+                          >
+                            <CheckCircle2 className="h-3 w-3 text-kw-red-bright" />
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
-                    <h3
+                    <div
                       className={cn(
-                        "mt-6 text-2xl font-bold tracking-tight transition-transform duration-300 group-hover:-translate-y-0.5",
-                        dark ? "text-white" : "text-ink"
+                        "mt-8 flex items-center justify-between border-t pt-5",
+                        dark ? "border-white/10" : "border-ink/10"
                       )}
                     >
-                      {item.title}
-                    </h3>
-
-                    <p
-                      className={cn(
-                        "type-body mt-4 leading-relaxed",
-                        dark ? "text-stone-dark" : "text-charcoal"
-                      )}
-                    >
-                      {item.body}
-                    </p>
-
-                    {/* Key Pillar Takeaways */}
-                    <div className="mt-6 flex flex-wrap gap-2">
-                      {tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className={cn(
-                            "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[0.68rem] font-semibold transition-colors",
-                            dark
-                              ? "border-white/10 bg-ink-deep/80 text-snow/85 group-hover:border-kw-red/40"
-                              : "border-ink/10 bg-mist text-ink group-hover:border-kw-red/40"
-                          )}
-                        >
-                          <CheckCircle2 className="h-3 w-3 text-kw-red-bright" />
-                          {tag}
-                        </span>
-                      ))}
+                      <span className="text-xs font-bold uppercase tracking-[0.2em] text-kw-red-bright">
+                        Pillar {item.num} ·{" "}
+                        {audience === "agents" ? "Agents" : "Clients"}
+                      </span>
+                      <Link
+                        to={targetUrl}
+                        className={cn(
+                          "inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider transition-colors",
+                          dark
+                            ? "text-white/80 group-hover:text-kw-red-bright"
+                            : "text-ink group-hover:text-kw-red"
+                        )}
+                      >
+                        <span>Explore</span>
+                        <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </Link>
                     </div>
-                  </div>
-
-                  <div
-                    className={cn(
-                      "mt-8 flex items-center justify-between border-t pt-5",
-                      dark ? "border-white/10" : "border-ink/10"
-                    )}
-                  >
-                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-kw-red-bright">
-                      Pillar {item.num} ·{" "}
-                      {audience === "agents" ? "Agents" : "Clients"}
-                    </span>
-                    <Link
-                      to={targetUrl}
-                      className={cn(
-                        "inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider transition-colors",
-                        dark
-                          ? "text-white/80 group-hover:text-kw-red-bright"
-                          : "text-ink group-hover:text-kw-red"
-                      )}
-                    >
-                      <span>Explore</span>
-                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </Link>
                   </div>
                 </SpotlightCard>
               );
