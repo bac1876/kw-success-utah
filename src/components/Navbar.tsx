@@ -9,6 +9,9 @@ const UTIL_H = 38;
 const MAIN_H = 74;
 export const HEADER_H = UTIL_H + MAIN_H;
 
+/** Real KW Command sign-in; used whenever the demo portal is flagged off. */
+export const AGENT_LOGIN_URL = activeBrokerage.externalLinks.agentQuickLinks[0].url;
+
 const NAV_LINKS = [
   { label: "For Agents", to: "/agents" },
   { label: "Buy & Sell", to: "/clients" },
@@ -110,12 +113,23 @@ function UtilityBar() {
           Search Homes
           <ArrowUpRight className="h-3 w-3 text-kw-red" />
         </a>
-        <Link
-          to="/login/agent"
-          className="rounded-full border border-white/15 bg-white/5 px-3 py-0.5 text-[0.7rem] font-medium text-snow transition-colors hover:border-kw-red hover:bg-kw-red hover:text-white"
-        >
-          Agent Login
-        </Link>
+        {activeBrokerage.flags.showAgentPortalDemo ? (
+          <Link
+            to="/login/agent"
+            className="rounded-full border border-white/15 bg-white/5 px-3 py-0.5 text-[0.7rem] font-medium text-snow transition-colors hover:border-kw-red hover:bg-kw-red hover:text-white"
+          >
+            Agent Login
+          </Link>
+        ) : (
+          <a
+            href={AGENT_LOGIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-white/15 bg-white/5 px-3 py-0.5 text-[0.7rem] font-medium text-snow transition-colors hover:border-kw-red hover:bg-kw-red hover:text-white"
+          >
+            Agent Login
+          </a>
+        )}
       </div>
     </div>
   );
@@ -124,9 +138,13 @@ function UtilityBar() {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [showUtil, setShowUtil] = useState(true);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpenPath, setMobileOpenPath] = useState<string | null>(null);
   const lastY = useRef(0);
   const location = useLocation();
+  // The menu is open only on the route where it was opened, so navigating closes it without an effect.
+  const mobileOpen = mobileOpenPath === location.pathname;
+  const setMobileOpen = (open: boolean) =>
+    setMobileOpenPath(open ? location.pathname : null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -142,10 +160,6 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
 
   return (
     <>
@@ -296,13 +310,25 @@ export default function Navbar() {
               >
                 Search Utah Homes <ExternalLink className="h-4 w-4" />
               </a>
-              <Link
-                to="/login/agent"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-full border border-white/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-snow"
-              >
-                Agent Login
-              </Link>
+              {activeBrokerage.flags.showAgentPortalDemo ? (
+                <Link
+                  to="/login/agent"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-full border border-white/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-snow"
+                >
+                  Agent Login
+                </Link>
+              ) : (
+                <a
+                  href={AGENT_LOGIN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-full border border-white/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-snow"
+                >
+                  Agent Login
+                </a>
+              )}
             </div>
           </motion.div>
         )}

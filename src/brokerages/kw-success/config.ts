@@ -37,6 +37,7 @@ export const kwSuccessConfig: BrokerageConfig = {
     showClientLogin: false, // §4 dropped for KW Success
     showHomeServices: false, // §4 dropped for KW Success
     showTableProviderLogos: false, // §5.2 v1 shows categories only
+    showAgentPortalDemo: false, // demo portal is a mockup; Agent Login goes straight to KW Command
   },
   contact: {
     addressLine1: "1572 N Woodland Park Dr., Suite 500",

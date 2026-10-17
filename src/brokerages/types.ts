@@ -94,6 +94,8 @@ export interface FeatureFlags {
   showClientLogin: boolean;
   showHomeServices: boolean;
   showTableProviderLogos: boolean;
+  /** Interactive agent-portal mockup at /login/agent (demo credentials, fake AI chat). Off for real brokerages. */
+  showAgentPortalDemo: boolean;
 }
 
 export interface BrokerageConfig {

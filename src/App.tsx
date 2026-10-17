@@ -13,6 +13,7 @@ import LegalPage from "@/pages/LegalPage";
 import KwOffices from "@/pages/Network";
 import Office from "@/pages/Office";
 import HomeServices from "@/pages/HomeServices";
+import NotFound from "@/pages/NotFound";
 
 export default function App() {
   const { flags } = activeBrokerage;
@@ -28,8 +29,15 @@ export default function App() {
         <Route path="services/:slug" element={<ServiceDetail />} />
         <Route path="contact" element={<Contact />} />
         <Route path="contact/:service" element={<Contact />} />
-        <Route path="login" element={<Navigate to="/login/agent" replace />} />
-        <Route path="login/:kind" element={<Login />} />
+        {flags.showAgentPortalDemo && (
+          <>
+            <Route
+              path="login"
+              element={<Navigate to="/login/agent" replace />}
+            />
+            <Route path="login/:kind" element={<Login />} />
+          </>
+        )}
         <Route
           path="affiliated-business-disclosure"
           element={<LegalPage type="disclosure" />}
@@ -57,7 +65,7 @@ export default function App() {
         <Route path="careers" element={<Navigate to="/agents" replace />} />
         <Route path="buy" element={<Navigate to="/clients" replace />} />
         <Route path="sell" element={<Navigate to="/clients" replace />} />
-        <Route path="*" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

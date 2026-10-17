@@ -2,7 +2,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { Award, TrendingUp } from "lucide-react";
+import { AlertTriangle, Award, TrendingUp } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
 import SpotlightCard from "@/components/motion/SpotlightCard";
 import { cn } from "@/lib/utils";
@@ -19,35 +19,11 @@ export interface StatItem {
   sample?: boolean;
 }
 
-const DEFAULT_KW_STATS: StatItem[] = [
-  {
-    display: "20,000+",
-    countTo: 20000,
-    format: "comma",
-    label: "Homes closed since 1997",
-    note: "Trusted across Northern Utah",
-  },
-  {
-    display: "$6 Billion+",
-    countTo: 6,
-    format: "money",
-    label: "In real estate",
-    note: "Closed volume across Weber, Davis & Morgan",
-  },
-  {
-    display: "Since 1997",
-    countTo: 1997,
-    format: "plain",
-    label: "Serving Weber, Davis & Morgan",
-    note: "Nearly three decades of local leadership",
-  },
-];
-
 export default function StatsBand({
-  stats = DEFAULT_KW_STATS,
+  stats,
   className,
 }: {
-  stats?: StatItem[];
+  stats: StatItem[];
   className?: string;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -139,6 +115,15 @@ export default function StatsBand({
               <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-4">
                 {item.note && (
                   <span className="text-xs text-stone-dark">{item.note}</span>
+                )}
+                {item.sample && (
+                  <span
+                    className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/40 bg-amber-400/10 px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-[0.16em] text-amber-200"
+                    title="This figure is a draft placeholder and has not yet been verified by the brokerage."
+                  >
+                    <AlertTriangle className="h-3 w-3" />
+                    Draft figure, pending verification
+                  </span>
                 )}
               </div>
             </SpotlightCard>

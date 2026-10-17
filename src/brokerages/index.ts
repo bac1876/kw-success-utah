@@ -45,6 +45,7 @@ export const monogramConfig: BrokerageConfig = {
     showClientLogin: true,
     showHomeServices: true,
     showTableProviderLogos: false,
+    showAgentPortalDemo: true,
   },
   areasServedPage: {
     eyebrow: "AREAS SERVED",

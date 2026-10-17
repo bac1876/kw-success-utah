@@ -24,7 +24,7 @@ import {
 import { activeBrokerage } from "@/brokerages";
 import FourSeats from "@/components/FourSeats";
 import ThreePillars from "@/components/ThreePillars";
-import StatsBand from "@/components/StatsBand";
+import StatsBand, { type StatItem } from "@/components/StatsBand";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
@@ -37,6 +37,22 @@ import { cn } from "@/lib/utils";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+/** §5.6 Map config StatEntry -> StatsBand StatItem, inferring the counter format from the display string. */
+const HOME_STATS: StatItem[] = activeBrokerage.home.stats.map((s) => ({
+  display: s.display,
+  countTo: s.countTo,
+  format:
+    s.format ??
+    (s.display.startsWith("$")
+      ? "money"
+      : s.display.includes(",")
+        ? "comma"
+        : "plain"),
+  label: s.label,
+  note: s.note,
+  sample: s.sample,
+}));
 
 const WASATCH_COMMUNITIES_TICKER = [
   "Layton Market Center",
@@ -1015,7 +1031,7 @@ export default function Home() {
       {/* §5.5 Our Promise (Cool Mist + Interactive Continuity Stepper) */}
       <OurPromise />
       {/* §5.6 Stats Band + Best of State Badge (Deep Slate Bento) */}
-      <StatsBand />
+      <StatsBand stats={HOME_STATS} />
       {/* §5.7 Home Search + Interactive Wasatch Front Map */}
       <HomeSearchSection />
       {/* §5.8 Testimonials (hidden by flag showTestimonials=false until real) */}

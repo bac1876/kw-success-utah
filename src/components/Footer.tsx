@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, ExternalLink, Facebook, Instagram, MapPin, Phone, Star } from "lucide-react";
-import { brokerage } from "@/brokerages";
+import { activeBrokerage, brokerage } from "@/brokerages";
+import { AGENT_LOGIN_URL } from "@/components/Navbar";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
 
 export default function Footer() {
@@ -70,7 +71,9 @@ export default function Footer() {
               { label: "About", to: "/about" },
               { label: "Areas Served", to: "/areas-served" },
               { label: "Contact", to: "/contact" },
-              { label: "Agent Login", to: "/login/agent" },
+              ...(activeBrokerage.flags.showAgentPortalDemo
+                ? [{ label: "Agent Login", to: "/login/agent" }]
+                : []),
             ].map((item) => (
               <li key={item.to}>
                 <Link
@@ -81,6 +84,19 @@ export default function Footer() {
                 </Link>
               </li>
             ))}
+            {!activeBrokerage.flags.showAgentPortalDemo && (
+              <li>
+                <a
+                  href={AGENT_LOGIN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="type-body-sm inline-flex items-center gap-1.5 text-stone-dark transition-colors hover:text-white"
+                >
+                  Agent Login
+                  <ExternalLink className="h-3.5 w-3.5 text-kw-red" />
+                </a>
+              </li>
+            )}
             <li>
               <a
                 href={brokerage.search.buyUrl}

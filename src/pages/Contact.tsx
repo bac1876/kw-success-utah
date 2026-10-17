@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {
+  AlertCircle,
   ArrowUpRight,
   CheckCircle2,
   Clock,
@@ -14,7 +15,11 @@ import {
 import { activeBrokerage } from "@/brokerages";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
-import { submitLeadForm, type LeadSubmissionPayload } from "@/lib/leads";
+import {
+  submitLeadForm,
+  type LeadSubmissionPayload,
+  type LeadSubmissionResult,
+} from "@/lib/leads";
 import { cn } from "@/lib/utils";
 
 const TOPICS: LeadSubmissionPayload["topic"][] = [
@@ -58,10 +63,7 @@ export default function Contact() {
   const [message, setMessage] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<{
-    routedToName: string;
-    routedToEmail: string;
-  } | null>(null);
+  const [result, setResult] = useState<LeadSubmissionResult | null>(null);
 
   const isAgentTopic = topic === "I'm an agent";
 
@@ -87,10 +89,7 @@ export default function Contact() {
       honeypot,
     });
     setSubmitting(false);
-    setResult({
-      routedToName: res.routedToName,
-      routedToEmail: res.routedToEmail,
-    });
+    setResult(res);
   };
 
   const inputCls =
@@ -231,7 +230,7 @@ export default function Contact() {
             {/* Right Column: §11 Topic-Routed Form (Dark Slate Card) */}
             <div className="lg:col-span-7">
               <div className="rounded-3xl bg-ink p-8 text-snow shadow-lift md:p-11">
-                {result ? (
+                {result?.ok ? (
                   <div className="py-16 text-center">
                     <CheckCircle2 className="mx-auto h-12 w-12 text-kw-red-bright" />
                     <h3 className="mt-5 text-2xl font-bold text-white">
@@ -251,6 +250,52 @@ export default function Contact() {
                     >
                       Send Another Message
                     </button>
+                  </div>
+                ) : result ? (
+                  <div className="py-16 text-center">
+                    <AlertCircle className="mx-auto h-12 w-12 text-kw-red-bright" />
+                    <h3 className="mt-5 text-2xl font-bold text-white">
+                      {result.reason === "rate-limited"
+                        ? "Please Wait a Moment"
+                        : "We Couldn't Send This Right Now"}
+                    </h3>
+                    <p className="mx-auto mt-3 max-w-md text-sm text-stone-dark">
+                      {result.reason === "rate-limited"
+                        ? "You just sent a message. Give it about 30 seconds before trying again, or "
+                        : "Your message was not delivered. Please "}
+                      email{" "}
+                      <a
+                        href={result.mailtoHref}
+                        className="font-semibold text-white underline decoration-kw-red underline-offset-4 hover:text-kw-red-bright"
+                      >
+                        {result.routedToName} ({result.routedToEmail})
+                      </a>{" "}
+                      or call{" "}
+                      <a
+                        href={`tel:${contact.phone.replace(/[^0-9]/g, "")}`}
+                        className="font-semibold text-white hover:text-kw-red-bright"
+                      >
+                        {contact.phone}
+                      </a>
+                      . The email link opens with your message already filled
+                      in.
+                    </p>
+                    <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                      <a
+                        href={result.mailtoHref}
+                        className="inline-flex items-center gap-2 rounded-full bg-kw-red px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-kw-red-bright"
+                      >
+                        <Mail className="h-4 w-4" />
+                        Email Instead
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => setResult(null)}
+                        className="rounded-full border border-white/20 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-snow hover:border-kw-red"
+                      >
+                        Try Again
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">

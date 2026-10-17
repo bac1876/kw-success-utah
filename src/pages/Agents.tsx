@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
+  AlertCircle,
   ArrowUpRight,
   Bot,
   Building2,
@@ -23,7 +24,7 @@ import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
 import CultureGallery from "@/components/CultureGallery";
-import { submitLeadForm } from "@/lib/leads";
+import { submitLeadForm, type LeadSubmissionResult } from "@/lib/leads";
 
 const TILE_ICONS = [
   Users,
@@ -47,11 +48,11 @@ export default function Agents() {
   const [message, setMessage] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [submittedTo, setSubmittedTo] = useState<string | null>(null);
+  const [result, setResult] = useState<LeadSubmissionResult | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim()) return;
+    if (!name.trim() || !email.trim() || submitting) return;
     setSubmitting(true);
     const res = await submitLeadForm({
       topic: "I'm an agent",
@@ -65,9 +66,7 @@ export default function Agents() {
       honeypot,
     });
     setSubmitting(false);
-    if (res.ok) {
-      setSubmittedTo(`${res.routedToName} (${res.routedToEmail})`);
-    }
+    setResult(res);
   };
 
   const scrollToForm = () => {
@@ -435,7 +434,7 @@ export default function Agents() {
             {/* Right: §6.8 Form (name, email, phone, current brokerage, years licensed, message) */}
             <div className="lg:col-span-7">
               <div className="rounded-3xl border border-white/10 bg-slate-card p-8 shadow-lift-dark md:p-10">
-                {submittedTo ? (
+                {result?.ok ? (
                   <div className="py-12 text-center">
                     <CheckCircle2 className="mx-auto h-12 w-12 text-kw-red-bright" />
                     <h3 className="mt-5 text-2xl font-bold text-white">
@@ -444,11 +443,57 @@ export default function Agents() {
                     <p className="mt-3 text-sm text-stone-dark">
                       Routed directly to{" "}
                       <span className="font-semibold text-white">
-                        {submittedTo}
+                        {result.routedToName} ({result.routedToEmail})
                       </span>
-                      . Russie will reach out shortly for a confidential
-                      conversation.
+                      . {agentsPage.cta.leaderName.split(" ")[0]} will reach
+                      out shortly for a confidential conversation.
                     </p>
+                  </div>
+                ) : result ? (
+                  <div className="py-12 text-center">
+                    <AlertCircle className="mx-auto h-12 w-12 text-kw-red-bright" />
+                    <h3 className="mt-5 text-2xl font-bold text-white">
+                      {result.reason === "rate-limited"
+                        ? "Please Wait a Moment"
+                        : "We Couldn't Send This Right Now"}
+                    </h3>
+                    <p className="mx-auto mt-3 max-w-md text-sm text-stone-dark">
+                      {result.reason === "rate-limited"
+                        ? "You just sent a message. Give it about 30 seconds before trying again, or "
+                        : "Your message was not delivered. Please "}
+                      email{" "}
+                      <a
+                        href={result.mailtoHref}
+                        className="font-semibold text-white underline decoration-kw-red underline-offset-4 hover:text-kw-red-bright"
+                      >
+                        {result.routedToName} ({result.routedToEmail})
+                      </a>{" "}
+                      or call{" "}
+                      <a
+                        href={`tel:${agentsPage.cta.leaderPhone.replace(/[^0-9]/g, "")}`}
+                        className="font-semibold text-white hover:text-kw-red-bright"
+                      >
+                        {agentsPage.cta.leaderPhone}
+                      </a>
+                      . The email link opens with your message already filled
+                      in.
+                    </p>
+                    <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                      <a
+                        href={result.mailtoHref}
+                        className="inline-flex items-center gap-2 rounded-full bg-kw-red px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-kw-red-bright"
+                      >
+                        <Mail className="h-4 w-4" />
+                        Email Instead
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => setResult(null)}
+                        className="rounded-full border border-white/20 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-snow hover:border-kw-red"
+                      >
+                        Try Again
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-5">
