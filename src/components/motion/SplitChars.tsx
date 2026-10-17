@@ -28,13 +28,17 @@ export default function SplitChars({
             return (
               <motion.span
                 key={cIdx}
-                className="inline-block"
-                initial={reduced ? false : { y: "110%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
+                className="inline-block will-change-transform"
+                initial={
+                  reduced
+                    ? false
+                    : { y: "105%", opacity: 0, filter: "blur(3px)" }
+                }
+                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
                 transition={{
                   delay: delay + idx * stagger,
-                  duration: 0.7,
-                  ease: [0.22, 1, 0.36, 1],
+                  duration: 0.62,
+                  ease: [0.16, 1, 0.3, 1],
                 }}
               >
                 {ch}

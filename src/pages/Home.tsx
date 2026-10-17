@@ -1,6 +1,12 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -30,7 +36,7 @@ import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 const WASATCH_COMMUNITIES_TICKER = [
   "Layton Market Center",
@@ -316,6 +322,17 @@ function EveryoneAtOneTable() {
 
 function TheSuccessIdea() {
   const { successIdea } = activeBrokerage.home;
+  const reduced = useReducedMotion();
+  const [activeStep, setActiveStep] = useState(0);
+  const [flywheelPaused, setFlywheelPaused] = useState(false);
+
+  useEffect(() => {
+    if (reduced || flywheelPaused) return;
+    const timer = window.setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % successIdea.chainSteps.length);
+    }, 2800);
+    return () => window.clearInterval(timer);
+  }, [reduced, flywheelPaused, successIdea.chainSteps.length]);
 
   return (
     <section
@@ -443,24 +460,84 @@ function TheSuccessIdea() {
             spotlightColor="rgba(209, 25, 25, 0.2)"
             borderGlowColor="rgba(255, 80, 80, 0.8)"
             className="mt-8 rounded-3xl border border-ink/10 bg-ink-deep p-6 text-snow shadow-lift md:p-9"
+            onMouseEnter={() => setFlywheelPaused(true)}
+            onMouseLeave={() => setFlywheelPaused(false)}
           >
+            {/* Live Flywheel Energy Rail */}
+            <div className="mb-5 hidden items-center justify-between gap-4 md:flex">
+              <span className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-stone-dark">
+                Compounding Success Flywheel · Step 0{activeStep + 1} of 0
+                {successIdea.chainSteps.length}
+              </span>
+              <div className="relative h-1 w-48 overflow-hidden rounded-full bg-white/10">
+                <motion.span
+                  animate={{
+                    scaleX: (activeStep + 1) / successIdea.chainSteps.length,
+                  }}
+                  transition={{ duration: 0.55, ease: EASE }}
+                  className="absolute inset-0 origin-left rounded-full bg-gradient-to-r from-kw-red to-kw-red-bright"
+                />
+              </div>
+            </div>
+
             <div className="grid items-center gap-6 md:grid-cols-3">
-              {successIdea.chainSteps.map((step, i) => (
-                <div
-                  key={step}
-                  className="group relative flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-colors hover:border-kw-red/50 hover:bg-white/[0.06]"
-                >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-kw-red text-sm font-extrabold text-white shadow-[0_0_20px_rgba(180,1,1,0.5)]">
-                    0{i + 1}
-                  </span>
-                  <p className="text-sm font-semibold leading-snug text-white">
-                    {step}
-                  </p>
-                  {i < successIdea.chainSteps.length - 1 && (
-                    <ArrowRight className="ml-auto hidden h-4 w-4 shrink-0 text-kw-red-bright md:block" />
-                  )}
-                </div>
-              ))}
+              {successIdea.chainSteps.map((step, i) => {
+                const isActive = activeStep === i;
+                return (
+                  <button
+                    key={step}
+                    type="button"
+                    onClick={() => setActiveStep(i)}
+                    onMouseEnter={() => setActiveStep(i)}
+                    className={cn(
+                      "group relative flex w-full items-center gap-4 rounded-2xl border p-5 text-left transition-colors duration-300",
+                      isActive
+                        ? "border-kw-red/70 bg-white/[0.07]"
+                        : "border-white/10 bg-white/[0.03] hover:border-kw-red/40 hover:bg-white/[0.05]"
+                    )}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="flywheel-active-glow"
+                        className="pointer-events-none absolute inset-0 rounded-2xl border border-kw-red-bright/80 shadow-[0_0_28px_rgba(209,25,25,0.28)]"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 32,
+                        }}
+                      />
+                    )}
+                    <span
+                      className={cn(
+                        "relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-extrabold text-white transition-all duration-300",
+                        isActive
+                          ? "bg-kw-red shadow-[0_0_22px_rgba(209,25,25,0.65)] scale-105"
+                          : "bg-white/10 text-stone-dark group-hover:bg-kw-red/80 group-hover:text-white"
+                      )}
+                    >
+                      0{i + 1}
+                    </span>
+                    <p
+                      className={cn(
+                        "relative z-10 text-sm font-semibold leading-snug transition-colors duration-300",
+                        isActive ? "text-white" : "text-snow/80"
+                      )}
+                    >
+                      {step}
+                    </p>
+                    {i < successIdea.chainSteps.length - 1 && (
+                      <ArrowRight
+                        className={cn(
+                          "relative z-10 ml-auto hidden h-4 w-4 shrink-0 transition-transform duration-300 md:block",
+                          isActive
+                            ? "translate-x-1 text-kw-red-bright"
+                            : "text-stone-dark"
+                        )}
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </SpotlightCard>
         </Reveal>
@@ -496,7 +573,17 @@ const CONTINUITY_MILESTONES = [
 
 function OurPromise() {
   const { promise } = activeBrokerage.home;
+  const reduced = useReducedMotion();
   const [activeMilestone, setActiveMilestone] = useState(2);
+  const [timelinePaused, setTimelinePaused] = useState(false);
+
+  useEffect(() => {
+    if (reduced || timelinePaused) return;
+    const timer = window.setInterval(() => {
+      setActiveMilestone((prev) => (prev + 1) % CONTINUITY_MILESTONES.length);
+    }, 4200);
+    return () => window.clearInterval(timer);
+  }, [reduced, timelinePaused]);
 
   return (
     <section className="relative overflow-hidden bg-mist-deep py-24 text-ink md:py-32">
@@ -533,6 +620,8 @@ function OurPromise() {
                   spotlightColor="rgba(209, 25, 25, 0.25)"
                   borderGlowColor="rgba(255, 80, 80, 0.9)"
                   className="rounded-3xl bg-ink p-8 text-snow shadow-lift"
+                  onMouseEnter={() => setTimelinePaused(true)}
+                  onMouseLeave={() => setTimelinePaused(false)}
                 >
                   <span className="type-label text-kw-red-bright">
                     Wasatch Front Continuity
@@ -549,13 +638,24 @@ function OurPromise() {
                           onClick={() => setActiveMilestone(idx)}
                           onMouseEnter={() => setActiveMilestone(idx)}
                           className={cn(
-                            "rounded-full px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-wider transition-all",
+                            "relative rounded-full px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-wider transition-colors",
                             active
-                              ? "bg-kw-red text-white shadow-[0_0_20px_rgba(180,1,1,0.6)]"
+                              ? "text-white"
                               : "bg-white/10 text-stone-dark hover:text-white"
                           )}
                         >
-                          {m.year}
+                          {active && (
+                            <motion.span
+                              layoutId="continuity-milestone-pill"
+                              className="absolute inset-0 rounded-full bg-kw-red shadow-[0_0_20px_rgba(180,1,1,0.6)]"
+                              transition={{
+                                type: "spring",
+                                stiffness: 420,
+                                damping: 34,
+                              }}
+                            />
+                          )}
+                          <span className="relative z-10">{m.year}</span>
                         </button>
                       );
                     })}
@@ -583,13 +683,27 @@ function OurPromise() {
                     </span>
                   </div>
 
-                  <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                    <p className="text-sm font-bold text-white">
-                      {CONTINUITY_MILESTONES[activeMilestone].title}
-                    </p>
-                    <p className="mt-1.5 text-xs leading-relaxed text-stone-dark">
-                      {CONTINUITY_MILESTONES[activeMilestone].detail}
-                    </p>
+                  <div className="mt-5 min-h-[6.25rem] rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={CONTINUITY_MILESTONES[activeMilestone].year}
+                        initial={
+                          reduced
+                            ? false
+                            : { opacity: 0, y: 6, filter: "blur(3px)" }
+                        }
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, y: -6, filter: "blur(2px)" }}
+                        transition={{ duration: 0.3, ease: EASE }}
+                      >
+                        <p className="text-sm font-bold text-white">
+                          {CONTINUITY_MILESTONES[activeMilestone].title}
+                        </p>
+                        <p className="mt-1.5 text-xs leading-relaxed text-stone-dark">
+                          {CONTINUITY_MILESTONES[activeMilestone].detail}
+                        </p>
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
 
                   <p className="mt-5 text-xs font-medium text-snow/80">

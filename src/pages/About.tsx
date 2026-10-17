@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import {
   ArrowUpRight,
   ChevronDown,
@@ -20,6 +23,161 @@ import SplitChars from "@/components/motion/SplitChars";
 import SpotlightCard from "@/components/motion/SpotlightCard";
 import CultureGallery from "@/components/CultureGallery";
 import { SUPPORT_STAFF } from "@/data/kwSuccessMedia";
+import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const TIMELINE_EVENTS = [
+  {
+    year: "1997",
+    body: "Marcus & Jenifer Arbuckle found the brokerage in Northern Utah with a vision for agent-first, relationship-driven real estate.",
+  },
+  {
+    year: "Layton",
+    body: "KW Success anchors its flagship Market Center at 1572 Woodland Park Drive, serving Davis, Weber, and Morgan Counties.",
+  },
+  {
+    year: "20,000+",
+    body: "More than 20,000 Utah families and individuals guided home across the Wasatch Front.",
+  },
+  {
+    year: "$6B+",
+    body: "Surpasses $6 billion in closed real estate volume through collaborative coaching and market leadership.",
+  },
+  {
+    year: "Unity & Amicus",
+    body: "Unity Home Loans and Amicus Title join the family of companies — bringing lending and escrow to the same table.",
+  },
+  {
+    year: "8 of 9",
+    body: "Recognized 8 out of 9 years with Utah Best of State honors inside the Keller Williams Utah Region.",
+  },
+];
+
+function BrandTimeline() {
+  const root = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      const line = root.current?.querySelector("[data-timeline-line]");
+      const blocks = gsap.utils.toArray<HTMLElement>("[data-timeline-block]");
+      const years = gsap.utils.toArray<HTMLElement>("[data-timeline-year]");
+      if (!line) return;
+
+      if (reduced) {
+        gsap.set(line, { scaleY: 1 });
+        gsap.set(blocks, { opacity: 1, y: 0 });
+        gsap.set(years, { color: "#D11919" });
+        return;
+      }
+
+      gsap.fromTo(
+        line,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          transformOrigin: "top",
+          ease: "none",
+          scrollTrigger: {
+            trigger: root.current?.querySelector("[data-timeline-body]"),
+            start: "top 60%",
+            end: "bottom 60%",
+            scrub: true,
+          },
+        }
+      );
+
+      blocks.forEach((b, idx) => {
+        gsap.fromTo(
+          b,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: "power3.out",
+            scrollTrigger: { trigger: b, start: "top 68%" },
+          }
+        );
+        if (years[idx]) {
+          gsap.fromTo(
+            years[idx],
+            { color: "#828282", scale: 0.94 },
+            {
+              color: "#D11919",
+              scale: 1,
+              duration: 0.6,
+              ease: "back.out(2)",
+              scrollTrigger: { trigger: b, start: "top 68%" },
+            }
+          );
+        }
+      });
+    },
+    { scope: root }
+  );
+
+  return (
+    <section ref={root} className="bg-ink py-24 text-snow md:py-32">
+      <div className="container-kw">
+        <div className="text-center">
+          <Reveal>
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
+                02
+              </span>
+              <span className="type-label text-kw-red-bright">Our History</span>
+            </div>
+          </Reveal>
+          <h2 className="type-display-lg mx-auto mt-5 max-w-3xl text-white">
+            <SplitWords text="ROOTED IN LAYTON SINCE 1997." />
+          </h2>
+        </div>
+
+        <div data-timeline-body className="relative mt-20">
+          <span
+            data-timeline-line
+            aria-hidden
+            className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-kw-red-bright will-change-transform md:block"
+          />
+          {TIMELINE_EVENTS.map((item, idx) => (
+            <div
+              key={item.year}
+              data-timeline-block
+              className="relative flex flex-col py-10 will-change-transform md:grid md:min-h-[28vh] md:grid-cols-2 md:items-center md:gap-24 md:py-0"
+            >
+              <span
+                aria-hidden
+                className="absolute left-1/2 top-1/2 hidden h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border border-kw-red-bright bg-ink md:block"
+              />
+              <div
+                className={cn(
+                  "md:text-right",
+                  idx % 2 === 0 ? "md:order-1" : "md:order-2"
+                )}
+              >
+                <span
+                  data-timeline-year
+                  className="type-stat inline-block text-stone will-change-transform"
+                >
+                  {item.year}
+                </span>
+              </div>
+              <div className={cn(idx % 2 === 0 ? "md:order-2" : "md:order-1")}>
+                <p className="type-body mt-4 max-w-md text-snow/85 md:mt-0">
+                  {item.body}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 const COMMUNITY_CARDS = [
   {
@@ -176,44 +334,8 @@ export default function About() {
         </div>
       </section>
 
-      {/* §8.3 Timeline (Dark Slate Section) */}
-      <section className="bg-ink py-24 text-snow md:py-32">
-        <div className="container-kw">
-          <Reveal>
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
-                02
-              </span>
-              <span className="type-label text-kw-red-bright">Our History</span>
-            </div>
-          </Reveal>
-          <h2 className="type-display-lg mt-5 text-white">
-            <SplitWords text="ROOTED IN LAYTON SINCE 1997." />
-          </h2>
-
-          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {aboutPage.timeline.map((item, idx) => (
-              <Reveal key={item.year} delay={0.08 * idx} y={20}>
-                <SpotlightCard className="flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-slate-card/80 p-7">
-                  <div>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="rounded-full bg-kw-red px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider text-white">
-                        {item.year}
-                      </span>
-                      <span className="font-mono text-xs font-bold text-stone-dark">
-                        0{idx + 1}
-                      </span>
-                    </div>
-                    <p className="mt-6 text-sm leading-relaxed text-snow/90">
-                      {item.body}
-                    </p>
-                  </div>
-                </SpotlightCard>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* §8.3 Timeline (Vertical Scroll-Scrubbed Heritage Timeline) */}
+      <BrandTimeline />
 
       {/* §8.4 Leadership Team (Cool Sky Mist Section — All 9 Leaders in Spec Order) */}
       <section id="leadership" className="bg-mist py-24 text-ink md:py-32">

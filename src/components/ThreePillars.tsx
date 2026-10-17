@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -13,7 +13,7 @@ import Reveal, { SplitWords } from "@/components/Reveal";
 import SpotlightCard from "@/components/motion/SpotlightCard";
 import { cn } from "@/lib/utils";
 
-const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 const PILLAR_ICONS = [Compass, Layers, TrendingUp];
 
 const AGENT_HIGHLIGHTS: string[][] = [
@@ -29,36 +29,60 @@ const CLIENT_HIGHLIGHTS: string[][] = [
 ];
 
 function PillarGraphic({ index, hovered }: { index: number; hovered: boolean }) {
+  const reduced = useReducedMotion();
+
   if (index === 0) {
-    // Rising trajectory curve
+    // Rising trajectory curve with live draw & pulsing apex beacon
     return (
       <svg
         aria-hidden
         viewBox="0 0 140 64"
         fill="none"
-        className="h-14 w-28 opacity-80 transition-transform duration-500 group-hover:scale-105"
+        className="h-14 w-28 opacity-90 transition-transform duration-500 ease-out group-hover:scale-105"
       >
-        <path
-          d="M6 56 C 38 52, 56 36, 86 28 C 106 22, 120 12, 134 6"
-          stroke={hovered ? "#D11919" : "rgba(209,25,25,0.5)"}
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-        <path
+        <motion.path
           d="M6 56 C 38 52, 56 36, 86 28 C 106 22, 120 12, 134 6 L 134 60 L 6 60 Z"
           fill="url(#pillarGrad0)"
+          initial={reduced ? false : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.75, delay: 0.2, ease: EASE }}
         />
-        <circle
+        <motion.path
+          d="M6 56 C 38 52, 56 36, 86 28 C 106 22, 120 12, 134 6"
+          stroke={hovered ? "#FF3B3B" : "#D11919"}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          initial={reduced ? false : { pathLength: 0 }}
+          whileInView={{ pathLength: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.05, ease: EASE }}
+        />
+        {!reduced && (
+          <motion.circle
+            cx="134"
+            cy="6"
+            r="8"
+            fill="none"
+            stroke="#D11919"
+            strokeWidth="1.2"
+            animate={{ scale: [1, 1.85, 1], opacity: [0.65, 0, 0.65] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }}
+          />
+        )}
+        <motion.circle
           cx="134"
           cy="6"
-          r={hovered ? "5" : "3.5"}
+          r={hovered ? 5 : 4}
           fill="#D11919"
           stroke="#fff"
           strokeWidth="1.5"
+          animate={{ scale: hovered ? 1.2 : 1 }}
+          transition={{ duration: 0.25, ease: EASE }}
         />
         <defs>
           <linearGradient id="pillarGrad0" x1="70" y1="6" x2="70" y2="60" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#D11919" stopOpacity={hovered ? "0.35" : "0.15"} />
+            <stop offset="0%" stopColor="#D11919" stopOpacity={hovered ? "0.42" : "0.18"} />
             <stop offset="100%" stopColor="#D11919" stopOpacity="0" />
           </linearGradient>
         </defs>
@@ -66,45 +90,58 @@ function PillarGraphic({ index, hovered }: { index: number; hovered: boolean }) 
     );
   }
   if (index === 1) {
-    // Concentric mastery rings
+    // Concentric mastery rings with continuous orbital rotation
     return (
       <svg
         aria-hidden
         viewBox="0 0 140 64"
         fill="none"
-        className="h-14 w-28 opacity-80 transition-transform duration-500 group-hover:scale-105"
+        className="h-14 w-28 opacity-90 transition-transform duration-500 ease-out group-hover:scale-105"
       >
-        <circle
+        <motion.circle
           cx="104"
           cy="32"
           r="26"
-          stroke={hovered ? "rgba(209,25,25,0.65)" : "rgba(255,255,255,0.18)"}
+          stroke={hovered ? "rgba(209,25,25,0.75)" : "rgba(255,255,255,0.22)"}
           strokeWidth="1.5"
           strokeDasharray="4 4"
+          style={{ transformOrigin: "104px 32px" }}
+          animate={reduced ? undefined : { rotate: 360 }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
         />
-        <circle
+        <motion.circle
           cx="104"
           cy="32"
           r="17"
-          stroke={hovered ? "#D11919" : "rgba(209,25,25,0.45)"}
+          stroke={hovered ? "#FF3B3B" : "rgba(209,25,25,0.55)"}
           strokeWidth="2"
+          initial={reduced ? false : { pathLength: 0 }}
+          whileInView={{ pathLength: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
         />
-        <circle
+        <motion.circle
           cx="104"
           cy="32"
-          r={hovered ? "7" : "5"}
+          r={hovered ? 7 : 5}
           fill="#D11919"
+          animate={
+            reduced
+              ? undefined
+              : { scale: hovered ? [1, 1.22, 1] : [1, 1.1, 1] }
+          }
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         />
       </svg>
     );
   }
-  // Compounding wealth bars
+  // Compounding wealth bars with staggered spring-out growth
   return (
     <svg
       aria-hidden
       viewBox="0 0 140 64"
       fill="none"
-      className="h-14 w-28 opacity-80 transition-transform duration-500 group-hover:scale-105"
+      className="h-14 w-28 opacity-90 transition-transform duration-500 ease-out group-hover:scale-105"
     >
       {[
         { x: 46, h: 18 },
@@ -112,19 +149,28 @@ function PillarGraphic({ index, hovered }: { index: number; hovered: boolean }) 
         { x: 90, h: 40 },
         { x: 112, h: 54 },
       ].map((b, i) => (
-        <rect
+        <motion.rect
           key={b.x}
           x={b.x}
-          y={60 - b.h}
           width="14"
-          height={b.h}
           rx="4"
+          initial={reduced ? false : { y: 60, height: 0 }}
+          whileInView={{
+            y: 60 - b.h - (hovered ? i * 1.5 : 0),
+            height: b.h + (hovered ? i * 1.5 : 0),
+          }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.65,
+            delay: 0.1 + i * 0.08,
+            ease: EASE,
+          }}
           fill={
             i === 3
               ? "#D11919"
               : hovered
-                ? "rgba(209,25,25,0.55)"
-                : "rgba(255,255,255,0.16)"
+                ? "rgba(209,25,25,0.65)"
+                : "rgba(255,255,255,0.2)"
           }
         />
       ))}
