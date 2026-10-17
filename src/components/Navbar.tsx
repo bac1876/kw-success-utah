@@ -12,6 +12,12 @@ export const HEADER_H = UTIL_H + MAIN_H;
 /** Real KW Command sign-in; used whenever the demo portal is flagged off. */
 export const AGENT_LOGIN_URL = activeBrokerage.externalLinks.agentQuickLinks[0].url;
 
+/** Light theme shows the full-colour mark; dark keeps the reversed one. */
+const NAV_LOGO =
+  activeBrokerage.theme.mode === "light"
+    ? activeBrokerage.logos.fullColor
+    : activeBrokerage.logos.reversed;
+
 const NAV_LINKS = [
   { label: "For Agents", to: "/agents" },
   { label: "Buy & Sell", to: "/clients" },
@@ -183,7 +189,7 @@ export default function Navbar() {
           {/* Official KW Success Reversed Logo */}
           <Link to="/" className="flex items-center gap-3">
             <img
-              src={brokerage.brand.logos.reversed}
+              src={NAV_LOGO}
               alt={brokerage.brand.name}
               className="h-9 w-auto object-contain md:h-11"
             />
@@ -256,7 +262,7 @@ export default function Navbar() {
           >
             <div className="flex items-center justify-between border-b border-white/10 pb-5">
               <img
-                src={brokerage.brand.logos.reversed}
+                src={NAV_LOGO}
                 alt={brokerage.brand.name}
                 className="h-9 w-auto object-contain"
               />

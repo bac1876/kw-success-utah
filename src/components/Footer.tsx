@@ -8,7 +8,7 @@ export default function Footer() {
   const { brand, office, partnerLinks, social, disclosures } = brokerage;
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-ink-deep text-snow">
+    <footer className="keep-dark relative overflow-hidden border-t border-white/10 bg-ink-deep text-snow">
       {/* Top KW Red Accent Line */}
       <div className="h-1 w-full bg-gradient-to-r from-kw-red via-kw-red-bright to-kw-red-deep" />
 

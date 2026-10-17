@@ -30,7 +30,7 @@ export default function Clients() {
     <>
       {/* §7 Hero (Dark Architectural Slate + Wasatch Backdrop) */}
       <section
-        className="relative flex min-h-[76dvh] items-center overflow-hidden bg-ink-deep pb-20 pt-[160px] text-snow"
+        className="keep-dark relative flex min-h-[76dvh] items-center overflow-hidden bg-ink-deep pb-20 pt-[160px] text-snow"
         style={{ marginTop: -HEADER_H }}
       >
         <img
@@ -42,7 +42,7 @@ export default function Clients() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, rgba(20,23,26,0.95) 0%, rgba(31,35,38,0.82) 55%, rgba(180,1,1,0.18) 100%)",
+              "linear-gradient(135deg, rgba(20,23,26,0.62) 0%, rgba(31,35,38,0.38) 55%, rgba(180,1,1,0.16) 100%)",
           }}
         />
 

@@ -88,19 +88,19 @@ export default function Agents() {
     <>
       {/* §6.1 Hero (Dark Architectural Slate + Wasatch Backdrop) */}
       <section
-        className="relative flex min-h-[78dvh] items-center overflow-hidden bg-ink-deep pb-20 pt-[160px] text-snow"
+        className="keep-dark relative flex min-h-[78dvh] items-center overflow-hidden bg-ink-deep pb-20 pt-[160px] text-snow"
         style={{ marginTop: -HEADER_H }}
       >
         <img
           src={activeBrokerage.home.hero.image}
           alt={activeBrokerage.home.hero.imageAlt}
-          className="absolute inset-0 h-full w-full object-cover opacity-25"
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, rgba(20,23,26,0.96) 0%, rgba(31,35,38,0.82) 55%, rgba(180,1,1,0.22) 100%)",
+              "linear-gradient(135deg, rgba(20,23,26,0.62) 0%, rgba(31,35,38,0.38) 55%, rgba(180,1,1,0.16) 100%)",
           }}
         />
 

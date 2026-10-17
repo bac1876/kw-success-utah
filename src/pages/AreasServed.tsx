@@ -18,7 +18,7 @@ export default function AreasServed() {
     <>
       {/* §9 Hero (Dark Slate + Wasatch Backdrop) */}
       <section
-        className="relative flex min-h-[58dvh] items-center overflow-hidden bg-ink-deep pb-16 pt-[150px] text-snow"
+        className="keep-dark relative flex min-h-[58dvh] items-center overflow-hidden bg-ink-deep pb-16 pt-[150px] text-snow"
         style={{ marginTop: -HEADER_H }}
       >
         <img
@@ -30,7 +30,7 @@ export default function AreasServed() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, rgba(20,23,26,0.96) 0%, rgba(31,35,38,0.85) 60%, rgba(180,1,1,0.18) 100%)",
+              "linear-gradient(135deg, rgba(20,23,26,0.62) 0%, rgba(31,35,38,0.38) 55%, rgba(180,1,1,0.16) 100%)",
           }}
         />
 

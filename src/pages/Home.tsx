@@ -116,7 +116,7 @@ function HeroBackground() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(20,23,26,0.62) 0%, rgba(20,23,26,0.34) 45%, rgba(20,23,26,0.94) 100%)",
+            "linear-gradient(180deg, rgba(20,23,26,0.36) 0%, rgba(20,23,26,0.16) 42%, rgba(20,23,26,0.76) 100%)",
         }}
       />
       <div
@@ -152,7 +152,7 @@ function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[96dvh] flex-col justify-between overflow-hidden"
+      className="keep-dark relative flex min-h-[96dvh] flex-col justify-between overflow-hidden"
       style={{ marginTop: -HEADER_H }}
     >
       <HeroBackground />

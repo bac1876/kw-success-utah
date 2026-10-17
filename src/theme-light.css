@@ -1,0 +1,205 @@
+/* ==========================================================================
+   KW Success v2 — "Morning light on snow-capped Wasatch peaks" (spec §3.1)
+
+   The component tree was written for the dark Monogram-derived theme. Rather
+   than touch ~50 sections, this sheet remaps the dark-surface utilities to
+   the light palette from spec §3.4 whenever <html class="theme-light">.
+
+   Anything inside an element with .keep-dark (the footer, the photo heroes)
+   or inside the small dark "screen" graphics (bg-[#…]) is left as designed.
+   ========================================================================== */
+
+.theme-light {
+  --l-page: #fafaf8;      /* snow */
+  --l-card: #ffffff;      /* white */
+  --l-alt: #eef2f5;       /* mist (sky tones) */
+  --l-alt-deep: #e3e9ef;
+  --l-text: #1f2326;      /* deep ink headings */
+  --l-body: #4d4d4d;      /* charcoal body */
+  --l-muted: #5b6672;     /* replaces stone-dark on light */
+  --l-line: 31, 35, 38;   /* rgb for alpha borders/fills */
+}
+
+.theme-light body {
+  background-color: var(--l-page);
+  color: var(--l-text);
+}
+
+/* ---- Surfaces ----------------------------------------------------------- */
+.theme-light .bg-ink-deep:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: var(--l-page); }
+.theme-light .bg-ink:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: var(--l-card); }
+.theme-light .bg-slate-card:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: var(--l-alt); }
+.theme-light .bg-black:not(.keep-dark):not(.keep-dark *) { background-color: var(--l-alt-deep); }
+
+.theme-light .bg-ink-deep\/98:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink-deep\/95:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink-deep\/90:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink\/95:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink\/90:not(.keep-dark):not(.keep-dark *) { background-color: rgba(250, 250, 248, 0.94); }
+.theme-light .bg-ink-deep\/80:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink-deep\/75:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink\/85:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink\/80:not(.keep-dark):not(.keep-dark *) { background-color: rgba(255, 255, 255, 0.82); }
+.theme-light .bg-ink-deep\/65:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink-deep\/60:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink\/70:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink\/60:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink\/50:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink\/40:not(.keep-dark):not(.keep-dark *) { background-color: rgba(255, 255, 255, 0.7); }
+.theme-light .bg-slate-card\/80:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-slate-card\/70:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-slate-card\/60:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-slate-card\/50:not(.keep-dark):not(.keep-dark *) { background-color: rgba(238, 242, 245, 0.85); }
+.theme-light .hover\:bg-slate-card:hover:not(.keep-dark):not(.keep-dark *) { background-color: var(--l-alt); }
+.theme-light .bg-black\/90:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-black\/50:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-black\/30:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-black\/25:not(.keep-dark):not(.keep-dark *) { background-color: rgba(var(--l-line), 0.05); }
+
+/* Translucent white fills become translucent ink */
+.theme-light .bg-white\/\[0\.03\]:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: rgba(var(--l-line), 0.03); }
+.theme-light .bg-white\/\[0\.04\]:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: rgba(var(--l-line), 0.04); }
+.theme-light .bg-white\/\[0\.05\]:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: rgba(var(--l-line), 0.05); }
+.theme-light .bg-white\/\[0\.07\]:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: rgba(var(--l-line), 0.06); }
+.theme-light .bg-white\/5:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: rgba(var(--l-line), 0.04); }
+.theme-light .bg-white\/10:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: rgba(var(--l-line), 0.07); }
+.theme-light .bg-white\/15:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: rgba(var(--l-line), 0.1); }
+.theme-light .bg-white\/20:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: rgba(var(--l-line), 0.13); }
+.theme-light .bg-white\/25:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .bg-white\/30:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .bg-white\/35:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .bg-white\/40:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: rgba(var(--l-line), 0.18); }
+.theme-light .hover\:bg-white\/5:hover:not(.keep-dark):not(.keep-dark *),
+.theme-light .hover\:bg-white\/\[0\.04\]:hover:not(.keep-dark):not(.keep-dark *),
+.theme-light .hover\:bg-white\/\[0\.05\]:hover:not(.keep-dark):not(.keep-dark *) { background-color: rgba(var(--l-line), 0.05); }
+.theme-light .hover\:bg-white\/10:hover:not(.keep-dark):not(.keep-dark *),
+.theme-light .hover\:bg-white\/\[0\.06\]:hover:not(.keep-dark):not(.keep-dark *) { background-color: rgba(var(--l-line), 0.08); }
+
+/* Outline buttons that filled white on hover now fill ink */
+.theme-light .hover\:bg-white:hover:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { background-color: var(--l-text); color: #fff !important; }
+.theme-light .hover\:bg-white:hover:not(.keep-dark):not(.keep-dark *) .group-hover\:bg-ink { background-color: #fff; color: var(--l-text); }
+.theme-light .hover\:bg-white:hover:not(.keep-dark):not(.keep-dark *) .group-hover\:text-white { color: var(--l-text); }
+
+/* ---- Text --------------------------------------------------------------- */
+.theme-light .text-white:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .text-snow:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: var(--l-text); }
+.theme-light .text-white\/90:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .text-snow\/90:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: rgba(var(--l-line), 0.9); }
+.theme-light .text-white\/80:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .text-snow\/85:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .text-snow\/80:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: rgba(var(--l-line), 0.78); }
+.theme-light .text-snow\/75:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .text-white\/65:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .text-snow\/60:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: rgba(var(--l-line), 0.62); }
+.theme-light .text-white\/25:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: rgba(var(--l-line), 0.25); }
+.theme-light .text-stone-dark:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: var(--l-muted); }
+.theme-light .text-stone-dark\/60:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: rgba(91, 102, 114, 0.6); }
+.theme-light .hover\:text-white:hover:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: var(--l-text); }
+.theme-light .group:hover .group-hover\:text-white:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: var(--l-text); }
+.theme-light .group:hover .group-hover\:text-white\/60:not(.keep-dark):not(.keep-dark *) { color: rgba(var(--l-line), 0.6); }
+.theme-light .placeholder\:text-stone-dark::placeholder { color: #8a939d; }
+
+/* Red surfaces always keep white type, including on hover */
+.theme-light .bg-kw-red,
+.theme-light .bg-kw-red-bright,
+.theme-light .bg-kw-red-deep,
+.theme-light .bg-kw-red .text-white,
+.theme-light .bg-kw-red .text-snow,
+.theme-light .bg-kw-red-bright .text-white,
+.theme-light .hover\:bg-kw-red:hover,
+.theme-light .hover\:bg-kw-red-bright:hover,
+.theme-light .hover\:bg-kw-red:hover .text-white,
+.theme-light .group:hover .group-hover\:bg-kw-red { color: #fff !important; }
+.theme-light .bg-kw-red .text-kw-red,
+.theme-light .bg-kw-red-bright .text-kw-red { color: #b40101 !important; }
+/* White discs inside red pills stay white */
+.theme-light .bg-kw-red .bg-white,
+.theme-light .bg-kw-red-bright .bg-white { background-color: #fff !important; }
+
+/* Form fields written for dark cards */
+.theme-light input.bg-ink-deep:not(.keep-dark):not(.keep-dark *),
+.theme-light select.bg-ink-deep:not(.keep-dark):not(.keep-dark *),
+.theme-light textarea.bg-ink-deep:not(.keep-dark):not(.keep-dark *) { background-color: #fff; color: var(--l-text); }
+
+/* ---- Borders & dividers -------------------------------------------------- */
+.theme-light .border-white\/10:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { border-color: rgba(var(--l-line), 0.1); }
+.theme-light .border-white\/12:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { border-color: rgba(var(--l-line), 0.11); }
+.theme-light .border-white\/15:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { border-color: rgba(var(--l-line), 0.14); }
+.theme-light .border-white\/20:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { border-color: rgba(var(--l-line), 0.18); }
+.theme-light .border-white\/25:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { border-color: rgba(var(--l-line), 0.22); }
+.theme-light .border-white\/30:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { border-color: rgba(var(--l-line), 0.26); }
+.theme-light .border-white\/40:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { border-color: rgba(var(--l-line), 0.32); }
+.theme-light .border-white\/50:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { border-color: rgba(var(--l-line), 0.4); }
+.theme-light .hover\:border-white:hover:not(.keep-dark):not(.keep-dark *) { border-color: var(--l-text); }
+.theme-light .hover\:border-white\/10:hover:not(.keep-dark):not(.keep-dark *) { border-color: rgba(var(--l-line), 0.1); }
+.theme-light .hover\:border-white\/30:hover:not(.keep-dark):not(.keep-dark *),
+.theme-light .hover\:border-white\/35:hover:not(.keep-dark):not(.keep-dark *),
+.theme-light .hover\:border-white\/40:hover:not(.keep-dark):not(.keep-dark *) { border-color: rgba(var(--l-line), 0.3); }
+.theme-light .group:hover .group-hover\:border-white\/35:not(.keep-dark):not(.keep-dark *) { border-color: rgba(var(--l-line), 0.3); }
+.theme-light .divide-white\/10:not(.keep-dark):not(.keep-dark *) > :not([hidden]) ~ :not([hidden]),
+.theme-light .divide-white\/12:not(.keep-dark):not(.keep-dark *) > :not([hidden]) ~ :not([hidden]),
+.theme-light .divide-white\/15:not(.keep-dark):not(.keep-dark *) > :not([hidden]) ~ :not([hidden]) { border-color: rgba(var(--l-line), 0.12); }
+
+/* ---- Gradients (Tailwind 3 custom properties) --------------------------- */
+.theme-light .from-ink:not(.keep-dark):not(.keep-dark *),
+.theme-light .from-ink-deep:not(.keep-dark):not(.keep-dark *),
+.theme-light .from-ink-deep\/95:not(.keep-dark):not(.keep-dark *),
+.theme-light .from-ink-deep\/90:not(.keep-dark):not(.keep-dark *) {
+  --tw-gradient-from: #fafaf8 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgba(250, 250, 248, 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+.theme-light .from-slate-card:not(.keep-dark):not(.keep-dark *) {
+  --tw-gradient-from: #eef2f5 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgba(238, 242, 245, 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+.theme-light .via-ink:not(.keep-dark):not(.keep-dark *),
+.theme-light .via-ink-deep:not(.keep-dark):not(.keep-dark *),
+.theme-light .via-slate-card:not(.keep-dark):not(.keep-dark *) {
+  --tw-gradient-to: rgba(255, 255, 255, 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), #ffffff var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+.theme-light .via-ink-deep\/40:not(.keep-dark):not(.keep-dark *),
+.theme-light .via-ink-deep\/25:not(.keep-dark):not(.keep-dark *) {
+  --tw-gradient-to: rgba(255, 255, 255, 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), rgba(250, 250, 248, 0.5) var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+.theme-light .to-ink:not(.keep-dark):not(.keep-dark *),
+.theme-light .to-ink-deep:not(.keep-dark):not(.keep-dark *) { --tw-gradient-to: #ffffff var(--tw-gradient-to-position); }
+.theme-light .to-slate-card:not(.keep-dark):not(.keep-dark *),
+.theme-light .to-slate-card\/90:not(.keep-dark):not(.keep-dark *) { --tw-gradient-to: #eef2f5 var(--tw-gradient-to-position); }
+
+/* ---- Shadows ------------------------------------------------------------- */
+.theme-light .shadow-lift-dark:not(.keep-dark):not(.keep-dark *) {
+  --tw-shadow: 0 20px 48px rgba(20, 23, 26, 0.12);
+  --tw-shadow-colored: 0 20px 48px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+/* Cards that sat on a dark section now need a hairline to read as cards */
+.theme-light .bg-ink.rounded-3xl:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ink.rounded-2xl:not(.keep-dark):not(.keep-dark *) {
+  box-shadow: 0 10px 30px rgba(20, 23, 26, 0.06);
+}
+
+/* Lenis/scroll selection stays brand red */
+.theme-light ::selection { background: #b40101; color: #fff; }
+
+/* ---- Legacy alias utilities (ivory = snow, copper = kw-red) -------------- */
+.theme-light .text-ivory:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *),
+.theme-light .text-ivory-deep:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#"] *) { color: var(--l-text); }
+.theme-light .text-ivory\/90:not(.keep-dark):not(.keep-dark *),
+.theme-light .text-ivory\/80:not(.keep-dark):not(.keep-dark *),
+.theme-light .text-ivory\/70:not(.keep-dark):not(.keep-dark *) { color: rgba(var(--l-line), 0.78); }
+.theme-light .text-ivory\/60:not(.keep-dark):not(.keep-dark *),
+.theme-light .text-ivory\/50:not(.keep-dark):not(.keep-dark *) { color: rgba(var(--l-line), 0.6); }
+.theme-light .hover\:text-ivory:hover:not(.keep-dark):not(.keep-dark *) { color: var(--l-text); }
+.theme-light .group:hover .group-hover\:text-ivory:not(.keep-dark):not(.keep-dark *) { color: var(--l-text); }
+.theme-light .bg-ivory:not(.keep-dark):not(.keep-dark *) { background-color: var(--l-text); color: #fff; }
+.theme-light .bg-ivory\/10:not(.keep-dark):not(.keep-dark *),
+.theme-light .bg-ivory\/5:not(.keep-dark):not(.keep-dark *) { background-color: rgba(var(--l-line), 0.06); }
+.theme-light .border-ivory\/10:not(.keep-dark):not(.keep-dark *),
+.theme-light .border-ivory\/15:not(.keep-dark):not(.keep-dark *),
+.theme-light .border-ivory\/20:not(.keep-dark):not(.keep-dark *) { border-color: rgba(var(--l-line), 0.14); }
+.theme-light .text-sage:not(.keep-dark):not(.keep-dark *) { color: var(--l-body); }

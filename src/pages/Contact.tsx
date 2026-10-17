@@ -108,7 +108,7 @@ export default function Contact() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, rgba(20,23,26,0.98) 0%, rgba(31,35,38,0.88) 60%, rgba(180,1,1,0.2) 100%)",
+              "linear-gradient(135deg, #ffffff 0%, #eef2f5 60%, rgba(180,1,1,0.10) 100%)",
           }}
         />
         <div className="container-kw relative z-10">

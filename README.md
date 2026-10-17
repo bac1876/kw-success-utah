@@ -1,3 +1,19 @@
+# KW Success Keller Williams Realty — Website v2 ("Morning Light on Snow")
+
+This is the **second example** of the KW Success site: the same codebase as
+[kw-success-utah](https://github.com/bac1876/kw-success-utah) restyled to the
+light, inviting direction from spec §3.1 ("morning light on snow-capped Wasatch
+peaks") instead of the dark Monogram-derived treatment.
+
+How the light theme works: `index.html` sets `class="theme-light"` on `<html>`,
+and `src/theme-light.css` remaps the dark-surface utilities (`bg-ink`,
+`text-snow`, `border-white/10`, …) to the §3.4 palette. Elements marked
+`keep-dark` (the footer and the photo heroes) and the small dark "screen"
+graphics keep their original look. Remove the class on `<html>` to get the
+dark site back.
+
+---
+
 # KW Success Keller Williams Realty — Multi-Brokerage Website Template
 
 This repository powers the public website for **KW Success Keller Williams Realty** (Layton, Utah) and is built on a multi-brokerage configuration architecture (`src/brokerages/`) so that adding a new brokerage is a configuration job rather than a rebuild.

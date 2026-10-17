@@ -608,7 +608,7 @@ export default function ServiceDetail() {
          SECTION 1 — AURA ARCHITECTURAL HERO (Dark Monolith + Blueprint Grid)
          ============================================================ */}
       <section
-        className="relative flex min-h-[68dvh] items-center overflow-hidden bg-[#0D0F12] pb-20 pt-[160px] text-snow"
+        className="keep-dark relative flex min-h-[68dvh] items-center overflow-hidden bg-[#0D0F12] pb-20 pt-[160px] text-snow"
         style={{ marginTop: -HEADER_H }}
       >
         {/* Subtle Architectural Grid & Radial Spotlight (No cheesy stock photo) */}
