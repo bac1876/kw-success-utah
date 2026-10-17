@@ -18,6 +18,9 @@ import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
 import SpotlightCard from "@/components/motion/SpotlightCard";
+import OfficeTourShowcase from "@/components/OfficeTourShowcase";
+import CultureGallery from "@/components/CultureGallery";
+import { SUPPORT_STAFF } from "@/data/kwSuccessMedia";
 
 const COMMUNITY_CARDS = [
   {
@@ -318,8 +321,67 @@ export default function About() {
               );
             })}
           </div>
+
+          {/* Market Center Operations & Agent Support Team (from Updated Leadership Bio Doc) */}
+          <div className="mt-16 rounded-3xl border border-ink/10 bg-white p-8 shadow-card md:p-10">
+            <div className="flex flex-col justify-between gap-4 border-b border-ink/10 pb-6 md:flex-row md:items-end">
+              <div>
+                <span className="type-label text-kw-red">
+                  Operations &amp; Agent Services
+                </span>
+                <h3 className="mt-2 text-2xl font-bold text-ink">
+                  Market Center Support Team
+                </h3>
+              </div>
+              <p className="max-w-md text-xs leading-relaxed text-charcoal">
+                From compliance review to front-desk hospitality and virtual
+                leverage, our support staff keeps every transaction moving
+                smoothly.
+              </p>
+            </div>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {SUPPORT_STAFF.map((member) => (
+                <div
+                  key={member.name}
+                  className="flex flex-col justify-between rounded-2xl border border-ink/10 bg-mist/55 p-5 transition-colors hover:border-kw-red/40"
+                >
+                  <div>
+                    <span className="block text-[0.64rem] font-bold uppercase tracking-[0.16em] text-kw-red">
+                      {member.title}
+                    </span>
+                    <h4 className="mt-1 text-base font-bold text-ink">
+                      {member.name}
+                    </h4>
+                  </div>
+                  <div className="mt-4 space-y-1.5 border-t border-ink/10 pt-3 text-xs">
+                    <a
+                      href={`mailto:${member.email}`}
+                      className="flex items-center gap-2 font-medium text-ink transition-colors hover:text-kw-red"
+                    >
+                      <Mail className="h-3.5 w-3.5 shrink-0 text-kw-red" />
+                      <span className="truncate">{member.email}</span>
+                    </a>
+                    <a
+                      href={`tel:${member.phone.replace(/[^0-9]/g, "")}`}
+                      className="flex items-center gap-2 font-medium text-charcoal transition-colors hover:text-kw-red"
+                    >
+                      <Phone className="h-3.5 w-3.5 shrink-0 text-kw-red" />
+                      <span>{member.phone}</span>
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* §8.4b Inside Our Layton Market Center (10 New Office Photos) */}
+      <OfficeTourShowcase tone="dark" />
+
+      {/* §8.4c Life, Awards & Community Stories Gallery (Awards Breakfast, Team Meetings, Santa, Trunk or Treat, Office Parties) */}
+      <CultureGallery tone="light" />
 
       {/* §8.5 Community + §8.6 Backed by Keller Williams (Dark Slate Section) */}
       <section className="bg-ink py-24 text-snow md:py-32">

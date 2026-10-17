@@ -22,6 +22,8 @@ import ThreePillars from "@/components/ThreePillars";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
+import CultureGallery from "@/components/CultureGallery";
+import OfficeTourShowcase from "@/components/OfficeTourShowcase";
 import { submitLeadForm } from "@/lib/leads";
 import { cn } from "@/lib/utils";
 
@@ -39,7 +41,7 @@ const TILE_ICONS = [
 ];
 
 export default function Agents() {
-  const { agentsPage, flags } = activeBrokerage;
+  const { agentsPage } = activeBrokerage;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -441,14 +443,15 @@ export default function Agents() {
         </div>
       </section>
 
-      {/* §6.7 Agent Stories (hidden by flag showAgentStories=false until real) */}
-      {flags.showAgentStories && (
-        <section className="bg-ink py-20 text-snow">
-          <div className="container-kw text-center">
-            <h2 className="type-display-md">Agent Stories</h2>
-          </div>
-        </section>
-      )}
+      {/* §6.7 Culture, Awards & Training in Action + Layton Market Center Tour */}
+      <CultureGallery
+        tone="dark"
+        eyebrow="06 · Culture, Recognition & Training"
+        headline="SEE OUR MARKET CENTER IN ACTION."
+        subhead="Real moments from our annual Awards Breakfast, mastermind Team Meetings, and family events in Layton."
+      />
+
+      <OfficeTourShowcase tone="light" />
 
       {/* §6.8 CTA: Talk to Russie (Dark Slate Split Form) */}
       <section
@@ -462,7 +465,7 @@ export default function Agents() {
               <Reveal>
                 <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
-                    06
+                    07
                   </span>
                   <span className="type-label text-kw-red-bright">
                     Confidential Conversation

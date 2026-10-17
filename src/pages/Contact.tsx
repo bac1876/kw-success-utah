@@ -14,6 +14,7 @@ import {
 import { activeBrokerage } from "@/brokerages";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
+import OfficeTourShowcase from "@/components/OfficeTourShowcase";
 import { submitLeadForm, type LeadSubmissionPayload } from "@/lib/leads";
 import { cn } from "@/lib/utils";
 
@@ -408,6 +409,9 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      {/* Tour the Layton Market Center before visiting */}
+      <OfficeTourShowcase tone="dark" />
     </>
   );
 }
