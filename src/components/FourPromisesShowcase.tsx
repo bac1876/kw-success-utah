@@ -768,8 +768,8 @@ export default function FourPromisesShowcase() {
                   >
                     <div>
                       {/* Card Top Status Header */}
-                      <div className="mb-4 flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
+                      <div className="mb-4 flex min-h-[3rem] items-start justify-between gap-3">
+                        <div className="flex min-w-0 items-start gap-2.5">
                           <span
                             className={cn(
                               "flex h-10 w-10 items-center justify-center rounded-xl transition-colors",
@@ -780,17 +780,17 @@ export default function FourPromisesShowcase() {
                           >
                             <Icon className="h-5 w-5" />
                           </span>
-                          <div>
-                            <span className="block font-mono text-[0.58rem] uppercase tracking-widest text-stone-dark">
+                          <div className="min-w-0">
+                            <span className="block truncate whitespace-nowrap font-mono text-[0.58rem] uppercase tracking-widest text-stone-dark">
                               {meta.code}
                             </span>
-                            <span className="text-[0.68rem] font-bold uppercase tracking-wider text-kw-red-bright">
+                            <span className="line-clamp-2 block text-[0.66rem] font-bold uppercase leading-tight tracking-wider text-kw-red-bright">
                               {meta.tag}
                             </span>
                           </div>
                         </div>
 
-                        <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 font-mono text-xs font-bold text-white">
+                        <span className="shrink-0 rounded-full border border-white/15 bg-white/5 px-2.5 py-1 font-mono text-xs font-bold text-white">
                           0{idx + 1}
                         </span>
                       </div>
@@ -802,7 +802,7 @@ export default function FourPromisesShowcase() {
                       {idx === 3 && <TribeGraphic active={isActive} />}
 
                       {/* Promise Title & Copy */}
-                      <h3 className="mt-6 text-xl font-bold leading-snug text-white">
+                      <h3 className="mt-6 min-h-[3.5rem] text-xl font-bold leading-snug text-white">
                         {card.title}
                       </h3>
                       <p className="mt-2.5 text-sm leading-relaxed text-stone-dark">
@@ -811,11 +811,11 @@ export default function FourPromisesShowcase() {
                     </div>
 
                     {/* Bottom Telemetry Footer */}
-                    <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4 text-xs">
-                      <span className="font-mono text-[0.64rem] uppercase tracking-wider text-stone-dark">
+                    <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-4 text-xs">
+                      <span className="whitespace-nowrap font-mono text-[0.64rem] uppercase tracking-wider text-stone-dark">
                         {meta.metricLabel}
                       </span>
-                      <span className="inline-flex items-center gap-1.5 font-mono text-[0.68rem] font-bold text-white">
+                      <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-mono text-[0.68rem] font-bold text-white">
                         <span
                           className={cn(
                             "h-1.5 w-1.5 rounded-full",
