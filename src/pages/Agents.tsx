@@ -25,6 +25,7 @@ import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
 import CultureGallery from "@/components/CultureGallery";
 import { submitLeadForm, type LeadSubmissionResult } from "@/lib/leads";
+import { usePageMeta } from "@/lib/usePageMeta";
 
 const TILE_ICONS = [
   Users,
@@ -39,6 +40,7 @@ const TILE_ICONS = [
 ];
 
 export default function Agents() {
+  usePageMeta("For Agents", activeBrokerage.agentsPage.hero.subhead);
   const { agentsPage } = activeBrokerage;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

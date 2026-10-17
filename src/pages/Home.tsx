@@ -33,6 +33,7 @@ import SplitChars from "@/components/motion/SplitChars";
 import SpotlightCard from "@/components/motion/SpotlightCard";
 import NetworkMap from "@/components/motion/NetworkMap";
 import { cn } from "@/lib/utils";
+import { usePageMeta } from "@/lib/usePageMeta";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -1016,6 +1017,7 @@ function ClosingCTA() {
 /* ------------------------------------------------------------------ */
 
 export default function Home() {
+  usePageMeta("", activeBrokerage.home.hero.subhead);
   const { flags } = activeBrokerage;
 
   return (

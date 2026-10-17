@@ -116,10 +116,17 @@ export interface BrokerageConfig {
   theme: ThemeTokens;
   flags: FeatureFlags;
   contact: {
+    /** Short office name used in the utility bar, footer and contact page, e.g. "Layton Market Center" */
+    officeName: string;
     addressLine1: string;
     addressLine2: string;
     fullAddress: string;
     cityStateZip: string;
+    city: string;
+    state: string;
+    zip: string;
+    /** Google Maps embed URL for the office (contact page iframe) */
+    mapsEmbedUrl: string;
     phone: string;
     phoneIsPlaceholder?: boolean;
     hours: string;
@@ -133,6 +140,8 @@ export interface BrokerageConfig {
   };
   externalLinks: {
     searchHomesUrl: string;
+    /** Label for the external home-search link, e.g. "Search Utah Homes" */
+    searchHomesLabel: string;
     findAgentUrl: string;
     findAgentIsPlaceholder?: boolean;
     kwMainUrl: string;

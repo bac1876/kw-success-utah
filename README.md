@@ -15,6 +15,9 @@ npm run dev
 
 # Type-check and build for production
 npm run build
+
+# Lint (ESLint 9 flat config in eslint.config.js)
+npm run lint
 ```
 
 ---

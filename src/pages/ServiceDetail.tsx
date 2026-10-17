@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
+import { usePageMeta } from "@/lib/usePageMeta";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
@@ -580,6 +581,12 @@ export default function ServiceDetail() {
   const { slug = "" } = useParams<{ slug: string }>();
   const { partners, flags, contact } = activeBrokerage;
   const [selectedProgram, setSelectedProgram] = useState(0);
+  const isKnownSlug =
+    slug === "mortgage" || slug === "title" || slug === "insurance";
+  usePageMeta(
+    isKnownSlug ? partners[slug].navLabel : "Services",
+    isKnownSlug ? partners[slug].introCopy : undefined
+  );
 
   if (slug === "insurance" && !flags.showInsurancePartner) {
     return <Navigate to="/" replace />;

@@ -40,10 +40,16 @@ export const kwSuccessConfig: BrokerageConfig = {
     showAgentPortalDemo: false, // demo portal is a mockup; Agent Login goes straight to KW Command
   },
   contact: {
+    officeName: "Layton Market Center",
     addressLine1: "1572 N Woodland Park Dr., Suite 500",
     addressLine2: "Layton, UT 84041",
     fullAddress: "1572 N Woodland Park Dr., Suite 500, Layton, UT 84041",
     cityStateZip: "Layton, UT 84041",
+    city: "Layton",
+    state: "UT",
+    zip: "84041",
+    mapsEmbedUrl:
+      "https://www.google.com/maps?q=1572+N+Woodland+Park+Dr+Suite+500+Layton+UT+84041&output=embed",
     phone: "801.475.9900",
     phoneIsPlaceholder: false,
     hours: "Monday – Friday · 9:00 AM – 5:00 PM",
@@ -66,6 +72,7 @@ export const kwSuccessConfig: BrokerageConfig = {
   },
   externalLinks: {
     searchHomesUrl: "https://kwsuccessutah.kw.com/search/sale",
+    searchHomesLabel: "Search Utah Homes",
     findAgentUrl: "https://kwsuccessutah.kw.com/agents",
     findAgentIsPlaceholder: false,
     kwMainUrl: "https://kw.com",

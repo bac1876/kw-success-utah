@@ -21,6 +21,7 @@ import {
   type LeadSubmissionResult,
 } from "@/lib/leads";
 import { cn } from "@/lib/utils";
+import { usePageMeta } from "@/lib/usePageMeta";
 
 const TOPICS: LeadSubmissionPayload["topic"][] = [
   "I'm an agent",
@@ -45,6 +46,7 @@ function parseInitialTopic(
 }
 
 export default function Contact() {
+  usePageMeta("Contact Us", `Visit our ${activeBrokerage.contact.officeName} or send a direct message.`);
   const [searchParams] = useSearchParams();
   const { service } = useParams<{ service?: string }>();
   const { contact, externalLinks } = activeBrokerage;
@@ -126,7 +128,7 @@ export default function Contact() {
               />
             </h1>
             <p className="type-lead mt-4 text-stone-dark">
-              Visit our Layton Market Center or send a direct message below.
+              Visit our {contact.officeName} or send a direct message below.
             </p>
           </div>
         </div>
@@ -140,7 +142,7 @@ export default function Contact() {
             <div className="flex flex-col gap-6 lg:col-span-5">
               <div className="rounded-3xl border border-ink/10 bg-white p-8 shadow-card">
                 <span className="type-label text-kw-red">
-                  Layton Market Center
+                  {contact.officeName}
                 </span>
                 <h2 className="mt-2 text-2xl font-bold text-ink">
                   {activeBrokerage.name}
@@ -218,8 +220,8 @@ export default function Contact() {
               {/* Map Embed (§11) */}
               <div className="overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-card">
                 <iframe
-                  title="KW Success Layton Market Center Map"
-                  src="https://www.google.com/maps?q=1572+N+Woodland+Park+Dr+Suite+500+Layton+UT+84041&output=embed"
+                  title={`${activeBrokerage.shortName} ${contact.officeName} Map`}
+                  src={contact.mapsEmbedUrl}
                   className="h-64 w-full border-0"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"

@@ -17,10 +17,12 @@ import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
 import { cn } from "@/lib/utils";
+import { usePageMeta } from "@/lib/usePageMeta";
 
 const WHY_ICONS = [ShieldCheck, Compass, Award, MapPin];
 
 export default function Clients() {
+  usePageMeta("Buy & Sell", activeBrokerage.clientsPage.hero.subhead);
   const { clientsPage, externalLinks, disclosures } = activeBrokerage;
   const { oneTable } = activeBrokerage.home;
 

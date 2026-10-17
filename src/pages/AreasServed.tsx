@@ -8,8 +8,10 @@ import NetworkMap, {
   UTAH_AREA_COUNT,
   UTAH_AREA_GROUPS,
 } from "@/components/motion/NetworkMap";
+import { usePageMeta } from "@/lib/usePageMeta";
 
 export default function AreasServed() {
+  usePageMeta("Areas Served", activeBrokerage.areasServedPage.subhead);
   const { areasServedPage, contact, externalLinks } = activeBrokerage;
 
   return (

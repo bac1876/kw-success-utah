@@ -24,6 +24,7 @@ import SpotlightCard from "@/components/motion/SpotlightCard";
 import CultureGallery from "@/components/CultureGallery";
 import { SUPPORT_STAFF } from "@/data/kwSuccessMedia";
 import { cn } from "@/lib/utils";
+import { usePageMeta } from "@/lib/usePageMeta";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -201,6 +202,7 @@ const COMMUNITY_CARDS = [
 ];
 
 export default function About() {
+  usePageMeta("About & Leadership", activeBrokerage.aboutPage.hero.subhead);
   const { aboutPage, externalLinks } = activeBrokerage;
   const [expandedBio, setExpandedBio] = useState<Record<string, boolean>>({});
 

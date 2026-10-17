@@ -78,7 +78,7 @@ function UtilityBar() {
 
         <span className="hidden h-3.5 w-px bg-white/15 lg:inline-block" />
         <span className="hidden text-[0.72rem] text-stone-dark lg:inline-block">
-          Layton Market Center · Serving Weber, Davis &amp; Morgan Counties
+          {activeBrokerage.contact.officeName} · {activeBrokerage.subTagline}
         </span>
       </div>
 
@@ -91,18 +91,15 @@ function UtilityBar() {
           Join Our Team
         </Link>
         <span className="h-3 w-px bg-white/15" aria-hidden />
-        <Link
-          to="/services/mortgage"
-          className="text-snow/80 transition-colors hover:text-white"
-        >
-          Unity Home Loans
-        </Link>
-        <Link
-          to="/services/title"
-          className="text-snow/80 transition-colors hover:text-white"
-        >
-          Amicus Title
-        </Link>
+        {brokerage.partnerLinks.map((p) => (
+          <Link
+            key={p.to}
+            to={p.to}
+            className="text-snow/80 transition-colors hover:text-white"
+          >
+            {p.label}
+          </Link>
+        ))}
         <span className="h-3 w-px bg-white/15" aria-hidden />
         <a
           href={brokerage.search.buyUrl}
@@ -218,7 +215,7 @@ export default function Navbar() {
               href={brokerage.search.buyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Search Utah Homes"
+              aria-label={brokerage.search.label}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-snow transition-colors hover:border-kw-red hover:bg-kw-red hover:text-white"
             >
               <Search className="h-4 w-4" strokeWidth={1.75} />
@@ -275,15 +272,22 @@ export default function Navbar() {
 
             <nav className="my-auto flex flex-col gap-2 py-8">
               {[
-                { label: "Home", to: "/", num: "01" },
-                { label: "For Agents", to: "/agents", num: "02" },
-                { label: "Buy & Sell", to: "/clients", num: "03" },
-                { label: "About & Leadership", to: "/about", num: "04" },
-                { label: "Areas Served", to: "/areas-served", num: "05" },
-                { label: "Unity Home Loans", to: "/services/mortgage", num: "06" },
-                { label: "Amicus Title", to: "/services/title", num: "07" },
-                { label: "Contact Us", to: "/contact", num: "08" },
-              ].map((item) => (
+                { label: "Home", to: "/" },
+                { label: "For Agents", to: "/agents" },
+                { label: "Buy & Sell", to: "/clients" },
+                { label: "About & Leadership", to: "/about" },
+                { label: "Areas Served", to: "/areas-served" },
+                ...brokerage.partnerLinks.map((p) => ({
+                  label: p.label,
+                  to: p.to,
+                })),
+                { label: "Contact Us", to: "/contact" },
+              ]
+                .map((item, i) => ({
+                  ...item,
+                  num: String(i + 1).padStart(2, "0"),
+                }))
+                .map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
@@ -308,7 +312,7 @@ export default function Navbar() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 font-semibold text-kw-red-bright"
               >
-                Search Utah Homes <ExternalLink className="h-4 w-4" />
+                {brokerage.search.label} <ExternalLink className="h-4 w-4" />
               </a>
               {activeBrokerage.flags.showAgentPortalDemo ? (
                 <Link

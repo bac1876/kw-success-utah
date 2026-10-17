@@ -39,12 +39,15 @@ export function SearchOverlayProvider({ children }: { children: ReactNode }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  const openSearch = useCallback(() => setOpen(true), []);
+  // Reset the query when opening rather than in an effect (react-hooks/set-state-in-effect).
+  const openSearch = useCallback(() => {
+    setQuery("");
+    setOpen(true);
+  }, []);
   const closeSearch = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
     if (open) {
-      setQuery("");
       const t = window.setTimeout(() => inputRef.current?.focus(), 350);
       return () => window.clearTimeout(t);
     }

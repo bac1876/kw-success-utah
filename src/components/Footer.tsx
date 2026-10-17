@@ -5,7 +5,7 @@ import { AGENT_LOGIN_URL } from "@/components/Navbar";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
 
 export default function Footer() {
-  const { brand, office, partners, social, disclosures } = brokerage;
+  const { brand, office, partnerLinks, social, disclosures } = brokerage;
 
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-ink-deep text-snow">
@@ -26,8 +26,8 @@ export default function Footer() {
             {brand.tagline}
           </p>
           <p className="type-body-sm mt-3 max-w-sm text-stone-dark">
-            Serving Weber, Davis &amp; Morgan Counties from our Layton Market
-            Center since {brand.foundedYear}.
+            {activeBrokerage.subTagline} from our {office.name} since{" "}
+            {brand.foundedYear}.
           </p>
 
           <div className="mt-6 flex items-center gap-2.5">
@@ -115,41 +115,29 @@ export default function Footer() {
         <div className="lg:col-span-3">
           <p className="type-label text-kw-red-bright">Family of Companies</p>
           <div className="mt-5 space-y-3.5">
-            <Link
-              to="/services/mortgage"
-              className="group block rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-kw-red/50 hover:bg-white/[0.06]"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-snow group-hover:text-white">
-                  {partners.mortgage.name}
+            {partnerLinks.map((p) => (
+              <Link
+                key={p.to}
+                to={p.to}
+                className="group block rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-kw-red/50 hover:bg-white/[0.06]"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-snow group-hover:text-white">
+                    {p.name}
+                  </span>
+                  <ArrowUpRight className="h-4 w-4 text-kw-red transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+                <span className="mt-1 block text-xs text-stone-dark">
+                  {p.role}
                 </span>
-                <ArrowUpRight className="h-4 w-4 text-kw-red transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </div>
-              <span className="mt-1 block text-xs text-stone-dark">
-                {partners.mortgage.role}
-              </span>
-            </Link>
-
-            <Link
-              to="/services/title"
-              className="group block rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-kw-red/50 hover:bg-white/[0.06]"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-snow group-hover:text-white">
-                  {partners.title.name}
-                </span>
-                <ArrowUpRight className="h-4 w-4 text-kw-red transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </div>
-              <span className="mt-1 block text-xs text-stone-dark">
-                {partners.title.role}
-              </span>
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
 
         {/* Column 4 — Connect (§13) */}
         <div className="lg:col-span-3">
-          <p className="type-label text-kw-red-bright">Layton Market Center</p>
+          <p className="type-label text-kw-red-bright">{office.name}</p>
           <div className="type-body-sm mt-5 space-y-3 text-stone-dark">
             <div className="flex items-start gap-2.5">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-kw-red" />

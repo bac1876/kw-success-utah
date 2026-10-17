@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar, { HEADER_H } from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { trackPageView } from "@/lib/analytics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -47,6 +48,9 @@ export default function Layout() {
     }
     window.scrollTo(0, 0);
     ScrollTrigger.refresh();
+    // Pages set their own <title> in an effect; defer so the title is current.
+    const t = window.setTimeout(() => trackPageView(location.pathname), 0);
+    return () => window.clearTimeout(t);
   }, [location.pathname]);
 
   return (

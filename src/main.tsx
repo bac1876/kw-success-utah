@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
 import MotionNotice from "./components/motion/MotionNotice.tsx";
+import { initAnalytics } from "./lib/analytics.ts";
 
 const MOTION_KEY = "mn-motion";
 
@@ -39,6 +40,7 @@ function initMotionPreference() {
 }
 
 const motionState = initMotionPreference();
+initAnalytics();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

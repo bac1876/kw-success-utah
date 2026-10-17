@@ -12,27 +12,20 @@ Per **§14 & §15** of `imfo.md`, this file tracks every open `[PLACEHOLDER]`, `
 ---
 
 ## 2. Leadership Team (`src/brokerages/kw-success/config.ts` → `aboutPage.leadership`)
-- [ ] **Alyson Brown (Productivity Coach, #5)**:
-  - `[PLACEHOLDER]` Email address
-  - `[PLACEHOLDER]` Phone number
-  - `[PLACEHOLDER: bio coming]` Short bio
-- [ ] **Bradley Green (Market Center Tech Trainer, #8)**:
+- [x] **Alyson Brown** — removed from the roster in the Oct 16 leadership update; her headshot (`public/kw-success/leadership/alyson-brown.jpg`) is no longer referenced and can be deleted.
+- [ ] **Bradley Green (Market Center Tech Trainer)**:
   - `[PLACEHOLDER: bio coming]` Short bio (Email `bradley@unitedagentservices.biz` and phone `385.405.4082` are live)
-
 ---
 
 ## 3. Copy & External Links (`src/brokerages/kw-success/config.ts`)
-- [ ] **Main Office Phone & Hours (§11, §15)**:
-  - Phone currently shows `801.475.9900` (from the leadership doc) with `[PLACEHOLDER: Marcus to confirm]`.
-  - Office hours currently show `Monday – Friday · 9:00 AM – 5:00 PM` with `[PLACEHOLDER]`.
+- [x] **Main Office Phone & Hours (§11, §15)**: `801.475.9900` and `Monday – Friday · 9:00 AM – 5:00 PM` are confirmed (`phoneIsPlaceholder` / `hoursIsPlaceholder` are `false`).
 - [ ] **Timeline Milestones (§8.3, §15)**:
   - `1997 · KW Success opens in Layton.` is live; intermediate milestones between 1997 and today are marked `[PLACEHOLDER]`.
 - [ ] **Verified 1997–2011 Production Numbers (§5.6, §15)**:
-  - `20,000+ Homes closed since 1997` and `$6 Billion+ In real estate` are marked `[DRAFT STATS]` pending Marcus's verification of 1997–2011 numbers.
+  - `20,000+ Homes closed since 1997` and `$6 Billion+ In real estate` carry `sample: true` in `home.stats`, which renders a visible "Draft figure, pending verification" badge on the homepage. Set `sample: false` once Marcus verifies the 1997–2011 numbers.
 - [ ] **Unity Home Loans & Amicus Title Final Copy (§10, §15)**:
   - `/services/mortgage` and `/services/title` have official logos and draft 2–3 sentence intro copy marked `[PLACEHOLDER]` until Marcus/Unity/Amicus supply final text.
-- [ ] **Find-an-Agent Roster URL on kw.com (§7, §15)**:
-  - Currently links to `https://kwsuccessutah.kw.com/agents` with `[PLACEHOLDER]` badge until Marcus confirms the exact roster URL.
+- [x] **Find-an-Agent Roster URL on kw.com (§7, §15)**: `https://kwsuccessutah.kw.com/agents` (`findAgentIsPlaceholder: false`).
 
 ---
 
@@ -52,3 +45,11 @@ Per **§14 & §15** of `imfo.md`, this file tracks every open `[PLACEHOLDER]`, `
 - [ ] `showTestimonials: false` (§5.8 — hidden until real client & agent quotes are collected with permission)
 - [ ] `showAgentStories: false` (§6.7 — hidden until real agent stories are collected)
 - [ ] `showInsurancePartner: false` (§4 — hidden until insurance partner is finalized)
+- [ ] `showAgentPortalDemo: false` (the mock agent portal and Suki AI demo at `/login/agent` stay hidden; "Agent Login" links go straight to KW Command)
+
+---
+
+## 6. Pre-Launch Technical Items
+- [ ] **Production domain**: `public/sitemap.xml` and `public/robots.txt` point at `https://kw-success-utah.vercel.app`. Update both when Marcus connects the production domain in Vercel.
+- [ ] **Lead delivery**: forms post to Supabase `lead_submissions` only when `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` are set; until then visitors get an email/phone fallback. Add a Supabase→email trigger (or a Zapier/Make hook) so Russie and the front desk actually receive submissions.
+- [ ] **Analytics**: set `VITE_GA4_ID` and/or `VITE_PLAUSIBLE_DOMAIN` in Vercel; page views are tracked on every route change once set.

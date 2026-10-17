@@ -3,8 +3,10 @@ import { ArrowUpRight } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
 import { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
+import { usePageMeta } from "@/lib/usePageMeta";
 
 export default function NotFound() {
+  usePageMeta("Page Not Found");
   const { name } = activeBrokerage;
 
   return (

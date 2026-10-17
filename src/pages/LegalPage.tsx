@@ -3,6 +3,7 @@ import { activeBrokerage } from "@/brokerages";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
 import { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
+import { usePageMeta } from "@/lib/usePageMeta";
 
 export default function LegalPage({
   type,
@@ -17,6 +18,7 @@ export default function LegalPage({
     terms: "Terms of Use",
     accessibility: "Accessibility Statement",
   };
+  usePageMeta(titles[type]);
 
   return (
     <>
