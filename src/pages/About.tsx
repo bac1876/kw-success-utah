@@ -18,7 +18,6 @@ import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
 import SpotlightCard from "@/components/motion/SpotlightCard";
-import OfficeTourShowcase from "@/components/OfficeTourShowcase";
 import CultureGallery from "@/components/CultureGallery";
 import { SUPPORT_STAFF } from "@/data/kwSuccessMedia";
 
@@ -376,9 +375,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
-      {/* §8.4b Inside Our Layton Market Center (10 New Office Photos) */}
-      <OfficeTourShowcase tone="dark" />
 
       {/* §8.4c Life, Awards & Community Stories Gallery (Awards Breakfast, Team Meetings, Santa, Trunk or Treat, Office Parties) */}
       <CultureGallery tone="light" />

@@ -23,7 +23,6 @@ import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
 import CultureGallery from "@/components/CultureGallery";
-import OfficeTourShowcase from "@/components/OfficeTourShowcase";
 import { submitLeadForm } from "@/lib/leads";
 import { cn } from "@/lib/utils";
 
@@ -443,15 +442,13 @@ export default function Agents() {
         </div>
       </section>
 
-      {/* §6.7 Culture, Awards & Training in Action + Layton Market Center Tour */}
+      {/* §6.7 Culture, Awards & Training in Action */}
       <CultureGallery
         tone="dark"
         eyebrow="06 · Culture, Recognition & Training"
         headline="SEE OUR MARKET CENTER IN ACTION."
         subhead="Real moments from our annual Awards Breakfast, mastermind Team Meetings, and family events in Layton."
       />
-
-      <OfficeTourShowcase tone="light" />
 
       {/* §6.8 CTA: Talk to Russie (Dark Slate Split Form) */}
       <section
