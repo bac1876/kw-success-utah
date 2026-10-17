@@ -14,19 +14,17 @@ import {
   Phone,
   Rocket,
   Sparkles,
-  TrendingUp,
   Users,
 } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
 import ThreePillars from "@/components/ThreePillars";
+import FourPromisesShowcase from "@/components/FourPromisesShowcase";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
 import CultureGallery from "@/components/CultureGallery";
 import { submitLeadForm } from "@/lib/leads";
-import { cn } from "@/lib/utils";
 
-const PROMISE_ICONS = [HeartHandshake, TrendingUp, Bot, Users];
 const TILE_ICONS = [
   Users,
   Building2,
@@ -149,91 +147,8 @@ export default function Agents() {
         </div>
       </section>
 
-      {/* §6.2 Why KW Success (Four Promises — Cool Sky Mist Bento Grid) */}
-      <section className="bg-mist py-24 text-ink md:py-32">
-        <div className="container-kw">
-          <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
-            <div>
-              <Reveal>
-                <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1.5">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
-                    01
-                  </span>
-                  <span className="type-label text-kw-red">Why KW Success</span>
-                </div>
-              </Reveal>
-              <h2 className="type-display-lg mt-5 max-w-3xl text-ink">
-                <SplitWords text="FOUR PROMISES TO EVERY AGENT." />
-              </h2>
-            </div>
-            <Reveal delay={0.15}>
-              <p className="type-body max-w-md text-charcoal">
-                Real estate is how you fund the life you want. Here is the
-                standard we hold ourselves to for every agent in our Market
-                Center.
-              </p>
-            </Reveal>
-          </div>
-
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {agentsPage.whyPromises.map((card, idx) => {
-              const Icon = PROMISE_ICONS[idx % PROMISE_ICONS.length];
-              const isDark = idx === 0 || idx === 3;
-              return (
-                <Reveal key={card.title} delay={0.07 * idx} y={24}>
-                  <div
-                    className={cn(
-                      "flex h-full flex-col justify-between rounded-3xl border p-8 transition-all duration-300",
-                      isDark
-                        ? "border-ink/10 bg-ink text-snow shadow-lift"
-                        : "border-ink/10 bg-white text-ink shadow-card hover:border-kw-red/50"
-                    )}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between">
-                        <span
-                          className={cn(
-                            "flex h-11 w-11 items-center justify-center rounded-2xl",
-                            isDark
-                              ? "bg-kw-red text-white"
-                              : "bg-kw-red/10 text-kw-red"
-                          )}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </span>
-                        <span
-                          className={cn(
-                            "text-xs font-bold uppercase tracking-widest",
-                            isDark ? "text-stone-dark" : "text-kw-gray"
-                          )}
-                        >
-                          0{idx + 1}
-                        </span>
-                      </div>
-                      <h3
-                        className={cn(
-                          "mt-7 text-xl font-bold leading-snug",
-                          isDark ? "text-white" : "text-ink"
-                        )}
-                      >
-                        {card.title}
-                      </h3>
-                      <p
-                        className={cn(
-                          "mt-3 text-sm leading-relaxed",
-                          isDark ? "text-stone-dark" : "text-charcoal"
-                        )}
-                      >
-                        {card.body}
-                      </p>
-                    </div>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      {/* §6.2 Why KW Success (Four Promises — Interactive Moving Graphic Interface) */}
+      <FourPromisesShowcase />
 
       {/* §6.3 What Makes Us Different + §6.4 Become a Trusted Advisor (Dark Slate) */}
       <section className="bg-ink py-24 text-snow md:py-32">
