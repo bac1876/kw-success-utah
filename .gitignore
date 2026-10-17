@@ -26,3 +26,6 @@ KW Success Website – Assets/
 *.njsproj
 *.sln
 *.sw?
+
+# Local skill engine binary
+.agents/skills/impeccable/scripts/bin/
