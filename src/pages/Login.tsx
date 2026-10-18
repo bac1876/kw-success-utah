@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -357,8 +357,9 @@ export default function Login() {
     }
   });
 
-  const [email, setEmail] = useState("marcusgreen@kw.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const emailRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>("overview");
@@ -399,20 +400,8 @@ export default function Login() {
       }
     } else {
       setError(
-        "Invalid credentials. Use marcusgreen@kw.com and password pass1234."
+        "That email and password don't match. Contact Agent Services if you need help signing in."
       );
-    }
-  };
-
-  const handleQuickFillAndSignIn = () => {
-    setEmail("marcusgreen@kw.com");
-    setPassword("pass1234");
-    setError(null);
-    setIsAuthenticated(true);
-    try {
-      window.sessionStorage.setItem(STORAGE_KEY, "true");
-    } catch {
-      // ignore
     }
   };
 
@@ -479,11 +468,13 @@ export default function Login() {
                   <div className="relative">
                     <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-dark" />
                     <input
+                      ref={emailRef}
                       type="email"
                       required
+                      autoComplete="username"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="marcusgreen@kw.com"
+                      placeholder="you@kw.com"
                       className="w-full rounded-xl border border-white/15 bg-ink-deep py-3 pl-10 pr-4 text-sm text-white outline-none transition-colors focus:border-kw-red"
                     />
                   </div>
@@ -500,7 +491,8 @@ export default function Login() {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter pass1234"
+                      autoComplete="current-password"
+                      placeholder="Your password"
                       className="w-full rounded-xl border border-white/15 bg-ink-deep py-3 pl-10 pr-11 text-sm text-white outline-none transition-colors focus:border-kw-red"
                     />
                     <button
@@ -536,31 +528,9 @@ export default function Login() {
                   </span>
                 </button>
               </form>
-
-              {/* Demo Credentials Helper Box */}
-              <div className="mt-6 rounded-2xl border border-kw-red/35 bg-kw-red/10 p-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div>
-                    <span className="block text-[0.65rem] font-extrabold uppercase tracking-[0.18em] text-kw-red-bright">
-                      Interactive Demo Login
-                    </span>
-                    <p className="mt-1 font-mono text-xs text-snow/90">
-                      User: <strong>marcusgreen@kw.com</strong> · Pass:{" "}
-                      <strong>pass1234</strong>
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleQuickFillAndSignIn}
-                    className="rounded-full bg-white px-3.5 py-1.5 text-[0.68rem] font-extrabold uppercase tracking-wider text-ink transition-colors hover:bg-kw-red hover:text-white"
-                  >
-                    Instant Demo Sign-In →
-                  </button>
-                </div>
-              </div>
             </SpotlightCard>
 
-            {/* Right Column: Clickable Tool Preview Cards (Sign in directly to any tool mockup) */}
+            {/* Right Column: Tool cards. Clicking one remembers that tool and moves focus to the sign-in form. */}
             <div className="flex flex-col justify-between rounded-3xl border border-white/10 bg-ink/70 p-8 backdrop-blur-md lg:col-span-6 md:p-10">
               <div>
                 <div className="flex items-center gap-2">
@@ -570,12 +540,10 @@ export default function Login() {
                   </span>
                 </div>
                 <h2 className="mt-2 text-xl font-bold text-white">
-                  Click any tool below to sign in &amp; preview its interactive
-                  workspace
+                  Every system you use, in one place
                 </h2>
                 <p className="mt-1 text-xs text-stone-dark">
-                  Sign in with Marcus Green’s demo account to test interactive
-                  mockups of all five agent systems.
+                  Sign in to open any of these tools from your Agent Hub.
                 </p>
 
                 <div className="mt-6 space-y-3">
@@ -588,7 +556,7 @@ export default function Login() {
                           type="button"
                           onClick={() => {
                             setActiveTab(tool.id);
-                            handleQuickFillAndSignIn();
+                            emailRef.current?.focus();
                           }}
                           className="group flex w-full items-center justify-between rounded-2xl border border-white/10 bg-slate-card/80 p-4 text-left transition-all hover:border-kw-red hover:bg-slate-card"
                         >
