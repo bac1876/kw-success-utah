@@ -794,8 +794,7 @@ export default function Login() {
                         Your Integrated KW Success Systems
                       </h2>
                       <p className="mt-1 text-xs text-stone-dark">
-                        Click any system card below to open its interactive
-                        mockup inside the portal
+                        Click any system below to open it.
                       </p>
                     </div>
                   </div>
@@ -830,7 +829,7 @@ export default function Login() {
 
                             <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
                               <span className="text-xs font-bold uppercase tracking-wider text-kw-red-bright">
-                                Open Interactive Mockup
+                                Open {tool.label}
                               </span>
                               <ArrowRight className="h-4 w-4 text-kw-red-bright transition-transform group-hover:translate-x-1" />
                             </div>
@@ -852,7 +851,7 @@ export default function Login() {
                   <div>
                     <span className="inline-flex items-center gap-2 rounded-full bg-kw-red/15 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-wider text-kw-red-bright">
                       <FolderKanban className="h-3.5 w-3.5" />
-                      KW Command · Pipeline &amp; SmartPlans Mockup
+                      KW Command · Pipeline &amp; SmartPlans
                     </span>
                     <h2 className="mt-2 text-2xl font-bold text-white">
                       Marcus Green’s Active Opportunities &amp; One Table Sync
@@ -976,7 +975,7 @@ export default function Login() {
                   <div>
                     <span className="inline-flex items-center gap-2 rounded-full bg-kw-red/15 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-wider text-kw-red-bright">
                       <Building2 className="h-3.5 w-3.5" />
-                      utahrealestate.com · Northern Utah MLS Hot Sheet Mockup
+                      utahrealestate.com · Northern Utah MLS Hot Sheet
                     </span>
                     <h2 className="mt-2 text-2xl font-bold text-white">
                       Weber, Davis &amp; Morgan County Live Inventory Feed
@@ -1093,7 +1092,7 @@ export default function Login() {
                   <div>
                     <span className="inline-flex items-center gap-2 rounded-full bg-kw-red/15 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-wider text-kw-red-bright">
                       <Bot className="h-3.5 w-3.5" />
-                      Suki AI · KW Success Agent Copilot Mockup
+                      Suki AI · KW Success Agent Copilot
                     </span>
                     <h2 className="mt-2 text-2xl font-bold text-white">
                       Instant Listing Copy, Client Scripts &amp; Wasatch Market
@@ -1225,7 +1224,7 @@ export default function Login() {
                   <div>
                     <span className="inline-flex items-center gap-2 rounded-full bg-kw-red/15 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-wider text-kw-red-bright">
                       <Palette className="h-3.5 w-3.5" />
-                      Canva Brand Studio · KW Success Utah Templates Mockup
+                      Canva Brand Studio · KW Success Utah Templates
                     </span>
                     <h2 className="mt-2 text-2xl font-bold text-white">
                       Ready-to-Publish Social, Print &amp; Listing Decks
