@@ -15,18 +15,18 @@ const ROMAN = ["I.", "II.", "III.", "IV."] as const;
 const PARTNER_METRICS = {
   mortgage: [
     { value: "Same-Day", label: "Pre-Approval Letters" },
-    { value: "4 Seats", label: "Coordinated at One Table" },
-    { value: "3 Counties", label: "Weber · Davis · Morgan" },
+    { value: "Connected", label: "Coordinated Services" },
+    { value: "Northern Utah", label: "Salt Lake · Davis · Weber · Morgan · Summit · Tooele · Box Elder · Cache · Rich" },
     { value: "In-House", label: "Layton Lending Desk" },
   ],
   title: [
-    { value: "3 Counties", label: "Weber · Davis · Morgan" },
+    { value: "Northern Utah", label: "Salt Lake · Davis · Weber · Morgan · Summit · Tooele · Box Elder · Cache · Rich" },
     { value: "100%", label: "Wire-Shield Verified" },
     { value: "Same-Day", label: "Recording & Disbursement" },
     { value: "In-House", label: "Layton Closing Suites" },
   ],
   insurance: [
-    { value: "3 Counties", label: "Weber · Davis · Morgan" },
+    { value: "Northern Utah", label: "Salt Lake · Davis · Weber · Morgan · Summit · Tooele · Box Elder · Cache · Rich" },
     { value: "Multi-Carrier", label: "Coverage Comparisons" },
     { value: "Annual", label: "Policy Stewardship" },
     { value: "In-House", label: "Layton Advisory Desk" },
@@ -85,7 +85,7 @@ const TITLE_CAPABILITIES = [
     name: "Title Examination",
     tag: "Chain of Title",
     summary:
-      "Exhaustive examination of Weber, Davis, and Morgan County land records to guarantee marketable, unencumbered ownership.",
+      "Exhaustive examination of Northern Utah land records to guarantee marketable, unencumbered ownership.",
     specs: [
       "Full historical deed, easement & plat map verification",
       "Proactive curative work on prior liens and releases",
@@ -139,7 +139,7 @@ const CLOSING_PROTOCOL = {
       step: "02",
       title: "Lender Balancing & CD Review",
       detail:
-        "Amicus balances every line item directly with Unity Home Loans 72+ hours before signing.",
+        "Title companies balance every line item with lenders before signing to ensure a smooth closing.",
     },
     {
       step: "03",
@@ -209,7 +209,7 @@ function IsometricTableStack({ activeSlug }: { activeSlug: string }) {
     {
       id: "title",
       num: "03",
-      label: "Amicus Title",
+      label: "Title & Escrow",
       sub: "Title Search · Escrow · Recording",
       active: activeSlug === "title",
       offsetClass: "translate-y-14 hover:translate-y-16 z-10",
@@ -558,14 +558,14 @@ function TitleClosingConsole() {
       {/* Footer CTA */}
       <div className="mt-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <p className="max-w-xs text-xs leading-relaxed text-stone-dark">
-          <strong className="text-white">Wire-Shield Standard:</strong> Amicus
+          <strong className="text-white">Wire-Shield Standard:</strong> Leading title companies
           Title never alters wire routing via email. Always verify by phone.
         </p>
         <Link
           to="/contact/title"
           className="group inline-flex shrink-0 items-center gap-3 bg-kw-red px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
         >
-          <span>Open Escrow With Amicus</span>
+          <span>Talk to an Advisor</span>
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
       </div>
@@ -851,7 +851,7 @@ export default function ServiceDetail() {
               </span>
 
               <h2 className="type-display-md mt-4 text-white">
-                Everyone at One Table.
+                One Trusted Advisor for Every Chapter.
               </h2>
 
               <p className="mt-5 text-sm leading-relaxed text-stone-dark">

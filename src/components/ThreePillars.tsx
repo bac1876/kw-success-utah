@@ -24,7 +24,7 @@ const AGENT_HIGHLIGHTS: string[][] = [
 
 const CLIENT_HIGHLIGHTS: string[][] = [
   ["Trusted Advisor", "Hyper-Local Strategy", "Off-Market Insight"],
-  ["Weber, Davis & Morgan", "Local Schools & Parks", "Community Roots"],
+  ["Northern Utah", "Local Schools & Parks", "Community Roots"],
   ["Equity Reviews", "Remodel ROI Guidance", "Portfolio Growth"],
 ];
 

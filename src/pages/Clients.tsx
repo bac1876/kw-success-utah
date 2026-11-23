@@ -129,7 +129,7 @@ export default function Clients() {
             <Reveal delay={0.15}>
               <p className="type-body max-w-md text-stone-dark">
                 Better equipped, current on the market, coached to serve, and
-                deeply rooted across Weber, Davis, and Morgan Counties.
+                deeply rooted across Northern Utah.
               </p>
             </Reveal>
           </div>
@@ -175,7 +175,7 @@ export default function Clients() {
         </div>
       </section>
 
-      {/* §7 Everyone at One Table (Cool Sky Mist Section) */}
+      {/* §7 One Trusted Advisor (Cool Sky Mist Section) */}
       <section className="bg-mist py-24 text-ink md:py-32">
         <div className="container-kw">
           <div className="grid items-end gap-8 lg:grid-cols-12">

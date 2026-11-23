@@ -42,14 +42,11 @@ export default function LegalPage({
                 <p className="type-body">
                   This is to give you notice that{" "}
                   <strong className="text-ink">{name}</strong> and certain of
-                  its agents have a business relationship and ownership interest
-                  in <strong className="text-ink">Unity Home Loans</strong>{" "}
-                  (mortgage lending) and{" "}
-                  <strong className="text-ink">Amicus Title</strong> (title
-                  insurance &amp; escrow settlement services), part of the same
-                  family of companies. Because of this relationship, this
-                  referral may provide {name} or its affiliated owners a
-                  financial or other benefit.
+                  its agents have an ownership interest in{" "}
+                  <strong className="text-ink">Unity Home Loans, LLC</strong>{" "}
+                  (NMLS #2383237), part of the same family of companies. Because of this
+                  relationship, a referral to Unity may provide them a
+                  financial or other benefit. You are not required to use Unity Home Loans as a condition of the purchase, sale, or refinance of any property. Other settlement service providers are available with similar services, and you are free to shop around.
                 </p>
 
                 <AffiliatedDisclosure tone="light" showFullLegal />
@@ -96,9 +93,8 @@ export default function LegalPage({
                 <p className="type-body">
                   We do not sell your personal contact information to
                   unaffiliated third-party marketers. If you request connected
-                  services across our table (such as mortgage pre-approval
-                  through Unity Home Loans or escrow services through Amicus
-                  Title), your advisor will coordinate that introduction with
+                  services (such as mortgage pre-approval
+                  through Unity Home Loans), your advisor will coordinate that introduction with
                   your permission.
                 </p>
                 <p className="type-body-sm text-kw-gray">

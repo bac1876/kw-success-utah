@@ -1,3 +1,9 @@
 {
+  "redirects": [
+    { "source": "/services/title", "destination": "/contact", "permanent": true },
+    { "source": "/contact/title", "destination": "/contact", "permanent": true },
+    { "source": "/contact/mortgage", "destination": "/services/mortgage", "permanent": true },
+    { "source": "/affiliated-business-disclosure", "destination": "https://www.UnityHomeLoans.com/ABA", "permanent": false }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

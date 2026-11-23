@@ -86,7 +86,7 @@ const SEAT_META: Record<string, SeatMeta> = {
     icon: Hammer,
     shortDesc: "Trusted local trades for repairs, bids & upgrades",
     advisorRole:
-      "Need a licensed electrician, plumber, roofer, or general contractor who actually shows up? Your advisor opens our vetted Weber, Davis & Morgan County trade bench whenever you need a bid.",
+                      "Need a licensed electrician, plumber, roofer, or general contractor who actually shows up? Your advisor opens our vetted Northern Utah trade bench whenever you need a bid.",
     capabilities: [
       "Vetted Local Trades",
       "Pre-Sale Punch Lists",
@@ -431,16 +431,16 @@ export default function FourSeats({
           <span className="text-xs font-semibold tracking-wide text-snow/90">
             {activeChapterObj ? (
               <>
-                Showing active seats for Chapter:{" "}
+                Showing active services for Chapter:{" "}
                 <strong className="text-kw-red-bright">
                   {activeChapterObj.step}
                 </strong>{" "}
-                ({activeChapterObj.activeSeats.length} seats coordinated)
+                ({activeChapterObj.activeSeats.length} services coordinated)
               </>
             ) : (
               <>
-                Interactive Table — Hover or click any seat around the table to
-                inspect how your advisor coordinates it
+                Interactive Hub — Hover or click any service around the circle to
+                see how your advisor helps
               </>
             )}
           </span>
@@ -752,7 +752,7 @@ export default function FourSeats({
                     <div className="flex items-center justify-between gap-2">
                       <span className="inline-flex items-center gap-1.5 text-[0.65rem] font-extrabold uppercase tracking-[0.18em] text-kw-red-bright">
                         <PrimaryIcon className="h-3.5 w-3.5" />
-                        Seat 0{primarySeatIndex + 1} · {primarySeat.category}
+                        Service {primarySeatIndex + 1} · {primarySeat.category}
                       </span>
                       <span className="rounded-full bg-white/10 px-2 py-0.5 text-[0.6rem] font-semibold text-snow/80">
                         Active Focus
@@ -780,7 +780,7 @@ export default function FourSeats({
                       <div className="mt-3.5 flex items-center justify-between gap-3 rounded-xl border border-kw-red/40 bg-kw-red/15 px-3 py-2">
                         <div>
                           <span className="block text-[0.58rem] font-bold uppercase tracking-widest text-kw-red-bright">
-                            In-House Partner Seat
+                            Lending Partner
                           </span>
                           <span className="text-xs font-bold text-white">
                             {primaryProvider.name}
@@ -876,7 +876,7 @@ export default function FourSeats({
                     dark ? "text-stone-dark" : "text-charcoal"
                   )}
                 >
-                  Click any chapter below to light up the seats your advisor
+                  Click any chapter below to see the services your advisor
                   coordinates for that stage
                 </span>
               </div>
@@ -950,7 +950,7 @@ export default function FourSeats({
                               : "text-ink/30"
                       )}
                     >
-                      {chapter.activeSeats.length} seats
+                          {chapter.activeSeats.length} services
                     </span>
                   </div>
 

@@ -131,7 +131,7 @@ export default function Agents() {
                 onClick={scrollToForm}
                 className="group inline-flex items-center gap-3.5 rounded-full bg-kw-red py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-lift-dark transition-all hover:bg-kw-red-bright"
               >
-                <span>Talk to Russie</span>
+                <span>Explore a Career With Us</span>
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
                   <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
                 </span>
@@ -347,7 +347,7 @@ export default function Agents() {
                       onClick={scrollToForm}
                       className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-kw-red transition-colors hover:text-ink"
                     >
-                      <span>Talk to Russie About This Path</span>
+                      <span>Explore This Path</span>
                       <ArrowUpRight className="h-4 w-4" />
                     </button>
                   </div>
@@ -366,7 +366,7 @@ export default function Agents() {
         subhead="Real moments from our annual Awards Breakfast, mastermind Team Meetings, and family events in Layton."
       />
 
-      {/* §6.8 CTA: Talk to Russie (Dark Slate Split Form) */}
+      {/* §6.8 CTA: Book a Conversation (Dark Slate Split Form) */}
       <section
         id="talk-to-russie"
         className="bg-ink py-24 text-snow md:py-32"
@@ -591,14 +591,14 @@ export default function Agents() {
                         rows={4}
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Tell Russie a bit about your goals…"
+                        placeholder="Tell us a bit about your goals…"
                         className={inputCls}
                       />
                     </div>
 
                     <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
                       <span className="text-xs text-stone-dark">
-                        100% confidential · Routed directly to Russie Edwards
+                        100% confidential · Routed directly to our leadership team
                       </span>
                       <button
                         type="submit"
@@ -608,7 +608,7 @@ export default function Agents() {
                         <span>
                           {submitting
                             ? "Sending…"
-                            : "Book Confidential Conversation"}
+                            : "Schedule a Confidential Conversation"}
                         </span>
                         <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
                           <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />

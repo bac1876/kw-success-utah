@@ -46,8 +46,8 @@ const TIMELINE_EVENTS = [
     body: "Surpasses $6 billion in closed real estate volume through collaborative coaching and market leadership.",
   },
   {
-    year: "Unity & Amicus",
-    body: "Unity Home Loans and Amicus Title join the family of companies — bringing lending and escrow to the same table.",
+    year: "Unity",
+    body: "Unity Home Loans joins the family of companies — bringing mortgage lending expertise directly to KW Success clients.",
   },
   {
     year: "8 of 9",
@@ -183,7 +183,7 @@ function BrandTimeline() {
 const COMMUNITY_CARDS = [
   {
     title: "KW Success Cares",
-    subtitle: "Weber, Davis & Morgan Counties",
+    subtitle: "Northern Utah",
     detail:
       "Locally funded outreach supporting Northern Utah families, school pantries, and neighbors experiencing unexpected hardship.",
   },
@@ -515,7 +515,7 @@ export default function About() {
                   Community Impact
                 </span>
                 <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[0.68rem] font-semibold text-stone-dark">
-                  Weber · Davis · Morgan Counties
+                  Northern Utah
                 </span>
               </div>
 

@@ -578,7 +578,7 @@ export default function NetworkMap() {
 
   const filterListBlock = (
     <div>
-      <p className="type-label mt-9 text-stone-dark">Coverage Hubs</p>
+      <p className="type-label mt-9 text-stone-dark">Service Area</p>
       <ul className="mt-3 border-t hairline-dark">
         {hubs.map((h) => {
           const active =

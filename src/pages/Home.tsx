@@ -269,7 +269,7 @@ function Hero() {
             onClick={() => scrollTo("#connected")}
             className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-snow/85 transition-colors hover:text-white"
           >
-            <span>Explore One Table</span>
+            <span>Learn More</span>
             <ChevronDown className="h-4 w-4 animate-bounce text-kw-red-bright" />
           </button>
         </div>
@@ -279,7 +279,7 @@ function Hero() {
 }
 
 /* ------------------------------------------------------------------ */
-/* §5.2 "Everyone at One Table" (Dark Architectural Slate Section)     */
+/* §5.2 "One Trusted Advisor" (Dark Architectural Slate Section)     */
 /* ------------------------------------------------------------------ */
 
 function EveryoneAtOneTable() {
@@ -572,7 +572,7 @@ const CONTINUITY_MILESTONES = [
     year: "1997",
     title: "Founded in Northern Utah",
     detail:
-      "Built in the communities of Weber, Davis, and Morgan Counties with a commitment to coaching, leadership, and lifelong client care.",
+      "Built in the communities of Northern Utah with a commitment to coaching, leadership, and lifelong client care.",
   },
   {
     year: "20,000+",
@@ -582,9 +582,9 @@ const CONTINUITY_MILESTONES = [
   },
   {
     year: "Today",
-    title: "Everyone at One Table",
+    title: "One Trusted Advisor for Every Chapter",
     detail:
-      "Your KW Success Trusted Advisor coordinates lending, title, insurance, inspections, and trusted local trades under one roof.",
+      "Your KW Success Trusted Advisor coordinates lending, insurance, inspections, and trusted local trades — your first call for anything your home needs.",
   },
 ];
 
@@ -740,7 +740,7 @@ function OurPromise() {
 /* §5.7 Home Search ("When You're Ready") + Interactive Wasatch Map    */
 /* ------------------------------------------------------------------ */
 
-const TABS = ["Buy", "Sell", "Rent"] as const;
+const TABS = ["Buy", "Sell"] as const;
 const QUICK_TOWNS = [
   "Layton",
   "Kaysville",
@@ -1024,7 +1024,7 @@ export default function Home() {
     <>
       {/* §5.1 Hero (Wasatch Mountain Panorama) */}
       <Hero />
-      {/* §5.2 Everyone at One Table (Dark Slate Interactive Neural Hub) */}
+      {/* §5.2 One Trusted Advisor (Dark Slate Interactive Hub) */}
       <EveryoneAtOneTable />
       {/* §5.3 The Success Idea (Cool Sky Mist + 3D Tilt Cards) */}
       <TheSuccessIdea />

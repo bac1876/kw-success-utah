@@ -6,7 +6,7 @@ export const kwSuccessConfig: BrokerageConfig = {
   shortName: "KW Success",
   legalName: "KW Success Keller Williams Realty",
   tagline: "You define Success. The relationship is how we get there.",
-  subTagline: "Serving Weber, Davis & Morgan Counties",
+  subTagline: "Proudly serving all of Northern Utah. Licensed to serve the entire state.",
   foundedYear: 1997,
   designatedBroker: "Shawn Janke",
   logos: {
@@ -57,16 +57,16 @@ export const kwSuccessConfig: BrokerageConfig = {
     generalEmail: "dfisuccess@unitedagentservices.biz",
     routing: {
       agentInquiry: {
-        name: "Russie Edwards, Team Leader",
-        email: "russie@unitedagentservices.biz",
+        name: "Leadership Team",
+        email: "admin@unitedagentservices.biz",
       },
       buyingSelling: {
         name: "Front Desk (Director of First Impressions)",
-        email: "dfisuccess@unitedagentservices.biz",
+        email: "admin@unitedagentservices.biz",
       },
       general: {
         name: "Front Desk (Director of First Impressions)",
-        email: "dfisuccess@unitedagentservices.biz",
+        email: "admin@unitedagentservices.biz",
       },
     },
   },
@@ -113,10 +113,10 @@ export const kwSuccessConfig: BrokerageConfig = {
   },
   disclosures: {
     affiliatedBusinessDraft:
-      "KW Success Keller Williams Realty and certain of its agents have an ownership interest in Unity Home Loans and Amicus Title, part of the same family of companies. You are not required to use any of these providers.",
+      "Affiliated Business Arrangement Disclosure: Certain agents of KW Success Keller Williams Realty have an ownership interest in Unity Home Loans, LLC (NMLS #2383237), part of the same family of companies. Because of this relationship, a referral to Unity may provide them a financial or other benefit. You are not required to use Unity Home Loans as a condition of the purchase, sale, or refinance of any property. Other settlement service providers are available with similar services, and you are free to shop around.",
     affiliatedBusinessFullCapitals:
       "YOU ARE NOT REQUIRED TO USE THE LISTED PROVIDER(S) AS A CONDITION FOR SETTLEMENT OF YOUR LOAN ON OR THE PURCHASE, SALE, OR REFINANCE OF THE SUBJECT PROPERTY. THERE ARE FREQUENTLY OTHER SETTLEMENT SERVICE PROVIDERS AVAILABLE WITH SIMILAR SERVICES. YOU ARE FREE TO SHOP AROUND TO DETERMINE THAT YOU ARE RECEIVING THE BEST SERVICES AND THE BEST RATE FOR THESE SERVICES.",
-    affiliatedPdfUrl: "/affiliated-business-disclosure",
+    affiliatedPdfUrl: "https://www.UnityHomeLoans.com/ABA",
     bestOfStateBadge:
       "Keller Williams Utah · Utah Best of State, Real Estate Services · 8-time winner (2018–2026).",
     footerLegalLine:
@@ -134,13 +134,13 @@ export const kwSuccessConfig: BrokerageConfig = {
         "Since 1997, KW Success has helped agents build businesses and lives by design, and helped families across northern Utah find the home base for theirs.",
       primaryCta: { label: "I'm an Agent", to: "/agents" },
       secondaryCta: { label: "I'm Buying or Selling", to: "/clients" },
-      cornerCaption: "Serving Weber, Davis & Morgan Counties",
+      cornerCaption: "Proudly serving all of Northern Utah. Licensed to serve the entire state.",
     },
     oneTable: {
       eyebrow: "CONNECTED HOMEOWNERSHIP",
-      headline: "ONE TRUSTED ADVISOR. EVERYTHING YOUR HOME NEEDS.",
-      body: "Before, during, and long after the closing, your KW Success Trusted Advisor is your first call for anything your home needs. Need a lender, an inspector, an insurance quote, a contractor or a great painter? Your advisor brings the right people to the table and stays at it with you for as long as you own your home.",
-      subhead: "Everyone at one table.",
+      headline: "ONE TRUSTED ADVISOR FOR EVERY CHAPTER OF HOMEOWNERSHIP",
+      body: "Before, during, and long after the closing, your KW Success advisor is your first call for anything your home needs, and the person who connects you with the right local pros.",
+      subhead: "One Trusted Advisor for Every Chapter of Homeownership.",
       centerCardTitle: "Your KW Success Trusted Advisor & you.",
       centerCardCaption: "Your first call for anything your home needs.",
       seats: [
@@ -150,7 +150,7 @@ export const kwSuccessConfig: BrokerageConfig = {
           providers: [
             {
               name: "Unity Home Loans",
-              logo: "/kw-success/logos/unity-home-loans.png",
+              logo: "/kw-success/logos/unity-home-loans-full-color.png",
               url: "/services/mortgage",
               affiliated: true,
             },
@@ -159,14 +159,7 @@ export const kwSuccessConfig: BrokerageConfig = {
         {
           category: "Title & Escrow",
           icon: "FileCheck2",
-          providers: [
-            {
-              name: "Amicus Title",
-              logo: "/kw-success/logos/amicus-title.png",
-              url: "/services/title",
-              affiliated: true,
-            },
-          ],
+          providers: [],
         },
         {
           category: "Insurance",
@@ -286,7 +279,7 @@ export const kwSuccessConfig: BrokerageConfig = {
       },
       {
         display: "Since 1997",
-        label: "Serving Weber, Davis & Morgan",
+        label: "Serving Northern Utah",
       },
     ],
     search: {
@@ -351,10 +344,10 @@ export const kwSuccessConfig: BrokerageConfig = {
     whatEveryAgentGetsIntro:
       "Agents choose KW Success for our leadership, our energy, our support, our office and our education.",
     whatEveryAgentGets: [
-      {
-        title: "Leadership that invests in you.",
-        body: "Russie and our leadership team coach, lead and support every agent, at every stage.",
-      },
+        {
+          title: "Leadership that invests in you.",
+          body: "Our leadership team coaches, leads and supports every agent, at every stage.",
+        },
       {
         title: "A real home base.",
         body: "Office space in Layton, built for meetings, closings and collaboration.",
@@ -409,11 +402,11 @@ export const kwSuccessConfig: BrokerageConfig = {
     ],
     cta: {
       headline: "HAVE A CONVERSATION ABOUT YOUR NEXT CHAPTER.",
-      body: "Book a confidential conversation with Russie Edwards, our Team Leader.",
-      leaderName: "Russie Edwards",
-      leaderTitle: "General Manager / Team Leader",
-      leaderEmail: "russie@unitedagentservices.biz",
-      leaderPhone: "801.710.5075",
+      body: "Book a confidential conversation with our leadership team.",
+      leaderName: "Leadership Team",
+      leaderTitle: "KW Success",
+      leaderEmail: "admin@unitedagentservices.biz",
+      leaderPhone: "801.475.9900",
       leaderPhoto: "/kw-success/leadership/russie-edwards.jpg",
     },
   },
@@ -437,10 +430,10 @@ export const kwSuccessConfig: BrokerageConfig = {
         title: "Coached to Serve",
         body: "Trained to listen first, advise honestly, and put your long-term goals ahead of a quick closing.",
       },
-      {
-        title: "Rooted Locally",
-        body: "Working and living right here across Weber, Davis, and Morgan counties since 1997.",
-      },
+        {
+          title: "Rooted Locally",
+          body: "Working and living right here across Northern Utah since 1997.",
+        },
     ],
   },
   aboutPage: {
@@ -475,12 +468,12 @@ export const kwSuccessConfig: BrokerageConfig = {
       },
       {
         year: "2018–2026",
-        body: "Keller Williams Utah Region recognized 8 consecutive times as Utah Best of State in Real Estate Services while KW Success launches its integrated One Table partner ecosystem.",
+        body: "Keller Williams Utah Region recognized 8 consecutive times as Utah Best of State in Real Estate Services while KW Success expands its family of companies with Unity Home Loans.",
         isPlaceholder: false,
       },
       {
         year: "Today",
-        body: "20,000+ homes closed and $6B+ in real estate across Weber, Davis & Morgan Counties — building lives by design.",
+        body: "20,000+ homes closed and $6B+ in real estate across Northern Utah — building lives by design.",
       },
     ],
     leadership: [
@@ -561,7 +554,7 @@ export const kwSuccessConfig: BrokerageConfig = {
     community: {
       eyebrow: "COMMUNITY",
       headline: "GIVING BACK WHERE WE LIVE.",
-      body: "KW Success Cares, KW Cares, RED Day and group service projects across Weber, Davis, and Morgan counties.",
+      body: "KW Success Cares, KW Cares, RED Day and group service projects across Northern Utah.",
       initiatives: [
         "KW Success Cares",
         "KW Cares",
@@ -583,6 +576,27 @@ export const kwSuccessConfig: BrokerageConfig = {
     headline: "ROOTED IN LAYTON. SERVING NORTHERN UTAH.",
     subhead: "1572 N Woodland Park Dr., Suite 500, Layton, UT 84041",
     counties: [
+      {
+        county: "Salt Lake County",
+        note: "Greater Salt Lake Metro",
+        communities: [
+          "Salt Lake City",
+          "Sandy",
+          "West Jordan",
+          "South Jordan",
+          "Draper",
+          "Riverton",
+          "Millcreek",
+          "Holladay",
+          "Cottonwood Heights",
+          "Murray",
+          "Midvale",
+          "West Valley City",
+          "Taylorsville",
+          "South Salt Lake",
+          "Magna",
+        ],
+      },
       {
         county: "Davis County",
         note: "Home to our Layton Market Center",
@@ -632,6 +646,31 @@ export const kwSuccessConfig: BrokerageConfig = {
         note: "Wasatch Back",
         communities: ["Morgan", "Mountain Green", "Croydon"],
       },
+      {
+        county: "Tooele County",
+        note: "West of Salt Lake Valley",
+        communities: ["Tooele", "Grantsville", "Stansbury Park"],
+      },
+      {
+        county: "Summit County",
+        note: "Park City & Wasatch Back",
+        communities: ["Park City", "Heber City", "Kamas", "Coalville", "Oakley"],
+      },
+      {
+        county: "Box Elder County",
+        note: "Northern Utah Corridor",
+        communities: ["Brigham City", "Tremonton", "Perry", "Willard", "Mantua"],
+      },
+      {
+        county: "Cache County",
+        note: "Logan Metro",
+        communities: ["Logan", "Smithfield", "Hyde Park", "North Logan", "Providence", "Nibley"],
+      },
+      {
+        county: "Rich County",
+        note: "Bear Lake Region",
+        communities: ["Garden City", "Randolph", "Laketown"],
+      },
     ],
   },
   partners: {
@@ -640,13 +679,13 @@ export const kwSuccessConfig: BrokerageConfig = {
       navLabel: "Unity Home Loans",
       companyName: "Unity Home Loans",
       roleLabel: "Lending Partner",
-      logo: "/kw-success/logos/unity-home-loans.png",
-      logoSquare: "/kw-success/logos/unity-square-color.png",
-      heroHeadline: "Financing built around your goals, right at the same table.",
+      logo: "/kw-success/logos/unity-home-loans-full-color.png",
+      logoSquare: "/kw-success/logos/unity-home-loans-full-color.png",
+      heroHeadline: "Unity Home Loans: One Team. Better Service.",
       introCopy:
-        "Unity Home Loans works alongside your KW Success Trusted Advisor to deliver clear pre-approvals, responsive communication, and tailored loan options for buyers and homeowners across Northern Utah.",
+        "Unity Home Loans was founded on a simple belief: the mortgage experience should be personal, transparent, and built around the needs of each client. Whether you're buying your first home, moving up, refinancing, or growing an investment portfolio, Unity brings together experienced professionals and a broad range of lending solutions to fit your plan. Because a mortgage is much more than a loan. It's part of your plan for what comes next.",
       isPlaceholderCopy: false,
-      whyItMattersHeadline: "WHY IT MATTERS AT THE TABLE",
+      whyItMattersHeadline: "WHY IT MATTERS",
       whyItMattersBody:
         "When your lender and your real estate advisor already know how to work together, pre-approvals move faster, contract deadlines are protected, and surprises at the closing table disappear.",
       highlights: [
@@ -656,27 +695,6 @@ export const kwSuccessConfig: BrokerageConfig = {
       ],
       affiliated: true,
       contactTopic: "Buying",
-    },
-    title: {
-      slug: "title",
-      navLabel: "Amicus Title",
-      companyName: "Amicus Title",
-      roleLabel: "Title & Escrow Partner",
-      logo: "/kw-success/logos/amicus-title.png",
-      heroHeadline: "Smooth, accurate closings handled by people you trust.",
-      introCopy:
-        "Amicus Title provides title insurance, escrow, and settlement services across Northern Utah, working hand-in-hand with your KW Success Trusted Advisor so closing day feels effortless.",
-      isPlaceholderCopy: false,
-      whyItMattersHeadline: "WHY IT MATTERS AT THE TABLE",
-      whyItMattersBody:
-        "Every real estate transaction depends on clean title and timely escrow coordination. Having Amicus Title at the table means proactive communication, clear settlement statements, and a closing experience built around your schedule.",
-      highlights: [
-        "Full title search, title insurance, and escrow settlement",
-        "Seamless document coordination with your KW Success advisor",
-        "Convenient Layton & Northern Utah closing support",
-      ],
-      affiliated: true,
-      contactTopic: "Selling",
     },
     insurance: {
       slug: "insurance",

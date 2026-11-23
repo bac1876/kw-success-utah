@@ -46,7 +46,7 @@ const PROMISE_META = [
     code: "SYS.04 // MASTERMIND_NET",
     tag: "Open-Book Collaboration",
     metricLabel: "Market Center",
-    metricValue: "Weber · Davis · Morgan",
+    metricValue: "Northern Utah",
     icon: Users,
   },
 ];
@@ -57,7 +57,7 @@ const PROMISE_META = [
 function CultureGraphic({ active }: { active: boolean }) {
   const [feedIdx, setFeedIdx] = useState(0);
   const feeds = [
-    "1-on-1 Strategy Session · Russie Edwards",
+    "1-on-1 Strategy Session · Leadership Team",
     "Broker Contract Review · Shawn Janke",
     "AI Campaign Buildout · Bradley Green",
     "Launch Coaching Check-In · Chris Bradford",
