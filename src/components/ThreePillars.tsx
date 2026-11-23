@@ -24,7 +24,7 @@ const AGENT_HIGHLIGHTS: string[][] = [
 
 const CLIENT_HIGHLIGHTS: string[][] = [
   ["Trusted Advisor", "Hyper-Local Strategy", "Off-Market Insight"],
-  ["Weber, Davis & Morgan", "Local Schools & Parks", "Community Roots"],
+  ["Northern Utah", "Local Schools & Parks", "Community Roots"],
   ["Equity Reviews", "Remodel ROI Guidance", "Portfolio Growth"],
 ];
 
@@ -207,7 +207,7 @@ export default function ThreePillars({
     audience === "agents" ? threePillars.forAgents : threePillars.forClients;
   const highlights =
     audience === "agents" ? AGENT_HIGHLIGHTS : CLIENT_HIGHLIGHTS;
-  const targetUrl = audience === "agents" ? "/agents" : "/clients";
+  const targetUrl = audience === "agents" ? "/agents#talk-to-leadership" : "/contact";
 
   return (
     <section

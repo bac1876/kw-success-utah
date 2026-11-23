@@ -35,7 +35,7 @@ const TIMELINE_EVENTS = [
   },
   {
     year: "Layton",
-    body: "KW Success anchors its flagship Market Center at 1572 Woodland Park Drive, serving Davis, Weber, and Morgan Counties.",
+    body: "KW Success anchors its flagship Market Center at 1572 Woodland Park Drive, proudly serving all of Northern Utah.",
   },
   {
     year: "20,000+",
@@ -46,8 +46,8 @@ const TIMELINE_EVENTS = [
     body: "Surpasses $6 billion in closed real estate volume through collaborative coaching and market leadership.",
   },
   {
-    year: "Unity & Amicus",
-    body: "Unity Home Loans and Amicus Title join the family of companies — bringing lending and escrow to the same table.",
+    year: "Unity",
+    body: "Unity Home Loans joins the family of companies — bringing mortgage lending expertise directly to KW Success clients.",
   },
   {
     year: "8 of 9",
@@ -106,9 +106,9 @@ function BrandTimeline() {
         if (years[idx]) {
           gsap.fromTo(
             years[idx],
-            { color: "#828282", scale: 0.94 },
+            { color: "#9BA3AE", scale: 0.94 },
             {
-              color: "#D11919",
+              color: "#B40101",
               scale: 1,
               duration: 0.6,
               ease: "back.out(2)",
@@ -122,18 +122,18 @@ function BrandTimeline() {
   );
 
   return (
-    <section ref={root} className="bg-ink py-24 text-snow md:py-32">
+    <section ref={root} className="bg-snow py-24 text-ink md:py-32">
       <div className="container-kw">
         <div className="text-center">
           <Reveal>
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1.5">
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
                 02
               </span>
-              <span className="type-label text-kw-red-bright">Our History</span>
+              <span className="type-label text-kw-red">Our History</span>
             </div>
           </Reveal>
-          <h2 className="type-display-lg mx-auto mt-5 max-w-3xl text-white">
+          <h2 className="type-display-lg mx-auto mt-5 max-w-3xl text-ink">
             <SplitWords text="ROOTED IN LAYTON SINCE 1997." />
           </h2>
         </div>
@@ -142,7 +142,7 @@ function BrandTimeline() {
           <span
             data-timeline-line
             aria-hidden
-            className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-kw-red-bright will-change-transform md:block"
+            className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-kw-red will-change-transform md:block"
           />
           {TIMELINE_EVENTS.map((item, idx) => (
             <div
@@ -152,7 +152,7 @@ function BrandTimeline() {
             >
               <span
                 aria-hidden
-                className="absolute left-1/2 top-1/2 hidden h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border border-kw-red-bright bg-ink md:block"
+                className="absolute left-1/2 top-1/2 hidden h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border border-kw-red bg-snow md:block"
               />
               <div
                 className={cn(
@@ -162,13 +162,13 @@ function BrandTimeline() {
               >
                 <span
                   data-timeline-year
-                  className="type-stat inline-block text-stone will-change-transform"
+                  className="type-stat inline-block text-charcoal will-change-transform"
                 >
                   {item.year}
                 </span>
               </div>
               <div className={cn(idx % 2 === 0 ? "md:order-2" : "md:order-1")}>
-                <p className="type-body mt-4 max-w-md text-snow/85 md:mt-0">
+                <p className="type-body mt-4 max-w-md text-charcoal md:mt-0">
                   {item.body}
                 </p>
               </div>
@@ -183,7 +183,7 @@ function BrandTimeline() {
 const COMMUNITY_CARDS = [
   {
     title: "KW Success Cares",
-    subtitle: "Weber, Davis & Morgan Counties",
+    subtitle: "Northern Utah",
     detail:
       "Locally funded outreach supporting Northern Utah families, school pantries, and neighbors experiencing unexpected hardship.",
   },
@@ -203,7 +203,7 @@ const COMMUNITY_CARDS = [
 
 export default function About() {
   usePageMeta("About & Leadership", activeBrokerage.aboutPage.hero.subhead);
-  const { aboutPage, externalLinks } = activeBrokerage;
+  const { aboutPage } = activeBrokerage;
   const [expandedBio, setExpandedBio] = useState<Record<string, boolean>>({});
 
   const toggleBio = (name: string) =>
@@ -515,7 +515,7 @@ export default function About() {
                   Community Impact
                 </span>
                 <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[0.68rem] font-semibold text-stone-dark">
-                  Weber · Davis · Morgan Counties
+                  Northern Utah
                 </span>
               </div>
 
@@ -583,17 +583,15 @@ export default function About() {
               READY TO WRITE YOUR SUCCESS STORY?
             </h2>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href={externalLinks.findAgentUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/agents#talk-to-leadership"
                 className="group inline-flex items-center gap-3.5 rounded-full bg-kw-red py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
               >
-                <span>Find Your Agent</span>
+                <span>Explore a Career With Us</span>
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
                   <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
                 </span>
-              </a>
+              </Link>
 
               <Link
                 to="/agents"

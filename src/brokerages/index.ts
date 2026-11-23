@@ -109,12 +109,11 @@ function buildEnrichedBrokerage(cfg: BrokerageConfig) {
       label: cfg.externalLinks.searchHomesLabel,
       findAgentUrl: cfg.externalLinks.findAgentUrl,
     },
-    /** Partner services shown in the utility bar, mobile menu and footer, in display order. */
+    /** Partner services shown in the utility bar, mobile menu and footer, in display order. Only affiliated companies, not generic services. */
     partnerLinks: [
       cfg.partners.mortgage,
-      cfg.partners.title,
       ...(cfg.flags.showInsurancePartner ? [cfg.partners.insurance] : []),
-    ].map((p) => ({
+    ].filter((p) => p.affiliated).map((p) => ({
       label: p.navLabel,
       name: p.companyName,
       role: p.roleLabel,

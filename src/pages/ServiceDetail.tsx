@@ -15,18 +15,18 @@ const ROMAN = ["I.", "II.", "III.", "IV."] as const;
 const PARTNER_METRICS = {
   mortgage: [
     { value: "Same-Day", label: "Pre-Approval Letters" },
-    { value: "4 Seats", label: "Coordinated at One Table" },
-    { value: "3 Counties", label: "Weber · Davis · Morgan" },
-    { value: "In-House", label: "Layton Lending Desk" },
+    { value: "Connected", label: "Coordinated Services" },
+    { value: "Northern Utah", label: "Salt Lake · Davis · Weber · Morgan · Summit · Tooele · Box Elder · Cache · Rich" },
+    { value: "Lending Partner", label: "Unity Home Loans, LLC" },
   ],
   title: [
-    { value: "3 Counties", label: "Weber · Davis · Morgan" },
+    { value: "Northern Utah", label: "Salt Lake · Davis · Weber · Morgan · Summit · Tooele · Box Elder · Cache · Rich" },
     { value: "100%", label: "Wire-Shield Verified" },
     { value: "Same-Day", label: "Recording & Disbursement" },
     { value: "In-House", label: "Layton Closing Suites" },
   ],
   insurance: [
-    { value: "3 Counties", label: "Weber · Davis · Morgan" },
+    { value: "Northern Utah", label: "Salt Lake · Davis · Weber · Morgan · Summit · Tooele · Box Elder · Cache · Rich" },
     { value: "Multi-Carrier", label: "Coverage Comparisons" },
     { value: "Annual", label: "Policy Stewardship" },
     { value: "In-House", label: "Layton Advisory Desk" },
@@ -85,7 +85,7 @@ const TITLE_CAPABILITIES = [
     name: "Title Examination",
     tag: "Chain of Title",
     summary:
-      "Exhaustive examination of Weber, Davis, and Morgan County land records to guarantee marketable, unencumbered ownership.",
+      "Exhaustive examination of Northern Utah land records to guarantee marketable, unencumbered ownership.",
     specs: [
       "Full historical deed, easement & plat map verification",
       "Proactive curative work on prior liens and releases",
@@ -139,7 +139,7 @@ const CLOSING_PROTOCOL = {
       step: "02",
       title: "Lender Balancing & CD Review",
       detail:
-        "Amicus balances every line item directly with Unity Home Loans 72+ hours before signing.",
+        "Title companies balance every line item with lenders before signing to ensure a smooth closing.",
     },
     {
       step: "03",
@@ -209,7 +209,7 @@ function IsometricTableStack({ activeSlug }: { activeSlug: string }) {
     {
       id: "title",
       num: "03",
-      label: "Amicus Title",
+      label: "Title & Escrow",
       sub: "Title Search · Escrow · Recording",
       active: activeSlug === "title",
       offsetClass: "translate-y-14 hover:translate-y-16 z-10",
@@ -311,31 +311,31 @@ function MortgageSimulator() {
   const piShare = Math.round((principalAndInterest / totalMonthly) * 100);
 
   return (
-    <div className="border border-white/12 bg-[#111418] p-8 md:p-12">
+    <div className="border border-ink/15 bg-white p-8 shadow-card md:p-12">
       {/* Header Row */}
-      <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-ink/10 pb-6">
         <div>
-          <span className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-kw-red-bright">
+          <span className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-kw-red">
             SIMULATOR // 30-YEAR FIXED
           </span>
-          <h3 className="mt-2 text-2xl font-bold tracking-tight text-white">
+          <h3 className="mt-2 text-2xl font-bold tracking-tight text-ink">
             Run the Numbers Before You Offer.
           </h3>
         </div>
-        <span className="font-mono text-xs uppercase tracking-widest text-stone-dark">
+        <span className="font-mono text-xs uppercase tracking-widest text-charcoal">
           Utah County Tax Model
         </span>
       </div>
 
       {/* Live Output Display + Stacked Proportion Bar */}
-      <div className="mt-8 grid gap-6 border-b border-white/10 pb-8 sm:grid-cols-2 sm:items-end">
+      <div className="mt-8 grid gap-6 border-b border-ink/10 pb-8 sm:grid-cols-2 sm:items-end">
         <div>
-          <span className="font-mono text-[0.65rem] uppercase tracking-[0.22em] text-stone-dark">
+          <span className="font-mono text-[0.65rem] uppercase tracking-[0.22em] text-charcoal">
             Estimated Monthly Total
           </span>
-          <div className="mt-2 font-display text-5xl font-extrabold tracking-tight text-white tabular-nums">
+          <div className="mt-2 font-display text-5xl font-extrabold tracking-tight text-ink tabular-nums">
             ${totalMonthly.toLocaleString()}
-            <span className="ml-1 text-base font-normal text-stone-dark">
+            <span className="ml-1 text-base font-normal text-charcoal">
               /mo
             </span>
           </div>
@@ -343,24 +343,24 @@ function MortgageSimulator() {
 
         <div className="space-y-2.5">
           <div className="flex justify-between font-mono text-[0.68rem] uppercase tracking-wider">
-            <span className="text-white">
+            <span className="text-ink">
               P&amp;I · ${principalAndInterest.toLocaleString()}
             </span>
-            <span className="text-stone-dark">
+            <span className="text-charcoal">
               Tax &amp; Ins · ${estTaxesAndIns.toLocaleString()}
             </span>
           </div>
-          <div className="flex h-2 w-full overflow-hidden bg-white/10">
+          <div className="flex h-2 w-full overflow-hidden bg-ink/10">
             <div
               className="bg-kw-red transition-all duration-300"
               style={{ width: `${piShare}%` }}
             />
             <div
-              className="bg-white/35 transition-all duration-300"
+              className="bg-ink/25 transition-all duration-300"
               style={{ width: `${100 - piShare}%` }}
             />
           </div>
-          <div className="flex justify-between font-mono text-[0.62rem] text-stone-dark">
+          <div className="flex justify-between font-mono text-[0.62rem] text-charcoal">
             <span>Loan Amount: ${loanAmount.toLocaleString()}</span>
             <span>Down: ${downPayment.toLocaleString()}</span>
           </div>
@@ -445,18 +445,10 @@ function MortgageSimulator() {
       </div>
 
       {/* Footer CTA */}
-      <div className="mt-9 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-7 sm:flex-row sm:items-center">
-        <p className="max-w-xs text-xs leading-relaxed text-stone-dark">
-          For planning only. Connect with Unity Home Loans in Layton for a
-          same-day personalized loan worksheet.
+      <div className="mt-9 border-t border-white/10 pt-7">
+        <p className="text-xs leading-relaxed text-stone-dark">
+          For illustration only. Not an offer to lend or a rate quote. Actual rate and APR depend on credit and loan terms. All loans subject to credit approval.
         </p>
-        <Link
-          to="/contact/mortgage"
-          className="group inline-flex shrink-0 items-center gap-3 bg-kw-red px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
-        >
-          <span>Get Pre-Approved</span>
-          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </Link>
       </div>
     </div>
   );
@@ -558,14 +550,14 @@ function TitleClosingConsole() {
       {/* Footer CTA */}
       <div className="mt-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <p className="max-w-xs text-xs leading-relaxed text-stone-dark">
-          <strong className="text-white">Wire-Shield Standard:</strong> Amicus
+          <strong className="text-white">Wire-Shield Standard:</strong> Leading title companies
           Title never alters wire routing via email. Always verify by phone.
         </p>
         <Link
           to="/contact/title"
           className="group inline-flex shrink-0 items-center gap-3 bg-kw-red px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
         >
-          <span>Open Escrow With Amicus</span>
+          <span>Talk to an Advisor</span>
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
       </div>
@@ -599,8 +591,6 @@ export default function ServiceDetail() {
   const partner = partners[slug];
   const metrics = PARTNER_METRICS[slug];
   const programs = slug === "mortgage" ? LOAN_PROGRAMS : TITLE_CAPABILITIES;
-  const sisterPartner =
-    slug === "mortgage" ? partners.title : partners.mortgage;
 
   return (
     <>
@@ -654,23 +644,111 @@ export default function ServiceDetail() {
                 {partner.heroHeadline}
               </p>
 
-              <div className="mt-10 flex flex-wrap items-center gap-5">
-                <Link
-                  to={`/contact/${slug}`}
-                  className="group inline-flex items-center gap-3.5 bg-kw-red px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
-                >
-                  <span>Connect With {partner.companyName}</span>
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Link>
+              {/* Conditional content for mortgage vs other services */}
+              {slug === "mortgage" ? (
+                <>
+                  {/* ABA Disclosure for Unity */}
+                  <div className="mt-8 max-w-2xl rounded border border-white/15 bg-white/5 p-5">
+                    <p className="text-xs leading-relaxed text-stone-dark">
+                      <strong className="text-white">Affiliated Business Arrangement Disclosure:</strong> Certain agents of KW Success Keller Williams Realty have an ownership interest in Unity Home Loans, LLC (NMLS #2383237), part of the same family of companies. Because of this relationship, a referral to Unity may provide them a financial or other benefit. You are not required to use Unity Home Loans as a condition of the purchase, sale, or refinance of any property. Other settlement service providers are available with similar services, and you are free to shop around.{" "}
+                      <a
+                        href="https://www.UnityHomeLoans.com/ABA"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-kw-red-bright underline hover:text-white"
+                      >
+                        View the Affiliated Business Arrangement Disclosure
+                      </a>
+                    </p>
+                  </div>
 
-                <Link
-                  to={`/services/${sisterPartner.slug}`}
-                  className="group inline-flex items-center gap-2 border border-white/15 bg-white/[0.03] px-6 py-4 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-snow/85 transition-colors hover:border-white/40 hover:text-white"
-                >
-                  <span>Also at the Table: {sisterPartner.companyName}</span>
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </div>
+                  {/* Unity CTA Buttons */}
+                  <div className="mt-8 flex flex-wrap items-center gap-4">
+                    <a
+                      href="https://unityhomeloans.my1003app.com/register"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-3.5 bg-kw-red px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
+                    >
+                      <span>Apply Here</span>
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </a>
+
+                    <a
+                      href="https://unityhomeloans.com/contact-us/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-3.5 border border-white/20 bg-white/5 px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:border-white/40 hover:bg-white/10"
+                    >
+                      <span>Contact Unity</span>
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </a>
+
+                    <a
+                      href="https://unityhomeloans.my1003app.com/inquiry"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-stone-dark transition-colors hover:text-white"
+                    >
+                      <span>Get a Quote</span>
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </a>
+                  </div>
+
+                  {/* Unity Company Details */}
+                  <div className="mt-10 max-w-2xl space-y-3 border-t border-white/10 pt-6 text-xs text-stone-dark">
+                    <p>
+                      <strong className="text-white">Unity Home Loans, LLC</strong> · NMLS #2383237 ·{" "}
+                      <a
+                        href="https://www.nmlsconsumeraccess.org/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-kw-red-bright underline hover:text-white"
+                      >
+                        NMLS Consumer Access
+                      </a>
+                    </p>
+                    <p>
+                      <a
+                        href="https://www.google.com/maps/search/1572+N.+Woodland+Park+Dr.,+Suite+500,+Layton,+UT+84041"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-white"
+                      >
+                        1572 N. Woodland Park Dr., Suite 500, Layton, UT 84041
+                      </a>{" "}
+                      ·{" "}
+                      <a href="tel:+13853278809" className="hover:text-white">
+                        (385) 327-8809
+                      </a>{" "}
+                      ·{" "}
+                      <a href="mailto:info@unityhomeloans.com" className="hover:text-white">
+                        info@unityhomeloans.com
+                      </a>
+                    </p>
+                    <p className="italic">
+                      All loans subject to credit approval. Rates and terms subject to change; restrictions may apply.
+                    </p>
+                    <div className="mt-4">
+                      <img
+                        src="/equal-housing-opportunity.svg"
+                        alt="Equal Housing Opportunity"
+                        className="h-10 w-auto opacity-70"
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="mt-10 flex flex-wrap items-center gap-5">
+                  <Link
+                    to="/contact"
+                    className="group inline-flex items-center gap-3.5 bg-kw-red px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
+                  >
+                    <span>Talk to an Advisor</span>
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Right (5 cols): Architectural Partner Spec Plate (Zero CheckCircle icons) */}
@@ -684,7 +762,7 @@ export default function ServiceDetail() {
                     className="h-11 w-auto max-w-[200px] object-contain"
                   />
                   <span className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.2em] text-ink/70">
-                    In-House Desk
+                    Lending Partner
                   </span>
                 </div>
 
@@ -719,15 +797,15 @@ export default function ServiceDetail() {
       {/* ============================================================
          SECTION 2 — FULL-WIDTH ARCHITECTURAL METRIC LEDGER
          ============================================================ */}
-      <section className="border-y border-white/10 bg-[#121519] text-snow">
+      <section className="border-y border-ink/10 bg-mist text-ink">
         <div className="container-kw">
-          <div className="grid grid-cols-2 divide-y divide-white/10 sm:grid-cols-4 sm:divide-y-0 sm:divide-x">
+          <div className="grid grid-cols-2 divide-y divide-ink/10 sm:grid-cols-4 sm:divide-y-0 sm:divide-x">
             {metrics.map((m) => (
               <div key={m.label} className="px-4 py-8 text-center sm:px-6">
-                <div className="font-display text-2xl font-extrabold tracking-tight text-white md:text-3xl">
+                <div className="font-display text-2xl font-extrabold tracking-tight text-ink md:text-3xl">
                   {m.value}
                 </div>
-                <div className="mt-2 font-mono text-[0.65rem] uppercase tracking-[0.22em] text-stone-dark">
+                <div className="mt-2 font-mono text-[0.65rem] uppercase tracking-[0.22em] text-charcoal">
                   {m.label}
                 </div>
               </div>
@@ -753,7 +831,7 @@ export default function ServiceDetail() {
             </Reveal>
 
             <h2 className="type-display-md mt-4 text-ink">
-              <SplitWords text="COORDINATED AROUND YOUR TABLE." />
+              <SplitWords text="LENDING BUILT AROUND YOUR PLAN." />
             </h2>
 
             <Reveal delay={0.1}>
@@ -828,16 +906,16 @@ export default function ServiceDetail() {
       </section>
 
       {/* ============================================================
-         SECTION 4 — DARK ARCHITECTURAL SIMULATOR + ISOMETRIC STACK
+         SECTION 4 — LIGHT ARCHITECTURAL SIMULATOR + ISOMETRIC STACK
          ============================================================ */}
-      <section className="relative overflow-hidden bg-[#0D0F12] py-24 text-snow md:py-32">
+      <section className="relative overflow-hidden bg-snow py-24 text-ink md:py-32">
         {/* Subtle dot matrix background */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.03]"
+          className="pointer-events-none absolute inset-0 opacity-[0.015]"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+              "radial-gradient(circle at 2px 2px, #1F2326 1px, transparent 0)",
             backgroundSize: "40px 40px",
           }}
         />
@@ -846,15 +924,15 @@ export default function ServiceDetail() {
           <div className="grid items-center gap-16 lg:grid-cols-12">
             {/* Left (5 cols): Why It Matters + Isometric 3-Layer Stack */}
             <div className="lg:col-span-5">
-              <span className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.25em] text-kw-red-bright">
+              <span className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.25em] text-kw-red">
                 02 // {partner.whyItMattersHeadline}
               </span>
 
-              <h2 className="type-display-md mt-4 text-white">
-                Everyone at One Table.
+              <h2 className="type-display-md mt-4 text-ink">
+                One Trusted Advisor for Every Chapter.
               </h2>
 
-              <p className="mt-5 text-sm leading-relaxed text-stone-dark">
+              <p className="mt-5 text-sm leading-relaxed text-charcoal">
                 {partner.whyItMattersBody}
               </p>
 
@@ -863,12 +941,12 @@ export default function ServiceDetail() {
                 <IsometricTableStack activeSlug={slug} />
               </div>
 
-              <div className="mt-6 border-t border-white/10 pt-6 font-mono text-xs text-stone-dark">
+              <div className="mt-6 border-t border-ink/10 pt-6 font-mono text-xs text-charcoal">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span>{contact.fullAddress}</span>
                   <a
                     href={`tel:${contact.phone.replace(/[^0-9]/g, "")}`}
-                    className="text-white transition-colors hover:text-kw-red-bright"
+                    className="text-ink transition-colors hover:text-kw-red"
                   >
                     {contact.phone}
                   </a>

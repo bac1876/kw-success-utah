@@ -43,15 +43,34 @@ export default function Layout() {
   }, []);
 
   useEffect(() => {
-    if (window.__lenis) {
-      window.__lenis.scrollTo(0, { immediate: true });
+    // Handle hash navigation (e.g., /about#leadership)
+    if (location.hash) {
+      // Wait for the page to render, then scroll to the hash target
+      const timer = window.setTimeout(() => {
+        const id = location.hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          if (window.__lenis) {
+            window.__lenis.scrollTo(element, { offset: -HEADER_H, duration: 1.2 });
+          } else {
+            const top = element.getBoundingClientRect().top + window.pageYOffset - HEADER_H;
+            window.scrollTo({ top, behavior: 'smooth' });
+          }
+        }
+      }, 100);
+      return () => window.clearTimeout(timer);
+    } else {
+      // No hash - scroll to top
+      if (window.__lenis) {
+        window.__lenis.scrollTo(0, { immediate: true });
+      }
+      window.scrollTo(0, 0);
     }
-    window.scrollTo(0, 0);
     ScrollTrigger.refresh();
     // Pages set their own <title> in an effect; defer so the title is current.
     const t = window.setTimeout(() => trackPageView(location.pathname), 0);
     return () => window.clearTimeout(t);
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   return (
     <div className="min-h-screen bg-ink-deep text-snow">

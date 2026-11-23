@@ -83,12 +83,12 @@ export function buildLeadMailto(
 /**
  * §11 Contact and forms handler:
  * - Routes:
- *   - Agent inquiries -> Russie (russie@unitedagentservices.biz)
- *   - Buying/Selling -> front desk (dfisuccess@unitedagentservices.biz)
- *   - General -> front desk (dfisuccess@unitedagentservices.biz)
+ *   - Agent inquiries -> Leadership Team (admin@unitedagentservices.biz)
+ *   - Buying/Selling -> admin@unitedagentservices.biz
+ *   - General -> admin@unitedagentservices.biz
  * - Spam protection: honeypot check + one submit per 30s (localStorage)
- * - Supabase storage: posts to VITE_SUPABASE_URL/rest/v1/lead_submissions when
- *   VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are configured.
+ * - Email delivery: posts to /api/submit-lead serverless function which uses
+ *   Resend to email admin@unitedagentservices.biz
  * - When no delivery path is configured, or the POST fails, returns ok:false
  *   so the UI can offer the visitor a direct email/phone fallback instead of
  *   claiming the message was delivered.
@@ -130,62 +130,36 @@ export async function submitLeadForm(
     };
   }
 
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY as
-    | string
-    | undefined;
-
-  if (!supabaseUrl || !supabaseKey) {
-    return {
-      ok: false,
-      reason: "not-configured",
-      routedToName: routeTarget.name,
-      routedToEmail: routeTarget.email,
-      storedInSupabase: false,
-      mailtoHref,
-    };
-  }
-
-  const record = {
-    brokerage_id: activeBrokerage.id,
-    topic: payload.topic,
-    name: payload.name.trim(),
-    email: payload.email.trim(),
-    phone: payload.phone?.trim() || null,
-    current_brokerage: payload.currentBrokerage?.trim() || null,
-    years_licensed:
-      payload.yearsLicensed?.trim() || payload.licenseStatus?.trim() || null,
-    message: payload.message?.trim() || null,
-    routed_to_email: routeTarget.email,
-    source_page: payload.sourcePage ?? "/contact",
-    submitted_at: new Date().toISOString(),
-  };
-
-  let storedInSupabase = false;
+  let emailSent = false;
   try {
-    const res = await fetch(`${supabaseUrl}/rest/v1/lead_submissions`, {
+    const res = await fetch("/api/submit-lead", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        apikey: supabaseKey,
-        Authorization: `Bearer ${supabaseKey}`,
-        Prefer: "return=minimal",
       },
-      body: JSON.stringify(record),
+      body: JSON.stringify({
+        ...payload,
+        sourcePage: payload.sourcePage ?? window.location.pathname,
+      }),
     });
-    storedInSupabase = res.ok;
+    
+    if (res.ok) {
+      emailSent = true;
+      markSubmitted();
+    } else {
+      const errorData = await res.json();
+      console.warn("[kw-success] Email submission failed:", errorData);
+    }
   } catch (err) {
-    console.warn("[kw-success] Supabase submission failed:", err);
+    console.warn("[kw-success] Email submission error:", err);
   }
 
-  if (storedInSupabase) markSubmitted();
-
   return {
-    ok: storedInSupabase,
-    reason: storedInSupabase ? undefined : "delivery-failed",
+    ok: emailSent,
+    reason: emailSent ? undefined : "delivery-failed",
     routedToName: routeTarget.name,
     routedToEmail: routeTarget.email,
-    storedInSupabase,
+    storedInSupabase: emailSent,
     mailtoHref,
   };
 }

@@ -1,8 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
-import { ArrowRight, Search, X } from "lucide-react";
+import { ArrowRight, ExternalLink, RotateCcw, Search, X } from "lucide-react";
 import { brokerage } from "@/brokerages";
+import {
+  CONTEXT_COUNTY_PATHS,
+  MAP_HEIGHT,
+  MAP_WIDTH,
+  SERVED_COUNTY_SHAPES,
+  UTAH_LAKE_SHAPES,
+  projectLatLng,
+} from "@/data/utahMapGeometry";
 import { cn } from "@/lib/utils";
 
 export interface AreaGroup {
@@ -58,12 +66,69 @@ export const UTAH_AREA_GROUPS: AreaGroup[] = [
   },
   {
     county: "Morgan County",
-    note: "Wasatch Back & Weber Canyon Communities",
+    note: "Weber Canyon Communities",
+    communities: ["Morgan", "Mountain Green", "Croydon"],
+  },
+  {
+    county: "Salt Lake County",
+    note: "Greater Salt Lake Metro",
     communities: [
-      "Morgan",
-      "Mountain Green",
-      "Croydon",
+      "Salt Lake City",
+      "Sandy",
+      "West Jordan",
+      "South Jordan",
+      "Draper",
+      "Murray",
+      "Herriman",
+      "West Valley City",
+      "Riverton",
+      "Cottonwood Heights",
+      "Millcreek",
+      "Holladay",
+      "Taylorsville",
+      "South Salt Lake",
     ],
+  },
+  {
+    county: "Tooele County",
+    note: "West of Salt Lake Valley",
+    communities: ["Tooele", "Grantsville", "Stansbury Park"],
+  },
+  {
+    county: "Summit County",
+    note: "Park City & Wasatch Back",
+    communities: ["Park City", "Kamas", "Coalville", "Francis", "Oakley"],
+  },
+  {
+    county: "Box Elder County",
+    note: "Northern Utah Gateway",
+    communities: [
+      "Brigham City",
+      "Tremonton",
+      "Perry",
+      "Willard",
+      "Bear River City",
+      "Mantua",
+    ],
+  },
+  {
+    county: "Cache County",
+    note: "Logan & Cache Valley",
+    communities: [
+      "Logan",
+      "North Logan",
+      "Smithfield",
+      "Hyde Park",
+      "Nibley",
+      "Providence",
+      "Millville",
+      "River Heights",
+    ],
+  },
+  {
+    county: "Rich County",
+    note: "Bear Lake Gateway",
+    communities: ["Garden City", "Randolph", "Laketown"],
   },
 ];
 
@@ -77,7 +142,6 @@ const COORDS: Record<string, [number, number]> = {
   Layton: [41.0602, -111.9711],
   Kaysville: [41.0352, -111.9385],
   Farmington: [40.9805, -111.8874],
-  FruitHeights: [41.0227, -111.9052],
   "Fruit Heights": [41.0227, -111.9052],
   Centerville: [40.918, -111.8722],
   Bountiful: [40.8894, -111.8808],
@@ -111,218 +175,94 @@ const COORDS: Record<string, [number, number]> = {
   // Morgan County
   Morgan: [41.0361, -111.6766],
   "Mountain Green": [41.1458, -111.7927],
-  Peterson: [41.1136, -111.758],
-  Milton: [41.0711, -111.7202],
-  Enterprise: [41.0886, -111.7347],
-  Porterville: [40.9855, -111.6788],
   Croydon: [41.0644, -111.565],
-  // Regional Gateway
+  // Salt Lake County
   "Salt Lake City": [40.7608, -111.891],
-  "Park City": [40.755, -111.565],
+  Sandy: [40.5649, -111.8389],
+  "West Jordan": [40.6097, -111.9391],
+  "South Jordan": [40.5622, -111.9296],
+  Draper: [40.5246, -111.8638],
+  Murray: [40.6669, -111.8879],
+  Herriman: [40.5141, -112.0333],
+  "West Valley City": [40.6916, -112.0011],
+  Riverton: [40.521, -111.9391],
+  "Cottonwood Heights": [40.6197, -111.8102],
+  Millcreek: [40.6869, -111.8757],
+  Holladay: [40.6688, -111.8243],
+  Taylorsville: [40.6677, -111.9388],
+  "South Salt Lake": [40.7188, -111.8882],
+  // Tooele County
+  Tooele: [40.5308, -112.2983],
+  Grantsville: [40.5999, -112.4644],
+  "Stansbury Park": [40.6377, -112.2961],
+  // Summit County
+  "Park City": [40.6461, -111.498],
+  Kamas: [40.643, -111.2807],
+  Coalville: [40.9177, -111.3999],
+  Francis: [40.6108, -111.2816],
+  Oakley: [40.7152, -111.3002],
+  // Box Elder County
+  "Brigham City": [41.5102, -112.0155],
+  Tremonton: [41.7116, -112.1655],
+  Perry: [41.4647, -112.0325],
+  Willard: [41.4091, -112.0366],
+  "Bear River City": [41.6166, -112.123],
+  Mantua: [41.4969, -111.9447],
+  // Cache County
+  Logan: [41.7369, -111.8338],
+  "North Logan": [41.7694, -111.8047],
+  Smithfield: [41.8386, -111.8313],
+  "Hyde Park": [41.7991, -111.8188],
+  Nibley: [41.6747, -111.8327],
+  Providence: [41.7064, -111.8166],
+  Millville: [41.6808, -111.8191],
+  "River Heights": [41.7194, -111.8216],
+  // Rich County
+  "Garden City": [41.9472, -111.398],
+  Randolph: [41.6647, -111.1819],
+  Laketown: [41.8294, -111.3177],
 };
 
-interface HubDef {
-  slug: string;
+interface LabelPlacement {
+  dx: number;
+  dy: number;
+  anchor: "start" | "end" | "middle";
+  featured?: boolean;
+}
+
+// Primary city labels positioned with guaranteed separation across all 9 counties
+const PRIORITY_LABELS: Record<string, LabelPlacement> = {
+  "Garden City": { dx: -9, dy: 4, anchor: "end" },
+  Tremonton: { dx: -9, dy: 4, anchor: "end" },
+  Logan: { dx: 9, dy: 4, anchor: "start" },
+  Randolph: { dx: 9, dy: 4, anchor: "start" },
+  "Brigham City": { dx: -9, dy: 4, anchor: "end" },
+  Ogden: { dx: 9, dy: 4, anchor: "start" },
+  Layton: { dx: -12, dy: 4, anchor: "end", featured: true },
+  Morgan: { dx: 9, dy: 4, anchor: "start" },
+  "Salt Lake City": { dx: -9, dy: 4, anchor: "end" },
+  "Park City": { dx: 0, dy: 16, anchor: "middle" },
+  Sandy: { dx: 9, dy: 5, anchor: "start" },
+  Tooele: { dx: -9, dy: 4, anchor: "end" },
+};
+
+const KW_RED = "#B40101";
+const KW_RED_BRIGHT = "#D11919";
+const INK = "#1F2326";
+const CHARCOAL = "#4D4D4D";
+
+interface TownPoint {
   name: string;
-  homeCity: string;
-  subtitle: string;
-  communities: string[];
+  county: string;
+  x: number;
+  y: number;
+  isPrimary: boolean;
+  isMarketCenter: boolean;
+  searchUrl: string;
 }
 
-const HUB_DEFS: HubDef[] = [
-  {
-    slug: "kw-success-layton",
-    name: "KW Success Market Center",
-    homeCity: "Layton",
-    subtitle: "Layton HQ · Davis County",
-    communities: [
-      "Layton",
-      "Kaysville",
-      "Farmington",
-      "Fruit Heights",
-      "Clearfield",
-      "Syracuse",
-      "West Point",
-      "Clinton",
-      "Sunset",
-      "South Weber",
-      "Ogden",
-      "Morgan",
-      "Bountiful",
-    ],
-  },
-  {
-    slug: "weber-corridor",
-    name: "Weber & Ogden Valley Hub",
-    homeCity: "Ogden",
-    subtitle: "Ogden · Weber County & Ogden Valley",
-    communities: [
-      "Ogden",
-      "South Ogden",
-      "Washington Terrace",
-      "Riverdale",
-      "Roy",
-      "Hooper",
-      "Plain City",
-      "Farr West",
-      "Harrisville",
-      "North Ogden",
-      "Pleasant View",
-      "Eden",
-      "Huntsville",
-      "Liberty",
-      "Marriott-Slaterville",
-      "Uintah",
-      "West Haven",
-    ],
-  },
-  {
-    slug: "morgan-wasatch-back",
-    name: "Wasatch Back & Morgan Hub",
-    homeCity: "Morgan",
-    subtitle: "Morgan · Mountain Green & Croydon",
-    communities: [
-      "Morgan",
-      "Mountain Green",
-      "Croydon",
-      "Huntsville",
-    ],
-  },
-  {
-    slug: "south-davis-slc",
-    name: "South Davis Corridor",
-    homeCity: "Bountiful",
-    subtitle: "Bountiful · Farmington to North Salt Lake",
-    communities: [
-      "Bountiful",
-      "Centerville",
-      "Farmington",
-      "West Bountiful",
-      "Woods Cross",
-      "North Salt Lake",
-    ],
-  },
-];
-
-// Great Salt Lake eastern shoreline coordinates (North to South)
-const SHORE_COORDS: [number, number][] = [
-  [41.36, -112.16],
-  [41.28, -112.15],
-  [41.2, -112.16],
-  [41.14, -112.13],
-  [41.07, -112.11],
-  [41.01, -112.06],
-  [40.95, -111.96],
-  [40.89, -111.95],
-  [40.82, -111.96],
-  [40.74, -112.04],
-];
-
-// Wasatch Range ridgeline spine (North to South)
-const WASATCH_RIDGE_COORDS: [number, number][] = [
-  [41.36, -111.91],
-  [41.28, -111.89],
-  [41.21, -111.88],
-  [41.14, -111.87],
-  [41.06, -111.86],
-  [40.98, -111.83],
-  [40.9, -111.81],
-  [40.82, -111.8],
-  [40.74, -111.78],
-];
-
-const BOUNDS = {
-  latMin: 40.72,
-  latMax: 41.37,
-  lngMin: -112.22,
-  lngMax: -111.51,
-};
-
-const W = 1000;
-const COS_LAT = Math.cos((41.05 * Math.PI) / 180);
-const H = Math.round(
-  (W * (BOUNDS.latMax - BOUNDS.latMin)) /
-    ((BOUNDS.lngMax - BOUNDS.lngMin) * COS_LAT)
-);
-
-function project([lat, lng]: [number, number]): [number, number] {
-  const x = ((lng - BOUNDS.lngMin) / (BOUNDS.lngMax - BOUNDS.lngMin)) * W;
-  const y = ((BOUNDS.latMax - lat) / (BOUNDS.latMax - BOUNDS.latMin)) * H;
-  return [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
-}
-
-const COPPER = "#B40101";
-const COPPER_BRIGHT = "#D11919";
-const IVORY = "#F7F8FA";
-
-const HUB_LABEL_POS: Record<string, string> = {
-  b: "-translate-x-1/2 mt-4 text-center",
-  "kw-success-layton": "-translate-y-1/2 ml-4 text-left",
-  "weber-corridor": "-translate-x-1/2 -translate-y-full -mt-4 text-center",
-  "morgan-wasatch-back": "-translate-x-1/2 mt-4 text-center",
-  "south-davis-slc": "-translate-y-1/2 ml-4 text-left",
-};
-
-const ANCHOR_POS: Record<"l" | "r" | "t" | "b", string> = {
-  l: "-translate-x-full -translate-y-1/2 -ml-2.5 text-right",
-  r: "-translate-y-1/2 ml-2.5 text-left",
-  t: "-translate-x-1/2 -translate-y-full -mt-2 text-center",
-  b: "-translate-x-1/2 mt-2 text-center",
-};
-
-const ANCHOR_TOWNS: Record<string, "l" | "r" | "t" | "b"> = {
-  "Pleasant View": "t",
-  "Plain City": "l",
-  Hooper: "l",
-  Syracuse: "l",
-  Clearfield: "l",
-  Kaysville: "r",
-  Farmington: "r",
-  Centerville: "r",
-  "North Salt Lake": "l",
-  "Salt Lake City": "b",
-  Eden: "t",
-  Huntsville: "r",
-  "Mountain Green": "t",
-  Croydon: "r",
-  Porterville: "b",
-  "Park City": "r",
-};
-
-function buildNetworkData() {
-  const hubs = HUB_DEFS.map((h) => {
-    const [hx, hy] = project(COORDS[h.homeCity]);
-    const links = h.communities
-      .filter((c) => COORDS[c] && c !== h.homeCity)
-      .map((c) => {
-        const [tx, ty] = project(COORDS[c]);
-        return {
-          id: `${h.slug}-${c}`.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-          town: c,
-          x: tx,
-          y: ty,
-          d: `M${hx} ${hy} L${tx} ${ty}`,
-          len: Math.hypot(tx - hx, ty - hy),
-        };
-      });
-    return {
-      slug: h.slug,
-      name: h.name,
-      city: h.homeCity,
-      subtitle: h.subtitle,
-      x: hx,
-      y: hy,
-      links,
-    };
-  });
-
-  const towns: {
-    name: string;
-    county: string;
-    x: number;
-    y: number;
-    delay: number;
-  }[] = [];
+function buildTownPoints(): TownPoint[] {
+  const towns: TownPoint[] = [];
   const seen = new Set<string>();
 
   for (const group of UTAH_AREA_GROUPS) {
@@ -330,43 +270,27 @@ function buildNetworkData() {
       const coord = COORDS[comm];
       if (!coord || seen.has(comm)) continue;
       seen.add(comm);
-      const [x, y] = project(coord);
-      const minDist = Math.min(
-        ...hubs.map((h) => Math.hypot(h.x - x, h.y - y))
-      );
+      const [x, y] = projectLatLng(coord);
       towns.push({
         name: comm,
         county: group.county,
         x,
         y,
-        delay: 0.35 + (Math.min(minDist, 700) / 700) * 1.4,
+        isPrimary: Boolean(PRIORITY_LABELS[comm]),
+        isMarketCenter: comm === "Layton",
+        searchUrl: `${brokerage.search.buyUrl}?q=${encodeURIComponent(
+          `${comm}, UT`
+        )}`,
       });
     }
   }
 
-  const shoreD = SHORE_COORDS.map(project)
-    .map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`)
-    .join(" ");
-  const lakeD = `${shoreD} L -60 ${H + 60} L -60 -60 Z`;
-
-  const ridgeD = WASATCH_RIDGE_COORDS.map(project)
-    .map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`)
-    .join(" ");
-
-  const linkedBy: Record<string, string[]> = {};
-  hubs.forEach((h) => {
-    linkedBy[h.city] = [...(linkedBy[h.city] ?? []), h.slug];
-    h.links.forEach((l) => {
-      linkedBy[l.town] = [...(linkedBy[l.town] ?? []), h.slug];
-    });
-  });
-
-  const countyOf: Record<string, string> = {};
-  towns.forEach((t) => {
-    countyOf[t.name] = t.county;
-  });
-
-  return { hubs, towns, shoreD, lakeD, ridgeD, linkedBy, countyOf };
+  // Secondary towns first, primary cities on top, Market Center (Layton) last
+  return towns.sort(
+    (a, b) =>
+      Number(a.isPrimary) - Number(b.isPrimary) ||
+      Number(a.isMarketCenter) - Number(b.isMarketCenter)
+  );
 }
 
 function useWide() {
@@ -386,128 +310,101 @@ function useWide() {
 
 export default function NetworkMap() {
   const wide = useWide();
-  const { hubs, towns, shoreD, lakeD, ridgeD, linkedBy, countyOf } = useMemo(
-    () => buildNetworkData(),
-    []
-  );
+  const towns = useMemo(() => buildTownPoints(), []);
   const rootRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(rootRef, { once: true, margin: "-10% 0px -10% 0px" });
-  const [filter, setFilter] = useState<{
-    kind: "office" | "county";
-    key: string;
-  } | null>(null);
-  const [hoveredTown, setHoveredTown] = useState<(typeof towns)[number] | null>(
-    null
-  );
-  const [query, setQuery] = useState("");
-  const [showPulses, setShowPulses] = useState(false);
+  const inView = useInView(rootRef, { once: true, margin: "-8% 0px -8% 0px" });
 
-  useEffect(() => {
-    if (
-      !inView ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return;
-    const t = window.setTimeout(() => setShowPulses(true), 1800);
-    return () => window.clearTimeout(t);
-  }, [inView]);
+  const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
+  const [hoveredCounty, setHoveredCounty] = useState<string | null>(null);
+  const [hoveredTown, setHoveredTown] = useState<TownPoint | null>(null);
+  const [query, setQuery] = useState("");
 
   const qClean = query.trim().toLowerCase();
-  const matches = qClean
-    ? towns
-        .filter((t) => t.name.toLowerCase().includes(qClean))
-        .sort(
-          (a, b) =>
-            Number(!a.name.toLowerCase().startsWith(qClean)) -
-              Number(!b.name.toLowerCase().startsWith(qClean)) ||
-            a.name.localeCompare(b.name)
-        )
-    : [];
-  const matchSet = new Set(matches.map((t) => t.name));
-  const isIdle = !filter && !hoveredTown && !qClean;
-
-  const isTownActive = (t: (typeof towns)[number]) => {
-    if (qClean) return matchSet.has(t.name);
-    if (filter) {
-      return filter.kind === "county"
-        ? t.county === filter.key
-        : (linkedBy[t.name] ?? []).includes(filter.key);
-    }
-    return true;
-  };
-
-  const isLinkActive = (
-    hub: (typeof hubs)[number],
-    link: (typeof hubs)[number]["links"][number]
-  ) => {
-    if (hoveredTown) {
-      return hoveredTown.name === link.town || hoveredTown.name === hub.city;
-    }
-    if (qClean) {
-      return matchSet.has(link.town) || matchSet.has(hub.city);
-    }
-    if (filter) {
-      return filter.kind === "county"
-        ? countyOf[link.town] === filter.key
-        : hub.slug === filter.key;
-    }
-    return true;
-  };
-
-  const isHubActive = (hub: (typeof hubs)[number]) => {
-    if (qClean) {
-      return (
-        matchSet.has(hub.city) || hub.links.some((l) => matchSet.has(l.town))
+  const matches = useMemo(() => {
+    if (!qClean) return [];
+    return towns
+      .filter(
+        (t) =>
+          t.name.toLowerCase().includes(qClean) ||
+          t.county.toLowerCase().includes(qClean)
+      )
+      .sort(
+        (a, b) =>
+          Number(!a.name.toLowerCase().startsWith(qClean)) -
+            Number(!b.name.toLowerCase().startsWith(qClean)) ||
+          a.name.localeCompare(b.name)
       );
-    }
-    if (filter) {
-      return filter.kind === "office"
-        ? hub.slug === filter.key
-        : countyOf[hub.city] === filter.key;
-    }
+  }, [qClean, towns]);
+
+  const matchSet = useMemo(
+    () => new Set(matches.map((t) => t.name)),
+    [matches]
+  );
+
+  // Active county drives map highlight (hover previews, click pins selection)
+  const activeCounty =
+    hoveredTown?.county ?? hoveredCounty ?? selectedCounty ?? null;
+
+  const isTownActive = (t: TownPoint) => {
+    if (qClean) return matchSet.has(t.name);
+    if (activeCounty) return t.county === activeCounty;
     return true;
   };
 
-  const openTownSearch = (t: { name: string }) => {
-    window.open(
-      `${brokerage.search.buyUrl}?q=${encodeURIComponent(t.name + ", UT")}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
+  const openTownSearch = (t: TownPoint) => {
+    window.open(t.searchUrl, "_blank", "noopener,noreferrer");
   };
 
-  const toggleFilter = (next: { kind: "office" | "county"; key: string }) => {
-    setFilter((cur) =>
-      cur && cur.kind === next.kind && cur.key === next.key ? null : next
-    );
+  const toggleCounty = (county: string) => {
+    setSelectedCounty((cur) => (cur === county ? null : county));
   };
-
-  const pctPos = (x: number, y: number) => ({
-    left: `${(x / W) * 100}%`,
-    top: `${(y / H) * 100}%`,
-  });
 
   const activeTooltipTown =
     hoveredTown ?? (matches.length === 1 ? matches[0] : null);
 
+  const selectedGroup = selectedCounty
+    ? UTAH_AREA_GROUPS.find((g) => g.county === selectedCounty) ?? null
+    : null;
+
+  // Render active county's dots on top of dimmed dots so tightly clustered areas are easy to pick
+  const orderedTowns = useMemo(() => {
+    return [...towns].sort((a, b) => {
+      const aSelected = activeTooltipTown?.name === a.name ? 1 : 0;
+      const bSelected = activeTooltipTown?.name === b.name ? 1 : 0;
+      if (aSelected !== bSelected) return aSelected - bSelected;
+      const aActive =
+        (qClean ? matchSet.has(a.name) : !activeCounty || a.county === activeCounty)
+          ? 1
+          : 0;
+      const bActive =
+        (qClean ? matchSet.has(b.name) : !activeCounty || b.county === activeCounty)
+          ? 1
+          : 0;
+      if (aActive !== bActive) return aActive - bActive;
+      return (
+        Number(a.isPrimary) - Number(b.isPrimary) ||
+        Number(a.isMarketCenter) - Number(b.isMarketCenter)
+      );
+    });
+  }, [towns, activeTooltipTown, qClean, matchSet, activeCounty]);
+
   const headerBlock = (
     <div>
-      <div className="flex items-center gap-4">
-        <span className="h-px w-10 bg-copper" />
-        <span className="type-label text-copper">The Wasatch Front, to Scale</span>
+      <div className="flex items-center gap-3.5">
+        <span className="h-px w-8 bg-kw-red" />
+        <span className="type-label text-kw-red">Northern Utah Coverage</span>
       </div>
-      <h2 className="mt-5 text-[clamp(1.6rem,2.4vw,2.1rem)] font-light leading-tight text-ivory">
+      <h2 className="mt-4 text-[clamp(1.55rem,2.3vw,2.05rem)] font-semibold leading-tight tracking-tight text-ink">
         Every dot is a Utah community we serve.
       </h2>
-      <p className="type-body-sm mt-4 max-w-sm text-white/65">
-        Anchored in Layton — {UTAH_AREA_COUNT}+ communities across Davis, Weber,
-        and Morgan Counties, plus the greater Salt Lake Metro. The copper
-        threads trace our advisors&apos; daily reach from the Great Salt Lake to
-        the Wasatch Back.
+      <p className="type-body-sm mt-3.5 max-w-sm text-charcoal">
+        Anchored in Layton — {UTAH_AREA_COUNT} communities across 9 Northern
+        Utah counties, from the Great Salt Lake to Bear Lake and the Wasatch
+        Back. Licensed to serve the entire state.
       </p>
 
-      <label className="mt-8 flex items-center gap-3 border-b hairline-dark pb-3 focus-within:border-copper">
-        <Search className="h-4 w-4 shrink-0 text-copper" strokeWidth={1.5} />
+      <label className="mt-6 flex items-center gap-3 border-b border-ink/20 pb-2.5 focus-within:border-kw-red">
+        <Search className="h-4 w-4 shrink-0 text-kw-red" strokeWidth={1.75} />
         <input
           type="text"
           value={query}
@@ -516,58 +413,58 @@ export default function NetworkMap() {
             if (e.key === "Enter" && matches[0]) openTownSearch(matches[0]);
             if (e.key === "Escape") setQuery("");
           }}
-          placeholder="Find your town (e.g. Layton, Ogden, Kaysville)…"
+          placeholder="Find your town (e.g. Layton, Logan)…"
           aria-label="Find your town"
-          className="w-full bg-transparent text-[0.95rem] text-ivory placeholder:text-stone-dark focus:outline-none"
+          className="w-full bg-transparent text-[0.92rem] text-ink placeholder:text-charcoal/50 focus:outline-none"
         />
         {query && (
           <button
             type="button"
-            aria-label="Clear"
+            aria-label="Clear search"
             onClick={() => setQuery("")}
-            className="text-stone-dark transition-colors hover:text-ivory"
+            className="text-charcoal transition-colors hover:text-ink"
           >
-            <X className="h-4 w-4" strokeWidth={1.5} />
+            <X className="h-4 w-4" strokeWidth={1.75} />
           </button>
         )}
       </label>
 
       {qClean && (
-        <ul className="mt-2">
+        <ul className="mt-2 divide-y divide-ink/10">
           {matches.slice(0, 6).map((t) => (
             <li key={t.name}>
-              <button
-                type="button"
-                onClick={() => openTownSearch(t)}
+              <a
+                href={t.searchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 onMouseEnter={() => setHoveredTown(t)}
                 onMouseLeave={() => setHoveredTown(null)}
                 className="group flex w-full items-center justify-between gap-4 py-2 text-left"
-                data-cursor="Explore"
               >
-                <span className="text-[0.9rem] text-ivory transition-colors group-hover:text-copper">
+                <span className="text-[0.9rem] font-medium text-ink transition-colors group-hover:text-kw-red">
                   {t.name}
                 </span>
-                <span className="type-body-sm flex items-center gap-2 text-stone-dark">
+                <span className="type-body-sm flex items-center gap-2 text-charcoal">
                   {t.county.replace(" County", "")}
                   <ArrowRight
-                    className="h-3.5 w-3.5 text-copper transition-transform group-hover:translate-x-1"
-                    strokeWidth={1.5}
+                    className="h-3.5 w-3.5 text-kw-red transition-transform group-hover:translate-x-1"
+                    strokeWidth={1.75}
                   />
                 </span>
-              </button>
+              </a>
             </li>
           ))}
           {matches.length === 0 && (
-            <li className="type-body-sm py-2 text-stone-dark">
+            <li className="type-body-sm py-2.5 text-charcoal">
               Not on the primary list yet —{" "}
-              <Link to="/contact" className="text-copper">
+              <Link to="/contact" className="font-medium text-kw-red hover:underline">
                 ask us
               </Link>
-              , our advisors serve the entire Wasatch Front.
+              , our advisors serve all of Northern Utah.
             </li>
           )}
           {matches.length > 6 && (
-            <li className="type-body-sm py-2 text-stone-dark">
+            <li className="type-body-sm py-2 text-charcoal">
               + {matches.length - 6} more — keep typing
             </li>
           )}
@@ -576,72 +473,70 @@ export default function NetworkMap() {
     </div>
   );
 
-  const filterListBlock = (
+  const countyListBlock = (
     <div>
-      <p className="type-label mt-9 text-stone-dark">Coverage Hubs</p>
-      <ul className="mt-3 border-t hairline-dark">
-        {hubs.map((h) => {
-          const active =
-            !filter ||
-            (filter.kind === "office" && filter.key === h.slug) ||
-            (filter.kind === "county" && countyOf[h.city] === filter.key);
+      <div className="mt-7 flex items-center justify-between">
+        <p className="type-label text-charcoal">9 Northern Utah Counties</p>
+        {selectedCounty && (
+          <button
+            type="button"
+            onClick={() => setSelectedCounty(null)}
+            className="inline-flex items-center gap-1 text-xs font-semibold text-kw-red transition-opacity hover:opacity-80"
+          >
+            <RotateCcw className="h-3 w-3" />
+            All
+          </button>
+        )}
+      </div>
+
+      <ul className="mt-3 flex flex-wrap gap-2 lg:block lg:border-t lg:border-ink/10">
+        {UTAH_AREA_GROUPS.map((g) => {
+          const isHighlighted = activeCounty === g.county;
+          const isSelected = selectedCounty === g.county;
+          const isDimmed = Boolean(activeCounty && !isHighlighted);
+
           return (
-            <li key={h.slug} className="border-b hairline-dark">
+            <li key={g.county} className="lg:border-b lg:border-ink/10">
               <button
                 type="button"
-                onMouseEnter={() => setFilter({ kind: "office", key: h.slug })}
-                onMouseLeave={() => setFilter(null)}
-                onClick={() => toggleFilter({ kind: "office", key: h.slug })}
+                aria-pressed={isSelected}
+                onMouseEnter={() => setHoveredCounty(g.county)}
+                onMouseLeave={() => setHoveredCounty(null)}
+                onClick={() => toggleCounty(g.county)}
                 className={cn(
-                  "group flex w-full items-center justify-between gap-4 py-2.5 text-left transition-opacity duration-300",
-                  active ? "opacity-100" : "opacity-35"
+                  "group flex w-full items-center justify-between gap-3 rounded-full border px-3.5 py-1.5 text-left transition-all duration-200 lg:rounded-none lg:border-0 lg:px-1.5 lg:py-2",
+                  isHighlighted
+                    ? "border-kw-red bg-kw-red/10 text-kw-red lg:bg-kw-red/[0.06]"
+                    : "border-ink/15 bg-white/80 text-ink hover:border-kw-red/40 lg:bg-transparent",
+                  isDimmed && "opacity-45 hover:opacity-90"
                 )}
-                data-cursor="Trace"
               >
-                <span className="flex items-center gap-3">
-                  <span className="block h-2 w-2 rotate-45 bg-copper" />
-                  <span className="text-[0.88rem] font-medium text-ivory transition-colors group-hover:text-copper">
-                    {h.name}
+                <span className="flex items-center gap-2.5">
+                  <span
+                    className={cn(
+                      "h-2 w-2 shrink-0 rounded-full transition-colors",
+                      isHighlighted
+                        ? "bg-kw-red"
+                        : "bg-ink/25 group-hover:bg-kw-red/60"
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "text-[0.86rem] transition-colors",
+                      isHighlighted
+                        ? "font-semibold text-kw-red"
+                        : "font-medium text-ink"
+                    )}
+                  >
+                    {g.county}
                   </span>
                 </span>
-                <span className="type-body-sm text-stone-dark">{h.city}</span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-
-      <p className="type-label mt-7 text-stone-dark">Counties</p>
-      <ul className="mt-3 flex flex-wrap gap-2 lg:block lg:border-t lg:hairline-dark">
-        {UTAH_AREA_GROUPS.map((g) => {
-          const active =
-            !filter ||
-            (filter.kind === "county" && filter.key === g.county) ||
-            (filter.kind === "office" &&
-              g.communities.some((c) =>
-                (linkedBy[c] ?? []).includes(filter.key)
-              ));
-          return (
-            <li key={g.county} className="lg:border-b lg:hairline-dark">
-              <button
-                type="button"
-                onMouseEnter={() =>
-                  setFilter({ kind: "county", key: g.county })
-                }
-                onMouseLeave={() => setFilter(null)}
-                onClick={() => toggleFilter({ kind: "county", key: g.county })}
-                className={cn(
-                  "flex w-full items-center justify-between gap-4 rounded-full border px-4 py-2 text-left transition-all duration-300 hairline-dark lg:rounded-none lg:border-0 lg:px-0 lg:py-2",
-                  active ? "opacity-100" : "opacity-35",
-                  filter?.kind === "county" &&
-                    filter.key === g.county &&
-                    "text-copper"
-                )}
-              >
-                <span className="text-[0.86rem] font-light text-ivory">
-                  {g.county}
-                </span>
-                <span className="type-body-sm tabular-nums text-stone-dark">
+                <span
+                  className={cn(
+                    "type-body-sm tabular-nums",
+                    isHighlighted ? "font-semibold text-kw-red" : "text-charcoal"
+                  )}
+                >
                   {g.communities.length}
                 </span>
               </button>
@@ -649,343 +544,430 @@ export default function NetworkMap() {
           );
         })}
       </ul>
-      <p className="type-body-sm mt-5 text-stone-dark">
-        Hover or tap a hub or county to trace its reach across the Wasatch
-        Front. Click any community dot to search homes there.
+
+      <p className="type-body-sm mt-4 text-charcoal">
+        Hover or tap any county on the map or list to highlight its communities.
+        Select any dot to search active homes there.
       </p>
     </div>
   );
 
+  // Clamp tooltip position horizontally/vertically so it never clips outside map bounds
+  const tooltipStyle = activeTooltipTown
+    ? {
+        left: `${Math.min(
+          86,
+          Math.max(14, (activeTooltipTown.x / MAP_WIDTH) * 100)
+        )}%`,
+        top: `${(activeTooltipTown.y / MAP_HEIGHT) * 100}%`,
+        placeBelow: activeTooltipTown.y < 110,
+      }
+    : null;
+
   const mapCanvas = (
-    <div
-      className="relative mx-auto w-full max-w-[960px]"
-      style={{ aspectRatio: `${W} / ${H}` }}
-    >
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        className="h-full w-full"
-        aria-hidden
-      >
-        <defs>
-          <linearGradient id="kws-lake" x1="1" y1="0" x2="0" y2="0">
-            <stop offset="0" stopColor={COPPER} stopOpacity="0.03" />
-            <stop offset="1" stopColor={COPPER} stopOpacity="0.16" />
-          </linearGradient>
-          <radialGradient id="kws-hub-glow">
-            <stop offset="0" stopColor={COPPER} stopOpacity="0.55" />
-            <stop offset="1" stopColor={COPPER} stopOpacity="0" />
-          </radialGradient>
-        </defs>
+    <div className="flex flex-col gap-3">
+      {/* Subtle Legend & Active County Status Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-charcoal">
+        <div className="flex flex-wrap items-center gap-4">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="relative flex h-3 w-3 items-center justify-center">
+              <span className="absolute h-3 w-3 rounded-full border border-kw-red/50" />
+              <span className="h-1.5 w-1.5 rounded-full bg-kw-red" />
+            </span>
+            <span className="font-medium text-ink">Layton Market Center</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-kw-red" />
+            <span>Served Communities ({UTAH_AREA_COUNT})</span>
+          </span>
+        </div>
 
-        {/* Great Salt Lake water fill */}
-        <motion.path
-          d={lakeD}
-          fill="url(#kws-lake)"
-          style={{ pointerEvents: "none" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: inView ? 1 : 0 }}
-          transition={{ duration: 1.4, delay: 0.2 }}
-        />
-
-        {/* Great Salt Lake shoreline */}
-        <motion.path
-          d={shoreD}
-          fill="none"
-          stroke={COPPER}
-          strokeWidth={1}
-          strokeOpacity={0.5}
-          style={{ pointerEvents: "none" }}
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: inView ? 1 : 0 }}
-          transition={{ duration: 1.8, ease: "easeInOut" }}
-        />
-
-        {/* Wasatch Front ridgeline */}
-        <motion.path
-          d={ridgeD}
-          fill="none"
-          stroke={COPPER}
-          strokeWidth={0.9}
-          strokeDasharray="4 6"
-          strokeOpacity={0.32}
-          style={{ pointerEvents: "none" }}
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: inView ? 1 : 0 }}
-          transition={{ duration: 2.0, delay: 0.3, ease: "easeInOut" }}
-        />
-
-        {/* Great Salt Lake vertical label */}
-        <motion.text
-          x={28}
-          y={H * 0.42}
-          fill={COPPER}
-          fillOpacity={0.6}
-          fontSize={13}
-          letterSpacing={4}
-          style={{ writingMode: "vertical-rl", pointerEvents: "none" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: inView ? 1 : 0 }}
-          transition={{ delay: 1.2, duration: 1 }}
-        >
-          GREAT SALT LAKE
-        </motion.text>
-
-        {/* Wasatch Range vertical label */}
-        <motion.text
-          x={W - 22}
-          y={H * 0.28}
-          fill={COPPER}
-          fillOpacity={0.45}
-          fontSize={12}
-          letterSpacing={4}
-          style={{ writingMode: "vertical-rl", pointerEvents: "none" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: inView ? 1 : 0 }}
-          transition={{ delay: 1.4, duration: 1 }}
-        >
-          WASATCH BACK
-        </motion.text>
-
-        {/* Network threads connecting hubs to towns */}
-        {hubs.map((hub) =>
-          hub.links.map((link, lIdx) => (
-            <motion.path
-              key={link.id}
-              d={link.d}
-              fill="none"
-              stroke={COPPER}
-              strokeWidth={0.95}
-              strokeLinecap="round"
-              style={{ pointerEvents: "none" }}
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{
-                pathLength: inView ? 1 : 0,
-                opacity: inView
-                  ? isLinkActive(hub, link)
-                    ? 0.48
-                    : hoveredTown
-                      ? 0.14
-                      : 0.08
-                  : 0,
-              }}
-              transition={{
-                pathLength: {
-                  duration: 0.9,
-                  delay: 0.45 + lIdx * 0.04,
-                  ease: "easeOut",
-                },
-                opacity: { duration: 0.35 },
-              }}
-            />
-          ))
-        )}
-
-        {/* Traveling light pulses along threads */}
-        {showPulses &&
-          hubs.map((hub) =>
-            hub.links
-              .filter((_, idx) => idx % 2 === 0)
-              .map((link, idx) => (
-                <circle
-                  key={`pulse-${link.id}`}
-                  r={2.5}
-                  fill={COPPER_BRIGHT}
-                  className="mn-travel"
-                  style={
-                    {
-                      pointerEvents: "none",
-                      offsetPath: `path('${link.d}')`,
-                      animationDuration: `${3.2 + link.len / 120}s`,
-                      animationDelay: `${-(idx * 1.4 + hub.x / 400)}s`,
-                    } as React.CSSProperties
-                  }
-                />
-              ))
-          )}
-
-        {/* Community Dots */}
-        {towns.map((town) => {
-          const active = isTownActive(town);
-          const selected = activeTooltipTown?.name === town.name;
-          return (
-            <g
-              key={town.name}
-              role="link"
-              tabIndex={0}
-              aria-label={`Search homes in ${town.name}`}
-              data-cursor="Explore"
-              style={{ cursor: "pointer" }}
-              onMouseEnter={() => setHoveredTown(town)}
-              onMouseLeave={() => setHoveredTown(null)}
-              onFocus={() => setHoveredTown(town)}
-              onBlur={() => setHoveredTown(null)}
-              onClick={() => openTownSearch(town)}
-              onKeyDown={(e) => e.key === "Enter" && openTownSearch(town)}
-            >
-              <circle cx={town.x} cy={town.y} r={14} fill="transparent" />
-              <motion.circle
-                cx={town.x}
-                cy={town.y}
-                r={10}
-                fill="none"
-                stroke={COPPER_BRIGHT}
-                strokeWidth={0.9}
-                initial={{ opacity: 0, scale: 0.4 }}
-                animate={{
-                  opacity: selected ? 0.95 : 0,
-                  scale: selected ? 1 : 0.4,
-                }}
-                transition={{ duration: 0.35 }}
-                style={{
-                  transformBox: "fill-box",
-                  transformOrigin: "center",
-                }}
-              />
-              <motion.circle
-                cx={town.x}
-                cy={town.y}
-                r={4.2}
-                fill={selected ? COPPER_BRIGHT : IVORY}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{
-                  opacity: inView ? (active ? (selected ? 1 : 0.88) : 0.16) : 0,
-                  scale: inView ? (selected ? 1.45 : 1) : 0,
-                }}
-                transition={{
-                  opacity: {
-                    duration: 0.4,
-                    delay: inView && isIdle ? town.delay : 0,
-                  },
-                  scale: {
-                    duration: 0.5,
-                    delay: inView && isIdle ? town.delay : 0,
-                    ease: [0.22, 1, 0.36, 1],
-                  },
-                }}
-                style={{
-                  transformBox: "fill-box",
-                  transformOrigin: "center",
-                }}
-              />
-            </g>
-          );
-        })}
-
-        {/* Diamond Hub Markers */}
-        {hubs.map((hub, idx) => {
-          const active = isHubActive(hub);
-          return (
-            <motion.g
-              key={hub.slug}
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{
-                opacity: inView ? (active ? 1 : 0.3) : 0,
-                scale: inView ? 1 : 0.6,
-              }}
-              transition={{
-                duration: 0.8,
-                delay: 0.25 + idx * 0.12,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              style={{
-                transformBox: "fill-box",
-                transformOrigin: "center",
-                pointerEvents: "none",
-              }}
-            >
-              <circle
-                cx={hub.x}
-                cy={hub.y}
-                r={32}
-                fill="url(#kws-hub-glow)"
-                className="mn-halo"
-                style={{
-                  transformBox: "fill-box",
-                  transformOrigin: "center",
-                }}
-              />
-              <rect
-                x={hub.x - 6}
-                y={hub.y - 6}
-                width={12}
-                height={12}
-                fill={COPPER}
-                transform={`rotate(45 ${hub.x} ${hub.y})`}
-              />
-              <rect
-                x={hub.x - 10}
-                y={hub.y - 10}
-                width={20}
-                height={20}
-                fill="none"
-                stroke={COPPER}
-                strokeOpacity={0.55}
-                strokeWidth={0.85}
-                transform={`rotate(45 ${hub.x} ${hub.y})`}
-              />
-            </motion.g>
-          );
-        })}
-      </svg>
-
-      {/* Town anchor labels */}
-      {towns
-        .filter((t) => ANCHOR_TOWNS[t.name])
-        .map((t) => (
-          <motion.span
-            key={`lbl-${t.name}`}
-            className={cn(
-              "pointer-events-none absolute hidden whitespace-nowrap text-[0.58rem] uppercase tracking-[0.16em] transition-colors duration-300 md:block",
-              ANCHOR_POS[ANCHOR_TOWNS[t.name]],
-              activeTooltipTown?.name === t.name
-                ? "text-copper"
-                : "text-stone-dark",
-              isTownActive(t) ? "" : "opacity-30"
-            )}
-            style={pctPos(t.x, t.y)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: inView ? 1 : 0 }}
-            transition={{ delay: 1.5 + t.delay * 0.35, duration: 0.6 }}
+        {selectedGroup ? (
+          <button
+            type="button"
+            onClick={() => setSelectedCounty(null)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3 py-1 text-[0.72rem] font-semibold text-kw-red transition-colors hover:bg-kw-red hover:text-white"
           >
-            {t.name}
-          </motion.span>
-        ))}
+            <span>
+              {selectedGroup.county} ({selectedGroup.communities.length})
+            </span>
+            <X className="h-3 w-3" />
+          </button>
+        ) : (
+          <span className="text-[0.72rem] text-charcoal/80">
+            Click a county to focus · Click a dot to search homes
+          </span>
+        )}
+      </div>
 
-      {/* Hub labels */}
-      {hubs.map((hub, idx) => (
-        <motion.div
-          key={`hub-lbl-${hub.slug}`}
-          className={cn(
-            "pointer-events-none absolute whitespace-nowrap transition-opacity duration-300",
-            HUB_LABEL_POS[hub.slug] ?? HUB_LABEL_POS.b,
-            isHubActive(hub) ? "opacity-100" : "opacity-30"
-          )}
-          style={pctPos(hub.x, hub.y)}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: inView ? 1 : 0 }}
-          transition={{ delay: 0.6 + idx * 0.12, duration: 0.7 }}
+      {/* Interactive Cartographic SVG Frame */}
+      <div
+        className="relative mx-auto w-full overflow-hidden rounded-2xl border border-ink/12 bg-[#ECEAE4] shadow-sm"
+        style={{ aspectRatio: `${MAP_WIDTH} / ${MAP_HEIGHT}` }}
+      >
+        <svg
+          viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
+          className="block h-full w-full select-none"
+          role="img"
+          aria-label={`Interactive Northern Utah coverage map showing 9 counties and ${UTAH_AREA_COUNT} communities served by KW Success`}
         >
-          <span className="block text-[0.64rem] font-medium uppercase tracking-[0.28em] text-ivory">
-            {hub.name}
-          </span>
-          <span className="block text-[0.6rem] uppercase tracking-[0.2em] text-copper">
-            {hub.city}
-          </span>
-        </motion.div>
-      ))}
+          {/* Subtle geographic backdrop for bordering states (ID, NV, WY) */}
+          <rect
+            x={0}
+            y={0}
+            width={MAP_WIDTH}
+            height={MAP_HEIGHT}
+            fill="#E4E0D8"
+          />
 
-      {/* Floating Tooltip */}
-      {activeTooltipTown && (
-        <div
-          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%_+_16px)] border hairline-dark bg-ink/95 px-4 py-2.5 text-center shadow-lift backdrop-blur"
-          style={pctPos(activeTooltipTown.x, activeTooltipTown.y)}
-        >
-          <span className="block whitespace-nowrap text-[0.95rem] font-medium text-ivory">
-            {activeTooltipTown.name}
-          </span>
-          <span className="block whitespace-nowrap text-[0.6rem] uppercase tracking-[0.24em] text-stone-dark">
-            {activeTooltipTown.county} · Explore homes →
-          </span>
+          {/* Neighboring state labels outside Utah borders */}
+          <g
+            fill="#847E75"
+            fontSize={10.5}
+            fontWeight={600}
+            letterSpacing={3.2}
+            style={{ pointerEvents: "none" }}
+          >
+            <text x={360} y={26} textAnchor="middle">
+              IDAHO
+            </text>
+            <text x={855} y={195} textAnchor="middle">
+              WYOMING
+            </text>
+          </g>
+
+          {/* Neighboring Utah context counties (quiet muted stone) */}
+          <g style={{ pointerEvents: "none" }}>
+            {CONTEXT_COUNTY_PATHS.map((c) => (
+              <path
+                key={c.county}
+                d={c.d}
+                fill="#ECE8E1"
+                stroke="#D8D3C9"
+                strokeWidth={0.9}
+                strokeLinejoin="round"
+              />
+            ))}
+          </g>
+
+          {/* 9 Served Northern Utah Counties — base fills & interactive hit regions */}
+          <g>
+            {SERVED_COUNTY_SHAPES.map((shape) => {
+              const isHighlighted = activeCounty === shape.county;
+              const isDimmed = Boolean(activeCounty && !isHighlighted);
+
+              return (
+                <path
+                  key={shape.county}
+                  d={shape.d}
+                  fill={isHighlighted ? "#F6E2E2" : shape.tone}
+                  fillOpacity={isDimmed ? 0.55 : 1}
+                  stroke={isHighlighted ? KW_RED : "#B2AA9D"}
+                  strokeWidth={isHighlighted ? 2.1 : 1.2}
+                  strokeLinejoin="round"
+                  className="cursor-pointer transition-colors duration-200 focus:outline-none"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${shape.county} — tap to ${
+                    selectedCounty === shape.county ? "clear" : "highlight"
+                  } communities`}
+                  aria-pressed={selectedCounty === shape.county}
+                  onMouseEnter={() => setHoveredCounty(shape.county)}
+                  onMouseLeave={() => setHoveredCounty(null)}
+                  onClick={() => toggleCounty(shape.county)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      toggleCounty(shape.county);
+                    }
+                  }}
+                />
+              );
+            })}
+          </g>
+
+          {/* Subtle Water Shapes: Great Salt Lake (w/ island cutouts), Utah Lake, Bear Lake */}
+          <g style={{ pointerEvents: "none" }}>
+            {UTAH_LAKE_SHAPES.map((lake) => (
+              <path
+                key={lake.name}
+                d={lake.d}
+                fill="#D4E2EC"
+                fillOpacity={0.88}
+                fillRule="evenodd"
+                stroke="#96AFC4"
+                strokeWidth={0.95}
+                strokeLinejoin="round"
+              />
+            ))}
+          </g>
+
+          {/* Re-stroke active county boundary cleanly on top of lake water so Davis/Weber/Box Elder borders remain crisp */}
+          {activeCounty &&
+            SERVED_COUNTY_SHAPES.filter((s) => s.county === activeCounty).map(
+              (shape) => (
+                <path
+                  key={`active-outline-${shape.county}`}
+                  d={shape.d}
+                  fill={KW_RED}
+                  fillOpacity={0.07}
+                  stroke={KW_RED}
+                  strokeWidth={2.2}
+                  strokeLinejoin="round"
+                  style={{ pointerEvents: "none" }}
+                />
+              )
+            )}
+
+          {/* Water body labels */}
+          <g
+            fill="#5C7A93"
+            fontSize={9.5}
+            fontStyle="italic"
+            fontWeight={600}
+            letterSpacing={1.8}
+            textAnchor="middle"
+            style={{ pointerEvents: "none" }}
+          >
+            {UTAH_LAKE_SHAPES.map((lake) => (
+              <text key={`lbl-${lake.name}`} x={lake.labelX} y={lake.labelY}>
+                {lake.labelLines.map((line, i) => (
+                  <tspan
+                    key={line}
+                    x={lake.labelX}
+                    dy={i === 0 ? 0 : 12}
+                  >
+                    {line}
+                  </tspan>
+                ))}
+              </text>
+            ))}
+          </g>
+
+          {/* County Name Labels */}
+          <g style={{ pointerEvents: "none" }}>
+            {SERVED_COUNTY_SHAPES.map((shape) => {
+              const isHighlighted = activeCounty === shape.county;
+              const isDimmed = Boolean(activeCounty && !isHighlighted);
+              return (
+                <text
+                  key={`county-lbl-${shape.county}`}
+                  x={shape.labelX}
+                  y={shape.labelY}
+                  textAnchor="middle"
+                  fontSize={isHighlighted ? 11.5 : 10.5}
+                  fontWeight={isHighlighted ? 700 : 600}
+                  letterSpacing={2.2}
+                  fill={isHighlighted ? KW_RED : "#6B655C"}
+                  fillOpacity={isDimmed ? 0.35 : 0.9}
+                  stroke="#F7F5F0"
+                  strokeWidth={3.2}
+                  strokeLinejoin="round"
+                  style={{ paintOrder: "stroke" }}
+                >
+                  {shape.shortLabel}
+                </text>
+              );
+            })}
+          </g>
+
+          {/* Community Dots (all 74 communities at exact true lat/lng) */}
+          <g>
+            {orderedTowns.map((town, idx) => {
+              const active = isTownActive(town);
+              const selected = activeTooltipTown?.name === town.name;
+              const baseRadius = town.isMarketCenter
+                ? 5.8
+                : town.isPrimary
+                  ? 4.7
+                  : activeCounty && active
+                    ? 4.4
+                    : 3.4;
+
+              return (
+                <a
+                  key={town.name}
+                  href={town.searchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Search homes in ${town.name}, ${town.county}`}
+                  className="cursor-pointer focus:outline-none"
+                  onMouseEnter={() => setHoveredTown(town)}
+                  onMouseLeave={() => setHoveredTown(null)}
+                  onFocus={() => setHoveredTown(town)}
+                  onBlur={() => setHoveredTown(null)}
+                >
+                  {/* Generous invisible hit area for effortless click/tap */}
+                  <circle
+                    cx={town.x}
+                    cy={town.y}
+                    r={town.isPrimary ? 9 : 6.5}
+                    fill="transparent"
+                  />
+
+                  {/* Signature outer ring for Layton Market Center */}
+                  {town.isMarketCenter && (
+                    <circle
+                      cx={town.x}
+                      cy={town.y}
+                      r={10.5}
+                      fill="none"
+                      stroke={KW_RED}
+                      strokeWidth={1.35}
+                      strokeOpacity={active ? 0.7 : 0.2}
+                    />
+                  )}
+
+                  {/* Hover / active focus ring */}
+                  {selected && (
+                    <circle
+                      cx={town.x}
+                      cy={town.y}
+                      r={11.5}
+                      fill={KW_RED_BRIGHT}
+                      fillOpacity={0.14}
+                      stroke={KW_RED_BRIGHT}
+                      strokeWidth={1.4}
+                    />
+                  )}
+
+                  {/* Visible Community Marker */}
+                  <motion.circle
+                    cx={town.x}
+                    cy={town.y}
+                    r={selected ? baseRadius + 1.6 : baseRadius}
+                    fill={
+                      selected
+                        ? KW_RED_BRIGHT
+                        : town.isPrimary
+                          ? KW_RED
+                          : activeCounty && active
+                            ? KW_RED
+                            : "#8F1E1E"
+                    }
+                    stroke="#FFFFFF"
+                    strokeWidth={town.isPrimary || selected ? 1.6 : 1.1}
+                    initial={{ opacity: 0, scale: 0.4 }}
+                    animate={{
+                      opacity: inView ? (active ? 1 : 0.22) : 0,
+                      scale: inView ? 1 : 0.4,
+                    }}
+                    transition={{
+                      duration: 0.35,
+                      delay: inView ? Math.min(idx * 0.006, 0.35) : 0,
+                    }}
+                    style={{
+                      transformBox: "fill-box",
+                      transformOrigin: "center",
+                    }}
+                  />
+                </a>
+              );
+            })}
+          </g>
+
+          {/* Priority City Labels (always legible on desktop & mobile, non-colliding) */}
+          <g style={{ pointerEvents: "none" }}>
+            {towns
+              .filter((t) => PRIORITY_LABELS[t.name])
+              .map((t) => {
+                const pos = PRIORITY_LABELS[t.name];
+                const active = isTownActive(t);
+                const selected = activeTooltipTown?.name === t.name;
+                return (
+                  <text
+                    key={`city-lbl-${t.name}`}
+                    x={t.x + pos.dx}
+                    y={t.y + pos.dy}
+                    textAnchor={pos.anchor}
+                    fontSize={pos.featured ? 13 : 11.5}
+                    fontWeight={pos.featured || selected ? 700 : 600}
+                    fill={
+                      selected || pos.featured
+                        ? KW_RED
+                        : active
+                          ? INK
+                          : CHARCOAL
+                    }
+                    fillOpacity={active ? 1 : 0.28}
+                    stroke="#F8F6F2"
+                    strokeWidth={3.6}
+                    strokeLinejoin="round"
+                    style={{ paintOrder: "stroke" }}
+                  >
+                    {t.name}
+                  </text>
+                );
+              })}
+          </g>
+        </svg>
+
+        {/* Floating Hover / Search Tooltip */}
+        {activeTooltipTown && tooltipStyle && (
+          <div
+            className={cn(
+              "pointer-events-none absolute z-20 -translate-x-1/2 rounded-xl border border-ink/15 bg-ink-deep/95 px-3.5 py-2 text-center shadow-lift backdrop-blur-sm",
+              tooltipStyle.placeBelow
+                ? "translate-y-4"
+                : "-translate-y-[calc(100%_+_14px)]"
+            )}
+            style={{ left: tooltipStyle.left, top: tooltipStyle.top }}
+          >
+            <span className="block whitespace-nowrap text-sm font-semibold text-white">
+              {activeTooltipTown.name}
+              {activeTooltipTown.isMarketCenter && (
+                <span className="ml-1.5 rounded bg-kw-red px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-white">
+                  HQ
+                </span>
+              )}
+            </span>
+            <span className="block whitespace-nowrap text-[0.65rem] font-medium uppercase tracking-[0.16em] text-stone-dark">
+              {activeTooltipTown.county} · Search homes →
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Selected County Quick Community Links (great for mobile & dense counties) */}
+      {selectedGroup && (
+        <div className="rounded-xl border border-ink/10 bg-[#FAF8F4] p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="text-sm font-semibold text-ink">
+                {selectedGroup.county}
+              </p>
+              {selectedGroup.note && (
+                <p className="text-xs text-charcoal">{selectedGroup.note}</p>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => setSelectedCounty(null)}
+              className="text-xs font-semibold text-kw-red hover:underline"
+            >
+              Show all 9 counties
+            </button>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {selectedGroup.communities.map((comm) => {
+              const town = towns.find((t) => t.name === comm);
+              if (!town) return null;
+              return (
+                <a
+                  key={comm}
+                  href={town.searchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onMouseEnter={() => setHoveredTown(town)}
+                  onMouseLeave={() => setHoveredTown(null)}
+                  className="group inline-flex items-center gap-1 rounded-full border border-ink/12 bg-white px-3 py-1 text-xs font-medium text-ink transition-colors hover:border-kw-red hover:bg-kw-red hover:text-white"
+                >
+                  <span>{comm}</span>
+                  <ExternalLink className="h-2.5 w-2.5 opacity-55 group-hover:opacity-100" />
+                </a>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
@@ -994,19 +976,19 @@ export default function NetworkMap() {
   return wide ? (
     <div
       ref={rootRef}
-      className="grid grid-cols-[minmax(0,4fr)_minmax(0,8fr)] gap-14 xl:grid-cols-[minmax(0,3.2fr)_minmax(0,6.8fr)]"
+      className="grid grid-cols-[minmax(0,3.6fr)_minmax(0,8.4fr)] items-start gap-10 xl:grid-cols-[minmax(0,3.2fr)_minmax(0,8.8fr)] xl:gap-12"
     >
       <div className="sticky top-24 self-start">
         {headerBlock}
-        {filterListBlock}
+        {countyListBlock}
       </div>
       {mapCanvas}
     </div>
   ) : (
-    <div ref={rootRef} className="flex flex-col gap-10">
+    <div ref={rootRef} className="flex flex-col gap-7">
       {headerBlock}
       {mapCanvas}
-      {filterListBlock}
+      {countyListBlock}
     </div>
   );
 }

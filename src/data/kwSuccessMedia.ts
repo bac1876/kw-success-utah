@@ -39,10 +39,10 @@ export const OFFICE_TOUR_PHOTOS: OfficePhotoItem[] = [
   {
     id: "boardroom",
     title: "Executive Closing & Strategy Boardroom",
-    tag: "One Table Suite",
+    tag: "Connected Services",
     image: "/kw-success/office/office-boardroom.jpg?v=2",
     caption:
-      "Where buyers, sellers, advisors, Unity Home Loans, and Amicus Title come together around one table.",
+      "Where buyers, sellers, advisors, and Unity Home Loans work together.",
   },
   {
     id: "training",
@@ -154,7 +154,7 @@ export const CULTURE_STORIES: CultureStoryItem[] = [
     id: "awards-team",
     category: "Awards Breakfast",
     title: "Top Producing Team & Luxury Recognition",
-    subtitle: "Celebrating high-performing teams across Weber, Davis & Morgan",
+    subtitle: "Celebrating high-performing teams across Northern Utah",
     image: "/kw-success/stories/awards-team.jpg?v=2",
     year: "Awards Breakfast",
   },
@@ -191,15 +191,6 @@ export const CULTURE_STORIES: CultureStoryItem[] = [
     subtitle: "Honoring milestone production at the annual Awards Breakfast",
     image: "/kw-success/stories/awards-bronze.jpg?v=2",
     year: "Awards Breakfast",
-  },
-  {
-    id: "party-halloween",
-    category: "Office Parties",
-    title: "Market Center Halloween Costume Contest",
-    subtitle:
-      "High-energy culture where we work hard and celebrate every season together",
-    image: "/kw-success/stories/party-halloween.jpg?v=2",
-    year: "Office Celebration",
   },
 ];
 

@@ -22,16 +22,16 @@ import {
   Users,
 } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
-import FourSeats from "@/components/FourSeats";
+import SevenChapters from "@/components/SevenChapters";
 import ThreePillars from "@/components/ThreePillars";
 import StatsBand, { type StatItem } from "@/components/StatsBand";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
+import BestOfState from "@/components/BestOfState";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
-import Parallax from "@/components/motion/Parallax";
 import SplitChars from "@/components/motion/SplitChars";
 import SpotlightCard from "@/components/motion/SpotlightCard";
-import NetworkMap from "@/components/motion/NetworkMap";
+import NetworkMap, { UTAH_AREA_COUNT } from "@/components/motion/NetworkMap";
 import { cn } from "@/lib/utils";
 import { usePageMeta } from "@/lib/usePageMeta";
 
@@ -57,15 +57,16 @@ const HOME_STATS: StatItem[] = activeBrokerage.home.stats.map((s) => ({
 
 const WASATCH_COMMUNITIES_TICKER = [
   "Layton Market Center",
-  "Ogden & Ogden Valley",
   "Kaysville & Fruit Heights",
   "Farmington & Centerville",
   "Bountiful & North Salt Lake",
   "Syracuse & West Point",
   "South Weber & Uintah",
   "Morgan & Mountain Green",
-  "Huntsville & Eden",
-  "North Ogden & Pleasant View",
+  "Salt Lake City & Sandy",
+  "Park City & Coalville",
+  "Brigham City & Tremonton",
+  "Logan & Smithfield",
 ];
 
 /* ------------------------------------------------------------------ */
@@ -254,7 +255,7 @@ function Hero() {
                 (item, idx) => (
                   <span
                     key={`${item}-${idx}`}
-                    className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-stone-dark"
+                    className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-snow/70"
                   >
                     <span className="h-1 w-1 rounded-full bg-kw-red-bright" />
                     {item}
@@ -269,7 +270,7 @@ function Hero() {
             onClick={() => scrollTo("#connected")}
             className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-snow/85 transition-colors hover:text-white"
           >
-            <span>Explore One Table</span>
+            <span>Learn More</span>
             <ChevronDown className="h-4 w-4 animate-bounce text-kw-red-bright" />
           </button>
         </div>
@@ -278,60 +279,6 @@ function Hero() {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* §5.2 "Everyone at One Table" (Dark Architectural Slate Section)     */
-/* ------------------------------------------------------------------ */
-
-function EveryoneAtOneTable() {
-  const { oneTable } = activeBrokerage.home;
-
-  return (
-    <section
-      id="connected"
-      className="relative overflow-hidden bg-ink py-24 text-snow md:py-32"
-    >
-      {/* Ambient background glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/3 h-[34rem] w-[56rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-kw-red/10 blur-3xl"
-      />
-
-      <div className="container-kw relative z-10">
-        {/* Asymmetric Modern Editorial Header */}
-        <div className="grid items-end gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <Reveal>
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
-                  01
-                </span>
-                <span className="type-label text-kw-red-bright">
-                  {oneTable.eyebrow}
-                </span>
-              </div>
-            </Reveal>
-
-            <h2 className="type-display-lg mt-5 text-white text-balance">
-              <SplitWords text={oneTable.headline} />
-            </h2>
-          </div>
-
-          <div className="lg:col-span-5">
-            <Reveal delay={0.15}>
-              <p className="type-body text-stone-dark leading-relaxed">
-                {oneTable.body}
-              </p>
-            </Reveal>
-          </div>
-        </div>
-
-        <Parallax distance={-12} className="mt-14">
-          <FourSeats tone="dark" showJourney />
-        </Parallax>
-      </div>
-    </section>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /* §5.3 The Success Idea (Cool Wasatch Sky Mist Section)               */
@@ -391,7 +338,7 @@ function TheSuccessIdea() {
               maxTilt={3}
               spotlightColor="rgba(209, 25, 25, 0.25)"
               borderGlowColor="rgba(255, 80, 80, 0.9)"
-              className="group flex h-full flex-col justify-between rounded-3xl border border-ink/10 bg-ink p-8 text-snow shadow-lift md:p-12"
+              className="group flex h-full flex-col justify-between rounded-3xl border border-ink/10 bg-white p-8 text-ink shadow-lift md:p-12"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -404,19 +351,19 @@ function TheSuccessIdea() {
                   </span>
                 </div>
 
-                <h3 className="mt-7 text-2xl font-bold leading-snug text-white md:text-3xl">
+                <h3 className="mt-7 text-2xl font-bold leading-snug text-ink md:text-3xl">
                   Build the business that funds your version of success.
                 </h3>
 
-                <p className="type-body mt-4 leading-relaxed text-stone-dark">
+                <p className="type-body mt-4 leading-relaxed text-charcoal">
                   {successIdea.forAgentsBody}
                 </p>
               </div>
 
-              <div className="mt-10 border-t border-white/10 pt-6">
+              <div className="mt-10 border-t border-ink/10 pt-6">
                 <Link
                   to="/agents"
-                  className="group/btn inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-colors hover:text-kw-red-bright"
+                  className="group/btn inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-kw-red-bright"
                 >
                   <span>Explore For Agents</span>
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-kw-red text-white transition-transform duration-300 group-hover/btn:rotate-45">
@@ -572,7 +519,7 @@ const CONTINUITY_MILESTONES = [
     year: "1997",
     title: "Founded in Northern Utah",
     detail:
-      "Built in the communities of Weber, Davis, and Morgan Counties with a commitment to coaching, leadership, and lifelong client care.",
+      "Built in the communities of Northern Utah with a commitment to coaching, leadership, and lifelong client care.",
   },
   {
     year: "20,000+",
@@ -582,9 +529,9 @@ const CONTINUITY_MILESTONES = [
   },
   {
     year: "Today",
-    title: "Everyone at One Table",
+    title: "One Trusted Advisor for Every Chapter",
     detail:
-      "Your KW Success Trusted Advisor coordinates lending, title, insurance, inspections, and trusted local trades under one roof.",
+      "Your KW Success Trusted Advisor coordinates lending, insurance, inspections, and trusted local trades — your first call for anything your home needs.",
   },
 ];
 
@@ -740,7 +687,7 @@ function OurPromise() {
 /* §5.7 Home Search ("When You're Ready") + Interactive Wasatch Map    */
 /* ------------------------------------------------------------------ */
 
-const TABS = ["Buy", "Sell", "Rent"] as const;
+const TABS = ["Buy", "Sell"] as const;
 const QUICK_TOWNS = [
   "Layton",
   "Kaysville",
@@ -773,7 +720,7 @@ function HomeSearchSection() {
   };
 
   const fieldCls =
-    "w-full rounded-xl border border-white/15 bg-ink-deep px-4 py-3.5 text-sm text-white outline-none transition-colors placeholder:text-stone-dark focus:border-kw-red";
+    "w-full rounded-xl border border-ink/20 bg-mist px-4 py-3.5 text-sm text-ink outline-none transition-colors placeholder:text-charcoal/50 focus:border-kw-red";
 
   return (
     <section id="home-search" className="bg-mist py-24 text-ink md:py-32">
@@ -799,16 +746,16 @@ function HomeSearchSection() {
               className="group inline-flex items-center gap-2.5 rounded-full border border-ink/20 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-ink transition-all hover:border-kw-red hover:text-kw-red"
             >
               <Compass className="h-4 w-4 text-kw-red" />
-              <span>Full 35-Community Directory</span>
+              <span>Full {UTAH_AREA_COUNT}-Community Directory</span>
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </Reveal>
         </div>
 
-        {/* High-Contrast Dark Slate Search Console */}
-        <div className="mt-12 overflow-hidden rounded-3xl border border-ink/10 bg-ink text-snow shadow-lift">
-          {/* Buy / Sell / Rent Tabs */}
-          <div className="flex border-b border-white/10 bg-ink-deep/60 px-6 pt-4">
+        {/* Light Search Console */}
+        <div className="mt-12 overflow-hidden rounded-3xl border border-ink/10 bg-white text-ink shadow-lift">
+          {/* Buy / Sell Tabs */}
+          <div className="flex border-b border-ink/10 bg-mist px-6 pt-4">
             {TABS.map((t) => (
               <button
                 key={t}
@@ -817,8 +764,8 @@ function HomeSearchSection() {
                 className={cn(
                   "relative px-7 py-3.5 text-xs font-bold uppercase tracking-[0.22em] transition-colors",
                   tab === t
-                    ? "text-white"
-                    : "text-stone-dark hover:text-white"
+                    ? "text-ink"
+                    : "text-charcoal hover:text-ink"
                 )}
               >
                 {t}
@@ -836,13 +783,12 @@ function HomeSearchSection() {
           {tab === "Sell" ? (
             <div className="flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center md:p-10">
               <div>
-                <p className="text-xl font-bold text-white">
+                <p className="text-xl font-bold text-ink">
                   Thinking about selling your home in Northern Utah?
                 </p>
-                <p className="mt-2 text-sm text-stone-dark">
+                <p className="mt-2 text-sm text-charcoal">
                   Connect with a KW Success Trusted Advisor for a personalized
-                  market valuation and selling strategy across Weber, Davis, or
-                  Morgan County.
+                  market valuation and selling strategy across Northern Utah.
                 </p>
               </div>
               <Link
@@ -862,7 +808,7 @@ function HomeSearchSection() {
                 className="grid gap-5 md:grid-cols-[1.5fr_1fr_0.8fr_auto] md:items-end"
               >
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-charcoal">
                     Community / ZIP
                   </label>
                   <input
@@ -873,7 +819,7 @@ function HomeSearchSection() {
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-charcoal">
                     Price Range
                   </label>
                   <select
@@ -890,7 +836,7 @@ function HomeSearchSection() {
                   </select>
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-charcoal">
                     Beds
                   </label>
                   <select
@@ -918,8 +864,8 @@ function HomeSearchSection() {
               </form>
 
               {/* Quick-select Northern Utah Community Chips */}
-              <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-white/10 pt-4">
-                <span className="text-[0.68rem] font-bold uppercase tracking-wider text-stone-dark">
+              <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-4">
+                <span className="text-[0.68rem] font-bold uppercase tracking-wider text-charcoal">
                   Quick Select:
                 </span>
                 {QUICK_TOWNS.map((town) => (
@@ -931,7 +877,7 @@ function HomeSearchSection() {
                       "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                       location === town
                         ? "border-kw-red bg-kw-red text-white"
-                        : "border-white/10 bg-white/5 text-snow/80 hover:border-kw-red/50 hover:text-white"
+                        : "border-ink/20 bg-mist text-ink hover:border-kw-red/50 hover:bg-kw-red/10"
                     )}
                   >
                     {town}
@@ -942,8 +888,8 @@ function HomeSearchSection() {
           )}
         </div>
 
-        {/* Interactive Wasatch Front Map Showcase right on the Home Page */}
-        <div className="mt-10 overflow-hidden rounded-3xl border border-ink/10 bg-ink-deep shadow-lift">
+        {/* Interactive Northern Utah Map Showcase right on the Home Page */}
+        <div className="mt-10 overflow-hidden rounded-3xl border border-ink/10 bg-white p-6 shadow-lift sm:p-8 lg:p-10">
           <NetworkMap />
         </div>
       </div>
@@ -959,7 +905,7 @@ function ClosingCTA() {
   const { closingCta } = activeBrokerage.home;
 
   return (
-    <section className="relative overflow-hidden bg-ink py-24 text-snow md:py-32">
+    <section className="relative overflow-hidden bg-mist py-24 text-ink md:py-32">
       {/* Subtle Wasatch radial glow */}
       <div
         aria-hidden
@@ -1024,16 +970,16 @@ export default function Home() {
     <>
       {/* §5.1 Hero (Wasatch Mountain Panorama) */}
       <Hero />
-      {/* §5.2 Everyone at One Table (Dark Slate Interactive Neural Hub) */}
-      <EveryoneAtOneTable />
+      {/* §5.2 One Trusted Advisor for Every Chapter */}
+      <SevenChapters className="bg-snow" />
       {/* §5.3 The Success Idea (Cool Sky Mist + 3D Tilt Cards) */}
       <TheSuccessIdea />
-      {/* §5.4 The Three Pillars (Deep Slate + Animated SVG Visualizations) */}
-      <ThreePillars mode="toggle" tone="dark" />
+      {/* §5.4 The Three Pillars (Light Stone + Animated SVG Visualizations) */}
+      <ThreePillars mode="toggle" tone="light" />
       {/* §5.5 Our Promise (Cool Mist + Interactive Continuity Stepper) */}
       <OurPromise />
       {/* §5.6 Stats Band + Best of State Badge (Deep Slate Bento) */}
-      <StatsBand stats={HOME_STATS} />
+      <StatsBand stats={HOME_STATS} className="bg-ink-deep" />
       {/* §5.7 Home Search + Interactive Wasatch Front Map */}
       <HomeSearchSection />
       {/* §5.8 Testimonials (hidden by flag showTestimonials=false until real) */}
@@ -1044,6 +990,8 @@ export default function Home() {
           </div>
         </section>
       )}
+      {/* Best of State Recognition */}
+      <BestOfState className="bg-snow" />
       {/* §5.9 Closing CTA (Dark Slate Architectural Banner) */}
       <ClosingCTA />
     </>

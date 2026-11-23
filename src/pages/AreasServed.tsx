@@ -57,27 +57,26 @@ export default function AreasServed() {
                 {contact.fullAddress}
               </span>
               <span>
-                {UTAH_AREA_COUNT} Communities Across Davis, Weber &amp; Morgan
-                Counties
+                {UTAH_AREA_COUNT}+ Communities Across All of Northern Utah
               </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* §9 Interactive Wasatch Front Network Map (Dark Slate Section) */}
-      <section id="network-map" className="bg-ink py-20 text-snow md:py-28">
+      {/* §9 Interactive Wasatch Front Network Map (Light Background Section) */}
+      <section id="network-map" className="bg-snow py-20 text-ink md:py-28">
         <div className="container-kw">
-          <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
+          <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-ink/10 pb-6">
             <div className="flex items-center gap-2.5">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
                 01
               </span>
-              <span className="type-label text-kw-red-bright">
-                Interactive Wasatch Front Coverage Map
+              <span className="type-label text-kw-red">
+                Interactive Northern Utah Coverage Map
               </span>
             </div>
-            <span className="text-xs text-stone-dark">
+            <span className="text-xs text-charcoal">
               Click any town dot to search active homes on kw.com
             </span>
           </div>
@@ -102,7 +101,7 @@ export default function AreasServed() {
                 </div>
               </Reveal>
               <h2 className="type-display-lg mt-5 text-ink">
-                <SplitWords text="WEBER, DAVIS & MORGAN COUNTIES." />
+                <SplitWords text="ALL OF NORTHERN UTAH." />
               </h2>
             </div>
 
