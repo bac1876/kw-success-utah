@@ -583,17 +583,15 @@ export default function About() {
               READY TO WRITE YOUR SUCCESS STORY?
             </h2>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href={externalLinks.findAgentUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/agents#talk-to-leadership"
                 className="group inline-flex items-center gap-3.5 rounded-full bg-kw-red py-2.5 pl-7 pr-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
               >
-                <span>Find Your Agent</span>
+                <span>Explore a Career With Us</span>
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-kw-red transition-transform duration-300 group-hover:rotate-45">
                   <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
                 </span>
-              </a>
+              </Link>
 
               <Link
                 to="/agents"
