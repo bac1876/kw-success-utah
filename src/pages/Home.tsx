@@ -22,14 +22,13 @@ import {
   Users,
 } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
-import FourSeats from "@/components/FourSeats";
+import SevenChapters from "@/components/SevenChapters";
 import ThreePillars from "@/components/ThreePillars";
 import StatsBand, { type StatItem } from "@/components/StatsBand";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import BestOfState from "@/components/BestOfState";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
-import Parallax from "@/components/motion/Parallax";
 import SplitChars from "@/components/motion/SplitChars";
 import SpotlightCard from "@/components/motion/SpotlightCard";
 import NetworkMap from "@/components/motion/NetworkMap";
@@ -279,60 +278,6 @@ function Hero() {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* §5.2 "One Trusted Advisor" (Light Section)     */
-/* ------------------------------------------------------------------ */
-
-function EveryoneAtOneTable() {
-  const { oneTable } = activeBrokerage.home;
-
-  return (
-    <section
-      id="connected"
-      className="relative overflow-hidden bg-snow py-24 text-ink md:py-32"
-    >
-      {/* Ambient background glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/3 h-[34rem] w-[56rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-kw-red/10 blur-3xl"
-      />
-
-      <div className="container-kw relative z-10">
-        {/* Asymmetric Modern Editorial Header */}
-        <div className="grid items-end gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <Reveal>
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
-                  01
-                </span>
-                <span className="type-label text-kw-red-bright">
-                  {oneTable.eyebrow}
-                </span>
-              </div>
-            </Reveal>
-
-            <h2 className="type-display-lg mt-5 text-ink text-balance">
-              <SplitWords text={oneTable.headline} />
-            </h2>
-          </div>
-
-          <div className="lg:col-span-5">
-            <Reveal delay={0.15}>
-              <p className="type-body text-charcoal leading-relaxed">
-                {oneTable.body}
-              </p>
-            </Reveal>
-          </div>
-        </div>
-
-        <Parallax distance={-12} className="mt-14">
-          <FourSeats tone="light" showJourney />
-        </Parallax>
-      </div>
-    </section>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /* §5.3 The Success Idea (Cool Wasatch Sky Mist Section)               */
@@ -1025,8 +970,8 @@ export default function Home() {
     <>
       {/* §5.1 Hero (Wasatch Mountain Panorama) */}
       <Hero />
-      {/* §5.2 One Trusted Advisor (Dark Slate Interactive Hub) */}
-      <EveryoneAtOneTable />
+      {/* §5.2 One Trusted Advisor for Every Chapter */}
+      <SevenChapters className="bg-snow" />
       {/* §5.3 The Success Idea (Cool Sky Mist + 3D Tilt Cards) */}
       <TheSuccessIdea />
       {/* §5.4 The Three Pillars (Deep Slate + Animated SVG Visualizations) */}

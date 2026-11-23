@@ -11,7 +11,7 @@ import {
   Users,
 } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
-import FourSeats from "@/components/FourSeats";
+import SevenChapters from "@/components/SevenChapters";
 import BestOfState from "@/components/BestOfState";
 import ThreePillars from "@/components/ThreePillars";
 import Reveal, { SplitWords } from "@/components/Reveal";
@@ -25,7 +25,6 @@ const WHY_ICONS = [ShieldCheck, Compass, Award, MapPin];
 export default function Clients() {
   usePageMeta("Buy & Sell", activeBrokerage.clientsPage.hero.subhead);
   const { clientsPage, externalLinks, disclosures } = activeBrokerage;
-  const { oneTable } = activeBrokerage.home;
 
   return (
     <>
@@ -104,6 +103,9 @@ export default function Clients() {
         </div>
       </section>
 
+      {/* §7 One Trusted Advisor for Every Chapter */}
+      <SevenChapters className="bg-mist" />
+
       {/* §7 Three Pillars in Client Terms (Cool Sky Mist Section) */}
       <ThreePillars mode="clients" tone="light" />
 
@@ -176,38 +178,6 @@ export default function Clients() {
         </div>
       </section>
 
-      {/* §7 One Trusted Advisor (Cool Sky Mist Section) */}
-      <section className="bg-mist py-24 text-ink md:py-32">
-        <div className="container-kw">
-          <div className="grid items-end gap-8 lg:grid-cols-12">
-            <div className="lg:col-span-7">
-              <Reveal>
-                <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1.5">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
-                    03
-                  </span>
-                  <span className="type-label text-kw-red">
-                    {oneTable.eyebrow}
-                  </span>
-                </div>
-              </Reveal>
-              <h2 className="type-display-lg mt-5 text-ink text-balance">
-                <SplitWords text={oneTable.headline} />
-              </h2>
-            </div>
-
-            <div className="lg:col-span-5">
-              <Reveal delay={0.15}>
-                <p className="type-body text-charcoal">{oneTable.body}</p>
-              </Reveal>
-            </div>
-          </div>
-
-          <div className="mt-14">
-            <FourSeats tone="light" showJourney />
-          </div>
-        </div>
-      </section>
 
       {/* §7 Closing CTA + Fair Housing Commitment (Dark Slate) */}
       <section className="bg-ink-deep py-24 text-snow md:py-28">
