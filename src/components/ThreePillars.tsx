@@ -207,7 +207,7 @@ export default function ThreePillars({
     audience === "agents" ? threePillars.forAgents : threePillars.forClients;
   const highlights =
     audience === "agents" ? AGENT_HIGHLIGHTS : CLIENT_HIGHLIGHTS;
-  const targetUrl = audience === "agents" ? "/agents" : "/clients";
+  const targetUrl = audience === "agents" ? "/agents#talk-to-leadership" : "/contact";
 
   return (
     <section
