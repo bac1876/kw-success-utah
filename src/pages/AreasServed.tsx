@@ -57,8 +57,7 @@ export default function AreasServed() {
                 {contact.fullAddress}
               </span>
               <span>
-                {UTAH_AREA_COUNT} Communities Across Davis, Weber &amp; Morgan
-                Counties
+                {UTAH_AREA_COUNT}+ Communities Across All of Northern Utah
               </span>
             </div>
           </div>

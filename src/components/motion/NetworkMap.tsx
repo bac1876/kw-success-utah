@@ -58,11 +58,87 @@ export const UTAH_AREA_GROUPS: AreaGroup[] = [
   },
   {
     county: "Morgan County",
-    note: "Wasatch Back & Weber Canyon Communities",
+    note: "Weber Canyon Communities",
     communities: [
       "Morgan",
       "Mountain Green",
       "Croydon",
+    ],
+  },
+  {
+    county: "Salt Lake County",
+    note: "Greater Salt Lake Metro",
+    communities: [
+      "Salt Lake City",
+      "Sandy",
+      "West Jordan",
+      "South Jordan",
+      "Draper",
+      "Murray",
+      "Herriman",
+      "West Valley City",
+      "Riverton",
+      "Cottonwood Heights",
+      "Millcreek",
+      "Holladay",
+      "Taylorsville",
+      "South Salt Lake",
+    ],
+  },
+  {
+    county: "Tooele County",
+    note: "West of Salt Lake Valley",
+    communities: [
+      "Tooele",
+      "Grantsville",
+      "Stansbury Park",
+    ],
+  },
+  {
+    county: "Summit County",
+    note: "Park City & Wasatch Back",
+    communities: [
+      "Park City",
+      "Heber City",
+      "Kamas",
+      "Coalville",
+      "Francis",
+      "Oakley",
+    ],
+  },
+  {
+    county: "Box Elder County",
+    note: "Northern Utah Gateway",
+    communities: [
+      "Brigham City",
+      "Tremonton",
+      "Perry",
+      "Willard",
+      "Bear River City",
+      "Mantua",
+    ],
+  },
+  {
+    county: "Cache County",
+    note: "Logan & Bear Lake Region",
+    communities: [
+      "Logan",
+      "North Logan",
+      "Smithfield",
+      "Hyde Park",
+      "Nibley",
+      "Providence",
+      "Millville",
+      "River Heights",
+    ],
+  },
+  {
+    county: "Rich County",
+    note: "Bear Lake Gateway",
+    communities: [
+      "Garden City",
+      "Randolph",
+      "Laketown",
     ],
   },
 ];
@@ -111,14 +187,53 @@ const COORDS: Record<string, [number, number]> = {
   // Morgan County
   Morgan: [41.0361, -111.6766],
   "Mountain Green": [41.1458, -111.7927],
-  Peterson: [41.1136, -111.758],
-  Milton: [41.0711, -111.7202],
-  Enterprise: [41.0886, -111.7347],
-  Porterville: [40.9855, -111.6788],
   Croydon: [41.0644, -111.565],
-  // Regional Gateway
+  // Salt Lake County
   "Salt Lake City": [40.7608, -111.891],
-  "Park City": [40.755, -111.565],
+  Sandy: [40.5649, -111.8389],
+  "West Jordan": [40.6097, -111.9391],
+  "South Jordan": [40.5622, -111.9296],
+  Draper: [40.5246, -111.8638],
+  Murray: [40.6669, -111.8879],
+  Herriman: [40.5141, -112.0333],
+  "West Valley City": [40.6916, -112.0011],
+  Riverton: [40.521, -111.9391],
+  "Cottonwood Heights": [40.6197, -111.8102],
+  Millcreek: [40.6869, -111.8757],
+  Holladay: [40.6688, -111.8243],
+  Taylorsville: [40.6677, -111.9388],
+  "South Salt Lake": [40.7188, -111.8882],
+  // Tooele County
+  Tooele: [40.5308, -112.2983],
+  Grantsville: [40.5999, -112.4644],
+  "Stansbury Park": [40.6377, -112.2961],
+  // Summit County
+  "Park City": [40.6461, -111.4980],
+  "Heber City": [40.5069, -111.4132],
+  Kamas: [40.6430, -111.2807],
+  Coalville: [40.9177, -111.3999],
+  Francis: [40.6108, -111.2816],
+  Oakley: [40.7152, -111.3002],
+  // Box Elder County
+  "Brigham City": [41.5102, -112.0155],
+  Tremonton: [41.7116, -112.1655],
+  Perry: [41.4647, -112.0325],
+  Willard: [41.4091, -112.0366],
+  "Bear River City": [41.6166, -112.1230],
+  Mantua: [41.4969, -111.9447],
+  // Cache County
+  Logan: [41.7369, -111.8338],
+  "North Logan": [41.7694, -111.8047],
+  Smithfield: [41.8386, -111.8313],
+  "Hyde Park": [41.7991, -111.8188],
+  Nibley: [41.6747, -111.8327],
+  Providence: [41.7064, -111.8166],
+  Millville: [41.6808, -111.8191],
+  "River Heights": [41.7194, -111.8216],
+  // Rich County
+  "Garden City": [41.9472, -111.3980],
+  Randolph: [41.6647, -111.1819],
+  Laketown: [41.8294, -111.3177],
 };
 
 interface HubDef {
@@ -129,80 +244,8 @@ interface HubDef {
   communities: string[];
 }
 
-const HUB_DEFS: HubDef[] = [
-  {
-    slug: "kw-success-layton",
-    name: "KW Success Market Center",
-    homeCity: "Layton",
-    subtitle: "Layton HQ · Davis County",
-    communities: [
-      "Layton",
-      "Kaysville",
-      "Farmington",
-      "Fruit Heights",
-      "Clearfield",
-      "Syracuse",
-      "West Point",
-      "Clinton",
-      "Sunset",
-      "South Weber",
-      "Ogden",
-      "Morgan",
-      "Bountiful",
-    ],
-  },
-  {
-    slug: "weber-corridor",
-    name: "Weber & Ogden Valley Hub",
-    homeCity: "Ogden",
-    subtitle: "Ogden · Weber County & Ogden Valley",
-    communities: [
-      "Ogden",
-      "South Ogden",
-      "Washington Terrace",
-      "Riverdale",
-      "Roy",
-      "Hooper",
-      "Plain City",
-      "Farr West",
-      "Harrisville",
-      "North Ogden",
-      "Pleasant View",
-      "Eden",
-      "Huntsville",
-      "Liberty",
-      "Marriott-Slaterville",
-      "Uintah",
-      "West Haven",
-    ],
-  },
-  {
-    slug: "morgan-wasatch-back",
-    name: "Wasatch Back & Morgan Hub",
-    homeCity: "Morgan",
-    subtitle: "Morgan · Mountain Green & Croydon",
-    communities: [
-      "Morgan",
-      "Mountain Green",
-      "Croydon",
-      "Huntsville",
-    ],
-  },
-  {
-    slug: "south-davis-slc",
-    name: "South Davis Corridor",
-    homeCity: "Bountiful",
-    subtitle: "Bountiful · Farmington to North Salt Lake",
-    communities: [
-      "Bountiful",
-      "Centerville",
-      "Farmington",
-      "West Bountiful",
-      "Woods Cross",
-      "North Salt Lake",
-    ],
-  },
-];
+// Coverage Hubs removed per Item 8 - all communities now served directly
+const HUB_DEFS: HubDef[] = [];
 
 // Great Salt Lake eastern shoreline coordinates (North to South)
 const SHORE_COORDS: [number, number][] = [
@@ -232,10 +275,10 @@ const WASATCH_RIDGE_COORDS: [number, number][] = [
 ];
 
 const BOUNDS = {
-  latMin: 40.72,
-  latMax: 41.37,
-  lngMin: -112.22,
-  lngMax: -111.51,
+  latMin: 40.48,  // Extended south for Salt Lake County
+  latMax: 41.95,  // Extended north for Cache & Rich Counties
+  lngMin: -112.52,  // Extended west for Tooele County
+  lngMax: -111.18,  // Extended east for Rich County (Bear Lake)
 };
 
 const W = 1000;
@@ -500,10 +543,9 @@ export default function NetworkMap() {
         Every dot is a Utah community we serve.
       </h2>
       <p className="type-body-sm mt-4 max-w-sm text-white/65">
-        Anchored in Layton — {UTAH_AREA_COUNT}+ communities across Davis, Weber,
-        and Morgan Counties, plus the greater Salt Lake Metro. The copper
-        threads trace our advisors&apos; daily reach from the Great Salt Lake to
-        the Wasatch Back.
+        Anchored in Layton — {UTAH_AREA_COUNT}+ communities across all of Northern Utah.
+        Licensed to serve the entire state. The copper threads trace our advisors&apos; 
+        daily reach from the Great Salt Lake to Bear Lake and the Wasatch Back.
       </p>
 
       <label className="mt-8 flex items-center gap-3 border-b hairline-dark pb-3 focus-within:border-copper">
