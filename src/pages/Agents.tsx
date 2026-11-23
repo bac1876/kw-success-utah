@@ -226,25 +226,25 @@ export default function Agents() {
       {/* §5.4 Agent Three Pillars (Cool Sky Mist Section — Agent Pillars Only) */}
       <ThreePillars mode="agents" tone="light" />
 
-      {/* §6.5 What Every Agent Gets (Deep Slate 9-Tile Bento Grid + Launch Coaching) */}
-      <section className="bg-ink-deep py-24 text-snow md:py-32">
+      {/* §6.5 What Every Agent Gets (Light Background 9-Tile Bento Grid + Launch Coaching) */}
+      <section className="bg-snow py-24 text-ink md:py-32">
         <div className="container-kw">
           <div className="max-w-3xl">
             <Reveal>
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/35 bg-kw-red/10 px-3.5 py-1.5">
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-kw-red/30 bg-kw-red/10 px-3.5 py-1.5">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-kw-red text-[0.65rem] font-bold text-white">
                   04
                 </span>
-                <span className="type-label text-kw-red-bright">
+                <span className="type-label text-kw-red">
                   Tools, Coaching &amp; Support
                 </span>
               </div>
             </Reveal>
 
-            <h2 className="type-display-lg mt-5 text-white">
+            <h2 className="type-display-lg mt-5 text-ink">
               <SplitWords text="WHAT EVERY AGENT GETS." />
             </h2>
-            <p className="type-lead mt-4 text-stone-dark">
+            <p className="type-lead mt-4 text-charcoal">
               {agentsPage.whatEveryAgentGetsIntro}
             </p>
           </div>
@@ -255,22 +255,22 @@ export default function Agents() {
               const Icon = TILE_ICONS[idx % TILE_ICONS.length];
               return (
                 <Reveal key={tile.title} delay={0.04 * idx} y={20}>
-                  <div className="group flex h-full flex-col justify-between rounded-2xl border border-white/10 bg-ink p-7 transition-all duration-300 hover:border-kw-red/60 hover:bg-slate-card">
+                  <div className="group flex h-full flex-col justify-between rounded-2xl border border-ink/10 bg-white p-7 shadow-card transition-all duration-300 hover:border-kw-red/50">
                     <div>
                       <div className="flex items-center justify-between gap-2">
-                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-kw-red/15 text-kw-red-bright group-hover:bg-kw-red group-hover:text-white">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-kw-red/10 text-kw-red group-hover:bg-kw-red group-hover:text-white">
                           <Icon className="h-5 w-5" />
                         </span>
                         {tile.badge && (
-                          <span className="rounded-full border border-kw-red/40 bg-kw-red/15 px-3 py-0.5 text-[0.62rem] font-bold uppercase tracking-wider text-kw-red-bright">
+                          <span className="rounded-full border border-kw-red/30 bg-kw-red/10 px-3 py-0.5 text-[0.62rem] font-bold uppercase tracking-wider text-kw-red">
                             {tile.badge}
                           </span>
                         )}
                       </div>
-                      <h3 className="mt-5 text-lg font-bold text-white">
+                      <h3 className="mt-5 text-lg font-bold text-ink">
                         {tile.title}
                       </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-stone-dark">
+                      <p className="mt-2 text-sm leading-relaxed text-charcoal">
                         {tile.body}
                       </p>
                     </div>
@@ -282,19 +282,19 @@ export default function Agents() {
 
           {/* §6.5 New Agents Callout: Launch Productivity Coaching */}
           <Reveal delay={0.2}>
-            <div className="mt-8 flex flex-col items-start justify-between gap-6 rounded-3xl border border-kw-red/50 bg-gradient-to-r from-kw-red/20 via-ink to-ink p-8 sm:flex-row sm:items-center md:p-10">
+            <div className="mt-8 flex flex-col items-start justify-between gap-6 rounded-3xl border border-kw-red/40 bg-gradient-to-r from-kw-red/10 via-mist to-mist p-8 sm:flex-row sm:items-center md:p-10">
               <div className="flex items-start gap-4">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-kw-red text-white">
                   <Rocket className="h-6 w-6" />
                 </span>
                 <div>
-                  <span className="type-label text-kw-red-bright">
+                  <span className="type-label text-kw-red">
                     {agentsPage.newAgentsCallout.label}
                   </span>
-                  <h3 className="mt-1 text-xl font-bold text-white">
+                  <h3 className="mt-1 text-xl font-bold text-ink">
                     {agentsPage.newAgentsCallout.title}
                   </h3>
-                  <p className="mt-1 text-sm text-stone-dark">
+                  <p className="mt-1 text-sm text-charcoal">
                     {agentsPage.newAgentsCallout.body}
                   </p>
                 </div>
@@ -360,7 +360,7 @@ export default function Agents() {
 
       {/* §6.7 Culture, Awards & Training in Action */}
       <CultureGallery
-        tone="dark"
+        tone="light"
         eyebrow="06 · Culture, Recognition & Training"
         headline="SEE OUR MARKET CENTER IN ACTION."
         subhead="Real moments from our annual Awards Breakfast, mastermind Team Meetings, and family events in Layton."

@@ -311,31 +311,31 @@ function MortgageSimulator() {
   const piShare = Math.round((principalAndInterest / totalMonthly) * 100);
 
   return (
-    <div className="border border-white/12 bg-[#111418] p-8 md:p-12">
+    <div className="border border-ink/15 bg-white p-8 shadow-card md:p-12">
       {/* Header Row */}
-      <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-ink/10 pb-6">
         <div>
-          <span className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-kw-red-bright">
+          <span className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-kw-red">
             SIMULATOR // 30-YEAR FIXED
           </span>
-          <h3 className="mt-2 text-2xl font-bold tracking-tight text-white">
+          <h3 className="mt-2 text-2xl font-bold tracking-tight text-ink">
             Run the Numbers Before You Offer.
           </h3>
         </div>
-        <span className="font-mono text-xs uppercase tracking-widest text-stone-dark">
+        <span className="font-mono text-xs uppercase tracking-widest text-charcoal">
           Utah County Tax Model
         </span>
       </div>
 
       {/* Live Output Display + Stacked Proportion Bar */}
-      <div className="mt-8 grid gap-6 border-b border-white/10 pb-8 sm:grid-cols-2 sm:items-end">
+      <div className="mt-8 grid gap-6 border-b border-ink/10 pb-8 sm:grid-cols-2 sm:items-end">
         <div>
-          <span className="font-mono text-[0.65rem] uppercase tracking-[0.22em] text-stone-dark">
+          <span className="font-mono text-[0.65rem] uppercase tracking-[0.22em] text-charcoal">
             Estimated Monthly Total
           </span>
-          <div className="mt-2 font-display text-5xl font-extrabold tracking-tight text-white tabular-nums">
+          <div className="mt-2 font-display text-5xl font-extrabold tracking-tight text-ink tabular-nums">
             ${totalMonthly.toLocaleString()}
-            <span className="ml-1 text-base font-normal text-stone-dark">
+            <span className="ml-1 text-base font-normal text-charcoal">
               /mo
             </span>
           </div>
@@ -343,24 +343,24 @@ function MortgageSimulator() {
 
         <div className="space-y-2.5">
           <div className="flex justify-between font-mono text-[0.68rem] uppercase tracking-wider">
-            <span className="text-white">
+            <span className="text-ink">
               P&amp;I · ${principalAndInterest.toLocaleString()}
             </span>
-            <span className="text-stone-dark">
+            <span className="text-charcoal">
               Tax &amp; Ins · ${estTaxesAndIns.toLocaleString()}
             </span>
           </div>
-          <div className="flex h-2 w-full overflow-hidden bg-white/10">
+          <div className="flex h-2 w-full overflow-hidden bg-ink/10">
             <div
               className="bg-kw-red transition-all duration-300"
               style={{ width: `${piShare}%` }}
             />
             <div
-              className="bg-white/35 transition-all duration-300"
+              className="bg-ink/25 transition-all duration-300"
               style={{ width: `${100 - piShare}%` }}
             />
           </div>
-          <div className="flex justify-between font-mono text-[0.62rem] text-stone-dark">
+          <div className="flex justify-between font-mono text-[0.62rem] text-charcoal">
             <span>Loan Amount: ${loanAmount.toLocaleString()}</span>
             <span>Down: ${downPayment.toLocaleString()}</span>
           </div>
@@ -797,15 +797,15 @@ export default function ServiceDetail() {
       {/* ============================================================
          SECTION 2 — FULL-WIDTH ARCHITECTURAL METRIC LEDGER
          ============================================================ */}
-      <section className="border-y border-white/10 bg-[#121519] text-snow">
+      <section className="border-y border-ink/10 bg-mist text-ink">
         <div className="container-kw">
-          <div className="grid grid-cols-2 divide-y divide-white/10 sm:grid-cols-4 sm:divide-y-0 sm:divide-x">
+          <div className="grid grid-cols-2 divide-y divide-ink/10 sm:grid-cols-4 sm:divide-y-0 sm:divide-x">
             {metrics.map((m) => (
               <div key={m.label} className="px-4 py-8 text-center sm:px-6">
-                <div className="font-display text-2xl font-extrabold tracking-tight text-white md:text-3xl">
+                <div className="font-display text-2xl font-extrabold tracking-tight text-ink md:text-3xl">
                   {m.value}
                 </div>
-                <div className="mt-2 font-mono text-[0.65rem] uppercase tracking-[0.22em] text-stone-dark">
+                <div className="mt-2 font-mono text-[0.65rem] uppercase tracking-[0.22em] text-charcoal">
                   {m.label}
                 </div>
               </div>
@@ -906,16 +906,16 @@ export default function ServiceDetail() {
       </section>
 
       {/* ============================================================
-         SECTION 4 — DARK ARCHITECTURAL SIMULATOR + ISOMETRIC STACK
+         SECTION 4 — LIGHT ARCHITECTURAL SIMULATOR + ISOMETRIC STACK
          ============================================================ */}
-      <section className="relative overflow-hidden bg-[#0D0F12] py-24 text-snow md:py-32">
+      <section className="relative overflow-hidden bg-snow py-24 text-ink md:py-32">
         {/* Subtle dot matrix background */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.03]"
+          className="pointer-events-none absolute inset-0 opacity-[0.015]"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+              "radial-gradient(circle at 2px 2px, #1F2326 1px, transparent 0)",
             backgroundSize: "40px 40px",
           }}
         />
@@ -924,15 +924,15 @@ export default function ServiceDetail() {
           <div className="grid items-center gap-16 lg:grid-cols-12">
             {/* Left (5 cols): Why It Matters + Isometric 3-Layer Stack */}
             <div className="lg:col-span-5">
-              <span className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.25em] text-kw-red-bright">
+              <span className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.25em] text-kw-red">
                 02 // {partner.whyItMattersHeadline}
               </span>
 
-              <h2 className="type-display-md mt-4 text-white">
+              <h2 className="type-display-md mt-4 text-ink">
                 One Trusted Advisor for Every Chapter.
               </h2>
 
-              <p className="mt-5 text-sm leading-relaxed text-stone-dark">
+              <p className="mt-5 text-sm leading-relaxed text-charcoal">
                 {partner.whyItMattersBody}
               </p>
 
@@ -941,12 +941,12 @@ export default function ServiceDetail() {
                 <IsometricTableStack activeSlug={slug} />
               </div>
 
-              <div className="mt-6 border-t border-white/10 pt-6 font-mono text-xs text-stone-dark">
+              <div className="mt-6 border-t border-ink/10 pt-6 font-mono text-xs text-charcoal">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span>{contact.fullAddress}</span>
                   <a
                     href={`tel:${contact.phone.replace(/[^0-9]/g, "")}`}
-                    className="text-white transition-colors hover:text-kw-red-bright"
+                    className="text-ink transition-colors hover:text-kw-red"
                   >
                     {contact.phone}
                   </a>
