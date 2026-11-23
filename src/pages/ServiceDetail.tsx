@@ -445,18 +445,10 @@ function MortgageSimulator() {
       </div>
 
       {/* Footer CTA */}
-      <div className="mt-9 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-7 sm:flex-row sm:items-center">
-        <p className="max-w-xs text-xs leading-relaxed text-stone-dark">
-          For planning only. Connect with Unity Home Loans in Layton for a
-          same-day personalized loan worksheet.
+      <div className="mt-9 border-t border-white/10 pt-7">
+        <p className="text-xs leading-relaxed text-stone-dark">
+          For illustration only. Not an offer to lend or a rate quote. Actual rate and APR depend on credit and loan terms. All loans subject to credit approval.
         </p>
-        <Link
-          to="/contact/mortgage"
-          className="group inline-flex shrink-0 items-center gap-3 bg-kw-red px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
-        >
-          <span>Get Pre-Approved</span>
-          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </Link>
       </div>
     </div>
   );
@@ -654,23 +646,111 @@ export default function ServiceDetail() {
                 {partner.heroHeadline}
               </p>
 
-              <div className="mt-10 flex flex-wrap items-center gap-5">
-                <Link
-                  to={`/contact/${slug}`}
-                  className="group inline-flex items-center gap-3.5 bg-kw-red px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
-                >
-                  <span>Connect With {partner.companyName}</span>
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Link>
+              {/* Conditional content for mortgage vs other services */}
+              {slug === "mortgage" ? (
+                <>
+                  {/* ABA Disclosure for Unity */}
+                  <div className="mt-8 max-w-2xl rounded border border-white/15 bg-white/5 p-5">
+                    <p className="text-xs leading-relaxed text-stone-dark">
+                      <strong className="text-white">Affiliated Business Arrangement Disclosure:</strong> Certain agents of KW Success Keller Williams Realty have an ownership interest in Unity Home Loans, LLC (NMLS #2383237), part of the same family of companies. Because of this relationship, a referral to Unity may provide them a financial or other benefit. You are not required to use Unity Home Loans as a condition of the purchase, sale, or refinance of any property. Other settlement service providers are available with similar services, and you are free to shop around.{" "}
+                      <a
+                        href="https://www.UnityHomeLoans.com/ABA"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-kw-red-bright underline hover:text-white"
+                      >
+                        View the Affiliated Business Arrangement Disclosure
+                      </a>
+                    </p>
+                  </div>
 
-                <Link
-                  to={`/services/${sisterPartner.slug}`}
-                  className="group inline-flex items-center gap-2 border border-white/15 bg-white/[0.03] px-6 py-4 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-snow/85 transition-colors hover:border-white/40 hover:text-white"
-                >
-                  <span>Also at the Table: {sisterPartner.companyName}</span>
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </div>
+                  {/* Unity CTA Buttons */}
+                  <div className="mt-8 flex flex-wrap items-center gap-4">
+                    <a
+                      href="https://unityhomeloans.my1003app.com/register"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-3.5 bg-kw-red px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
+                    >
+                      <span>Apply Here</span>
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </a>
+
+                    <a
+                      href="https://unityhomeloans.com/contact-us/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-3.5 border border-white/20 bg-white/5 px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:border-white/40 hover:bg-white/10"
+                    >
+                      <span>Contact Unity</span>
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </a>
+
+                    <a
+                      href="https://unityhomeloans.my1003app.com/inquiry"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-stone-dark transition-colors hover:text-white"
+                    >
+                      <span>Get a Quote</span>
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </a>
+                  </div>
+
+                  {/* Unity Company Details */}
+                  <div className="mt-10 max-w-2xl space-y-3 border-t border-white/10 pt-6 text-xs text-stone-dark">
+                    <p>
+                      <strong className="text-white">Unity Home Loans, LLC</strong> · NMLS #2383237 ·{" "}
+                      <a
+                        href="https://www.nmlsconsumeraccess.org/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-kw-red-bright underline hover:text-white"
+                      >
+                        NMLS Consumer Access
+                      </a>
+                    </p>
+                    <p>
+                      <a
+                        href="https://www.google.com/maps/search/1572+N.+Woodland+Park+Dr.,+Suite+500,+Layton,+UT+84041"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-white"
+                      >
+                        1572 N. Woodland Park Dr., Suite 500, Layton, UT 84041
+                      </a>{" "}
+                      ·{" "}
+                      <a href="tel:+13853278809" className="hover:text-white">
+                        (385) 327-8809
+                      </a>{" "}
+                      ·{" "}
+                      <a href="mailto:info@unityhomeloans.com" className="hover:text-white">
+                        info@unityhomeloans.com
+                      </a>
+                    </p>
+                    <p className="italic">
+                      All loans subject to credit approval. Rates and terms subject to change; restrictions may apply.
+                    </p>
+                    <div className="mt-4">
+                      <img
+                        src="/equal-housing-opportunity.svg"
+                        alt="Equal Housing Opportunity"
+                        className="h-10 w-auto opacity-70"
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="mt-10 flex flex-wrap items-center gap-5">
+                  <Link
+                    to="/contact"
+                    className="group inline-flex items-center gap-3.5 bg-kw-red px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-kw-red-bright"
+                  >
+                    <span>Talk to an Advisor</span>
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Right (5 cols): Architectural Partner Spec Plate (Zero CheckCircle icons) */}
