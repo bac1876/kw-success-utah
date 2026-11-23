@@ -787,8 +787,7 @@ function HomeSearchSection() {
                 </p>
                 <p className="mt-2 text-sm text-stone-dark">
                   Connect with a KW Success Trusted Advisor for a personalized
-                  market valuation and selling strategy across Weber, Davis, or
-                  Morgan County.
+                  market valuation and selling strategy across Northern Utah.
                 </p>
               </div>
               <Link

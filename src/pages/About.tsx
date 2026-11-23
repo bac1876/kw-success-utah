@@ -35,7 +35,7 @@ const TIMELINE_EVENTS = [
   },
   {
     year: "Layton",
-    body: "KW Success anchors its flagship Market Center at 1572 Woodland Park Drive, serving Davis, Weber, and Morgan Counties.",
+    body: "KW Success anchors its flagship Market Center at 1572 Woodland Park Drive, proudly serving all of Northern Utah.",
   },
   {
     year: "20,000+",
