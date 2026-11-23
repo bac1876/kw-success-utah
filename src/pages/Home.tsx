@@ -337,7 +337,7 @@ function TheSuccessIdea() {
               maxTilt={3}
               spotlightColor="rgba(209, 25, 25, 0.25)"
               borderGlowColor="rgba(255, 80, 80, 0.9)"
-              className="group flex h-full flex-col justify-between rounded-3xl border border-ink/10 bg-ink p-8 text-snow shadow-lift md:p-12"
+              className="group flex h-full flex-col justify-between rounded-3xl border border-ink/10 bg-white p-8 text-ink shadow-lift md:p-12"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -350,19 +350,19 @@ function TheSuccessIdea() {
                   </span>
                 </div>
 
-                <h3 className="mt-7 text-2xl font-bold leading-snug text-white md:text-3xl">
+                <h3 className="mt-7 text-2xl font-bold leading-snug text-ink md:text-3xl">
                   Build the business that funds your version of success.
                 </h3>
 
-                <p className="type-body mt-4 leading-relaxed text-stone-dark">
+                <p className="type-body mt-4 leading-relaxed text-charcoal">
                   {successIdea.forAgentsBody}
                 </p>
               </div>
 
-              <div className="mt-10 border-t border-white/10 pt-6">
+              <div className="mt-10 border-t border-ink/10 pt-6">
                 <Link
                   to="/agents"
-                  className="group/btn inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-colors hover:text-kw-red-bright"
+                  className="group/btn inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-kw-red-bright"
                 >
                   <span>Explore For Agents</span>
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-kw-red text-white transition-transform duration-300 group-hover/btn:rotate-45">
@@ -905,7 +905,7 @@ function ClosingCTA() {
   const { closingCta } = activeBrokerage.home;
 
   return (
-    <section className="relative overflow-hidden bg-ink py-24 text-snow md:py-32">
+    <section className="relative overflow-hidden bg-mist py-24 text-ink md:py-32">
       {/* Subtle Wasatch radial glow */}
       <div
         aria-hidden
