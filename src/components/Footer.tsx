@@ -5,7 +5,7 @@ import { AGENT_LOGIN_URL } from "@/components/Navbar";
 import AffiliatedDisclosure from "@/components/AffiliatedDisclosure";
 
 export default function Footer() {
-  const { brand, office, partnerLinks, social, disclosures } = brokerage;
+  const { brand, office, social, disclosures } = brokerage;
 
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-ink-deep text-snow">

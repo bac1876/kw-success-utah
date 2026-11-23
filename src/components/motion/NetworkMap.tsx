@@ -691,7 +691,7 @@ export default function NetworkMap() {
           );
         })}
       </ul>
-      <parameter name="new_string">      <p className="type-body-sm mt-5 text-charcoal">
+      <p className="type-body-sm mt-5 text-charcoal">
         Hover or tap a county to trace its reach across Northern Utah.
         Click any community dot to search homes there.
       </p>
