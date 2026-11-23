@@ -72,7 +72,7 @@ export default function Agents() {
   };
 
   const scrollToForm = () => {
-    const el = document.getElementById("talk-to-russie");
+    const el = document.getElementById("talk-to-leadership");
     if (!el) return;
     if (window.__lenis) {
       window.__lenis.scrollTo(el, { offset: -HEADER_H });
@@ -368,7 +368,7 @@ export default function Agents() {
 
       {/* §6.8 CTA: Book a Conversation (Dark Slate Split Form) */}
       <section
-        id="talk-to-russie"
+        id="talk-to-leadership"
         className="bg-ink py-24 text-snow md:py-32"
       >
         <div className="container-kw">
