@@ -727,7 +727,7 @@ export const kwSuccessConfig: BrokerageConfig = {
       introCopy:
         "Our trusted Northern Utah insurance specialists work alongside your KW Success Trusted Advisor to compare homeowners, auto, and umbrella policies—making sure the home and equity you've built stay protected through every season.",
       isPlaceholderCopy: false,
-      whyItMattersHeadline: "WHY IT MATTERS AT THE TABLE",
+      whyItMattersHeadline: "WHY IT MATTERS",
       whyItMattersBody:
         "Connected homeownership includes reviewing coverage as your home and life evolve.",
       highlights: [

@@ -720,7 +720,7 @@ function HomeSearchSection() {
   };
 
   const fieldCls =
-    "w-full rounded-xl border border-white/15 bg-ink-deep px-4 py-3.5 text-sm text-white outline-none transition-colors placeholder:text-stone-dark focus:border-kw-red";
+    "w-full rounded-xl border border-ink/20 bg-mist px-4 py-3.5 text-sm text-ink outline-none transition-colors placeholder:text-charcoal/50 focus:border-kw-red";
 
   return (
     <section id="home-search" className="bg-mist py-24 text-ink md:py-32">
@@ -746,16 +746,16 @@ function HomeSearchSection() {
               className="group inline-flex items-center gap-2.5 rounded-full border border-ink/20 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-ink transition-all hover:border-kw-red hover:text-kw-red"
             >
               <Compass className="h-4 w-4 text-kw-red" />
-              <span>Full 35-Community Directory</span>
+              <span>Full 75-Community Directory</span>
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </Reveal>
         </div>
 
-        {/* High-Contrast Dark Slate Search Console */}
-        <div className="mt-12 overflow-hidden rounded-3xl border border-ink/10 bg-ink text-snow shadow-lift">
-          {/* Buy / Sell / Rent Tabs */}
-          <div className="flex border-b border-white/10 bg-ink-deep/60 px-6 pt-4">
+        {/* Light Search Console */}
+        <div className="mt-12 overflow-hidden rounded-3xl border border-ink/10 bg-white text-ink shadow-lift">
+          {/* Buy / Sell Tabs */}
+          <div className="flex border-b border-ink/10 bg-mist px-6 pt-4">
             {TABS.map((t) => (
               <button
                 key={t}
@@ -764,8 +764,8 @@ function HomeSearchSection() {
                 className={cn(
                   "relative px-7 py-3.5 text-xs font-bold uppercase tracking-[0.22em] transition-colors",
                   tab === t
-                    ? "text-white"
-                    : "text-stone-dark hover:text-white"
+                    ? "text-ink"
+                    : "text-charcoal hover:text-ink"
                 )}
               >
                 {t}
@@ -783,10 +783,10 @@ function HomeSearchSection() {
           {tab === "Sell" ? (
             <div className="flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center md:p-10">
               <div>
-                <p className="text-xl font-bold text-white">
+                <p className="text-xl font-bold text-ink">
                   Thinking about selling your home in Northern Utah?
                 </p>
-                <p className="mt-2 text-sm text-snow/80">
+                <p className="mt-2 text-sm text-charcoal">
                   Connect with a KW Success Trusted Advisor for a personalized
                   market valuation and selling strategy across Northern Utah.
                 </p>
@@ -808,7 +808,7 @@ function HomeSearchSection() {
                 className="grid gap-5 md:grid-cols-[1.5fr_1fr_0.8fr_auto] md:items-end"
               >
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-charcoal">
                     Community / ZIP
                   </label>
                   <input
@@ -819,7 +819,7 @@ function HomeSearchSection() {
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-charcoal">
                     Price Range
                   </label>
                   <select
@@ -836,7 +836,7 @@ function HomeSearchSection() {
                   </select>
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-dark">
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-charcoal">
                     Beds
                   </label>
                   <select
@@ -864,8 +864,8 @@ function HomeSearchSection() {
               </form>
 
               {/* Quick-select Northern Utah Community Chips */}
-              <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-white/10 pt-4">
-                <span className="text-[0.68rem] font-bold uppercase tracking-wider text-stone-dark">
+              <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-ink/10 pt-4">
+                <span className="text-[0.68rem] font-bold uppercase tracking-wider text-charcoal">
                   Quick Select:
                 </span>
                 {QUICK_TOWNS.map((town) => (
@@ -877,7 +877,7 @@ function HomeSearchSection() {
                       "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                       location === town
                         ? "border-kw-red bg-kw-red text-white"
-                        : "border-white/10 bg-white/5 text-snow/80 hover:border-kw-red/50 hover:text-white"
+                        : "border-ink/20 bg-mist text-ink hover:border-kw-red/50 hover:bg-kw-red/10"
                     )}
                   >
                     {town}

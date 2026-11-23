@@ -17,7 +17,7 @@ const PARTNER_METRICS = {
     { value: "Same-Day", label: "Pre-Approval Letters" },
     { value: "Connected", label: "Coordinated Services" },
     { value: "Northern Utah", label: "Salt Lake · Davis · Weber · Morgan · Summit · Tooele · Box Elder · Cache · Rich" },
-    { value: "In-House", label: "Layton Lending Desk" },
+    { value: "Lending Partner", label: "Unity Home Loans, LLC" },
   ],
   title: [
     { value: "Northern Utah", label: "Salt Lake · Davis · Weber · Morgan · Summit · Tooele · Box Elder · Cache · Rich" },
@@ -762,7 +762,7 @@ export default function ServiceDetail() {
                     className="h-11 w-auto max-w-[200px] object-contain"
                   />
                   <span className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.2em] text-ink/70">
-                    In-House Desk
+                    Lending Partner
                   </span>
                 </div>
 
@@ -831,7 +831,7 @@ export default function ServiceDetail() {
             </Reveal>
 
             <h2 className="type-display-md mt-4 text-ink">
-              <SplitWords text="COORDINATED AROUND YOUR TABLE." />
+              <SplitWords text="LENDING BUILT AROUND YOUR PLAN." />
             </h2>
 
             <Reveal delay={0.1}>
