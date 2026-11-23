@@ -1,5 +1,4 @@
 import { Award, ExternalLink } from "lucide-react";
-import { activeBrokerage } from "@/brokerages";
 
 interface BestOfStateProps {
   className?: string;
@@ -11,7 +10,6 @@ interface BestOfStateProps {
  * Badge images pending - using placeholder for now
  */
 export default function BestOfState({ className = "" }: BestOfStateProps) {
-  const { disclosures } = activeBrokerage;
   
   // Placeholder URL - client will provide actual link
   const verifiedRecognitionUrl = "https://bestofstateutah.com";

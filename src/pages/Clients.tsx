@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { activeBrokerage } from "@/brokerages";
 import FourSeats from "@/components/FourSeats";
+import BestOfState from "@/components/BestOfState";
 import ThreePillars from "@/components/ThreePillars";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
@@ -259,6 +260,9 @@ export default function Clients() {
           </div>
         </div>
       </section>
+
+      {/* Best of State Recognition */}
+      <BestOfState className="bg-snow" />
     </>
   );
 }

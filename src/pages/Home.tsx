@@ -26,6 +26,7 @@ import FourSeats from "@/components/FourSeats";
 import ThreePillars from "@/components/ThreePillars";
 import StatsBand, { type StatItem } from "@/components/StatsBand";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
+import BestOfState from "@/components/BestOfState";
 import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import Parallax from "@/components/motion/Parallax";
@@ -1044,6 +1045,8 @@ export default function Home() {
           </div>
         </section>
       )}
+      {/* Best of State Recognition */}
+      <BestOfState className="bg-snow" />
       {/* §5.9 Closing CTA (Dark Slate Architectural Banner) */}
       <ClosingCTA />
     </>

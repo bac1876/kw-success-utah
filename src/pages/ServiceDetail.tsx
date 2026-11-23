@@ -591,8 +591,6 @@ export default function ServiceDetail() {
   const partner = partners[slug];
   const metrics = PARTNER_METRICS[slug];
   const programs = slug === "mortgage" ? LOAN_PROGRAMS : TITLE_CAPABILITIES;
-  const sisterPartner =
-    slug === "mortgage" ? partners.title : partners.mortgage;
 
   return (
     <>

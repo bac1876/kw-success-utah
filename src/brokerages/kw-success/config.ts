@@ -696,6 +696,27 @@ export const kwSuccessConfig: BrokerageConfig = {
       affiliated: true,
       contactTopic: "Buying",
     },
+    title: {
+      slug: "title",
+      navLabel: "Title & Escrow",
+      companyName: "Title & Escrow Services",
+      roleLabel: "Settlement Services",
+      logo: "/kw-success/logos/kw-success-rgb.png",
+      heroHeadline: "Professional Title & Escrow Services",
+      introCopy:
+        "Your KW Success advisor coordinates with trusted Northern Utah title and escrow professionals to ensure smooth, accurate closings.",
+      isPlaceholderCopy: false,
+      whyItMattersHeadline: "WHY IT MATTERS",
+      whyItMattersBody:
+        "Every real estate transaction depends on clean title and timely escrow coordination. Working with vetted settlement professionals means proactive communication and a closing experience built around your schedule.",
+      highlights: [
+        "Full title search and title insurance",
+        "Professional escrow settlement",
+        "Convenient Northern Utah closing support",
+      ],
+      affiliated: false,
+      contactTopic: "Selling",
+    },
     insurance: {
       slug: "insurance",
       navLabel: "Insurance",
