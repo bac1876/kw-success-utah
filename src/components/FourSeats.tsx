@@ -57,7 +57,7 @@ const SEAT_META: Record<string, SeatMeta> = {
       "Coordinated Closing Day",
     ],
     serviceUrl: "/services/title",
-    partnerName: "Amicus Title",
+    partnerName: "Title & Escrow",
   },
   Insurance: {
     icon: ShieldCheck,

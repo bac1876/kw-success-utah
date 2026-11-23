@@ -111,7 +111,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 3 — Family of Companies (§13: Unity Home Loans · Amicus Title) */}
+        {/* Column 3 — Family of Companies (§13: Unity Home Loans) */}
         <div className="lg:col-span-3">
           <p className="type-label text-kw-red-bright">Family of Companies</p>
           <div className="mt-5 space-y-3.5">

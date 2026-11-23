@@ -102,7 +102,7 @@ export default function AreasServed() {
                 </div>
               </Reveal>
               <h2 className="type-display-lg mt-5 text-ink">
-                <SplitWords text="WEBER, DAVIS & MORGAN COUNTIES." />
+                <SplitWords text="ALL OF NORTHERN UTAH." />
               </h2>
             </div>
 

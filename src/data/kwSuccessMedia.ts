@@ -154,7 +154,7 @@ export const CULTURE_STORIES: CultureStoryItem[] = [
     id: "awards-team",
     category: "Awards Breakfast",
     title: "Top Producing Team & Luxury Recognition",
-    subtitle: "Celebrating high-performing teams across Weber, Davis & Morgan",
+    subtitle: "Celebrating high-performing teams across Northern Utah",
     image: "/kw-success/stories/awards-team.jpg?v=2",
     year: "Awards Breakfast",
   },
