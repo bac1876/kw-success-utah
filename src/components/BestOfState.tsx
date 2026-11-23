@@ -41,16 +41,12 @@ export default function BestOfState({ className = "" }: BestOfStateProps) {
 
             {/* Right: Content with Prominent Years */}
             <div className="lg:col-span-8">
-              {/* Years 2018-2026 - Very Prominent */}
+              {/* Years 2018-2026 - Very Prominent - All Equal */}
               <div className="mb-8 flex flex-wrap items-center gap-2.5">
-                {[2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026].map((year, idx) => (
+                {[2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026].map((year) => (
                   <span
                     key={year}
-                    className={`inline-flex h-14 w-20 items-center justify-center rounded-xl text-lg font-extrabold shadow-md transition-transform hover:scale-105 ${
-                      idx < 8
-                        ? "bg-kw-red text-white"
-                        : "border-2 border-kw-gray/40 bg-mist text-kw-gray"
-                    }`}
+                    className="inline-flex h-14 w-20 items-center justify-center rounded-xl bg-kw-red text-lg font-extrabold text-white shadow-md transition-transform hover:scale-105"
                   >
                     {year}
                   </span>

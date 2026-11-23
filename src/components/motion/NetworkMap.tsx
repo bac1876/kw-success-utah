@@ -536,20 +536,20 @@ export default function NetworkMap() {
   const headerBlock = (
     <div>
       <div className="flex items-center gap-4">
-        <span className="h-px w-10 bg-copper" />
-        <span className="type-label text-copper">The Wasatch Front, to Scale</span>
+        <span className="h-px w-10 bg-kw-red" />
+        <span className="type-label text-kw-red">The Wasatch Front, to Scale</span>
       </div>
-      <h2 className="mt-5 text-[clamp(1.6rem,2.4vw,2.1rem)] font-light leading-tight text-ivory">
+      <h2 className="mt-5 text-[clamp(1.6rem,2.4vw,2.1rem)] font-light leading-tight text-ink">
         Every dot is a Utah community we serve.
       </h2>
-      <p className="type-body-sm mt-4 max-w-sm text-white/65">
+      <p className="type-body-sm mt-4 max-w-sm text-charcoal">
         Anchored in Layton — {UTAH_AREA_COUNT}+ communities across all of Northern Utah.
         Licensed to serve the entire state. The copper threads trace our advisors&apos; 
         daily reach from the Great Salt Lake to Bear Lake and the Wasatch Back.
       </p>
 
-      <label className="mt-8 flex items-center gap-3 border-b hairline-dark pb-3 focus-within:border-copper">
-        <Search className="h-4 w-4 shrink-0 text-copper" strokeWidth={1.5} />
+      <label className="mt-8 flex items-center gap-3 border-b border-ink/20 pb-3 focus-within:border-kw-red">
+        <Search className="h-4 w-4 shrink-0 text-kw-red" strokeWidth={1.5} />
         <input
           type="text"
           value={query}
@@ -560,14 +560,14 @@ export default function NetworkMap() {
           }}
           placeholder="Find your town (e.g. Layton, Ogden, Kaysville)…"
           aria-label="Find your town"
-          className="w-full bg-transparent text-[0.95rem] text-ivory placeholder:text-stone-dark focus:outline-none"
+          className="w-full bg-transparent text-[0.95rem] text-ink placeholder:text-charcoal/50 focus:outline-none"
         />
         {query && (
           <button
             type="button"
             aria-label="Clear"
             onClick={() => setQuery("")}
-            className="text-stone-dark transition-colors hover:text-ivory"
+            className="text-charcoal transition-colors hover:text-ink"
           >
             <X className="h-4 w-4" strokeWidth={1.5} />
           </button>
@@ -586,13 +586,13 @@ export default function NetworkMap() {
                 className="group flex w-full items-center justify-between gap-4 py-2 text-left"
                 data-cursor="Explore"
               >
-                <span className="text-[0.9rem] text-ivory transition-colors group-hover:text-copper">
+                <span className="text-[0.9rem] text-ink transition-colors group-hover:text-kw-red">
                   {t.name}
                 </span>
-                <span className="type-body-sm flex items-center gap-2 text-stone-dark">
+                <span className="type-body-sm flex items-center gap-2 text-charcoal">
                   {t.county.replace(" County", "")}
                   <ArrowRight
-                    className="h-3.5 w-3.5 text-copper transition-transform group-hover:translate-x-1"
+                    className="h-3.5 w-3.5 text-kw-red transition-transform group-hover:translate-x-1"
                     strokeWidth={1.5}
                   />
                 </span>
@@ -600,16 +600,16 @@ export default function NetworkMap() {
             </li>
           ))}
           {matches.length === 0 && (
-            <li className="type-body-sm py-2 text-stone-dark">
+            <li className="type-body-sm py-2 text-charcoal">
               Not on the primary list yet —{" "}
-              <Link to="/contact" className="text-copper">
+              <Link to="/contact" className="text-kw-red hover:underline">
                 ask us
               </Link>
-              , our advisors serve the entire Wasatch Front.
+              , our advisors serve all of Northern Utah.
             </li>
           )}
           {matches.length > 6 && (
-            <li className="type-body-sm py-2 text-stone-dark">
+            <li className="type-body-sm py-2 text-charcoal">
               + {matches.length - 6} more — keep typing
             </li>
           )}
@@ -620,15 +620,15 @@ export default function NetworkMap() {
 
   const filterListBlock = (
     <div>
-      <p className="type-label mt-9 text-stone-dark">Service Area</p>
-      <ul className="mt-3 border-t hairline-dark">
+      <p className="type-label mt-9 text-charcoal">Service Area</p>
+      <ul className="mt-3 border-t border-ink/10">
         {hubs.map((h) => {
           const active =
             !filter ||
             (filter.kind === "office" && filter.key === h.slug) ||
             (filter.kind === "county" && countyOf[h.city] === filter.key);
           return (
-            <li key={h.slug} className="border-b hairline-dark">
+            <li key={h.slug} className="border-b border-ink/10">
               <button
                 type="button"
                 onMouseEnter={() => setFilter({ kind: "office", key: h.slug })}
@@ -641,20 +641,20 @@ export default function NetworkMap() {
                 data-cursor="Trace"
               >
                 <span className="flex items-center gap-3">
-                  <span className="block h-2 w-2 rotate-45 bg-copper" />
-                  <span className="text-[0.88rem] font-medium text-ivory transition-colors group-hover:text-copper">
+                  <span className="block h-2 w-2 rotate-45 bg-kw-red" />
+                  <span className="text-[0.88rem] font-medium text-ink transition-colors group-hover:text-kw-red">
                     {h.name}
                   </span>
                 </span>
-                <span className="type-body-sm text-stone-dark">{h.city}</span>
+                <span className="type-body-sm text-charcoal">{h.city}</span>
               </button>
             </li>
           );
         })}
       </ul>
 
-      <p className="type-label mt-7 text-stone-dark">Counties</p>
-      <ul className="mt-3 flex flex-wrap gap-2 lg:block lg:border-t lg:hairline-dark">
+      <p className="type-label mt-7 text-charcoal">Counties</p>
+      <ul className="mt-3 flex flex-wrap gap-2 lg:block lg:border-t lg:border-ink/10">
         {UTAH_AREA_GROUPS.map((g) => {
           const active =
             !filter ||
@@ -664,7 +664,7 @@ export default function NetworkMap() {
                 (linkedBy[c] ?? []).includes(filter.key)
               ));
           return (
-            <li key={g.county} className="lg:border-b lg:hairline-dark">
+            <li key={g.county} className="lg:border-b lg:border-ink/10">
               <button
                 type="button"
                 onMouseEnter={() =>
@@ -673,17 +673,17 @@ export default function NetworkMap() {
                 onMouseLeave={() => setFilter(null)}
                 onClick={() => toggleFilter({ kind: "county", key: g.county })}
                 className={cn(
-                  "flex w-full items-center justify-between gap-4 rounded-full border px-4 py-2 text-left transition-all duration-300 hairline-dark lg:rounded-none lg:border-0 lg:px-0 lg:py-2",
+                  "flex w-full items-center justify-between gap-4 rounded-full border border-ink/10 px-4 py-2 text-left transition-all duration-300 lg:rounded-none lg:border-0 lg:px-0 lg:py-2",
                   active ? "opacity-100" : "opacity-35",
                   filter?.kind === "county" &&
                     filter.key === g.county &&
-                    "text-copper"
+                    "text-kw-red"
                 )}
               >
-                <span className="text-[0.86rem] font-light text-ivory">
+                <span className="text-[0.86rem] font-light text-ink">
                   {g.county}
                 </span>
-                <span className="type-body-sm tabular-nums text-stone-dark">
+                <span className="type-body-sm tabular-nums text-charcoal">
                   {g.communities.length}
                 </span>
               </button>
@@ -691,9 +691,9 @@ export default function NetworkMap() {
           );
         })}
       </ul>
-      <p className="type-body-sm mt-5 text-stone-dark">
-        Hover or tap a hub or county to trace its reach across the Wasatch
-        Front. Click any community dot to search homes there.
+      <parameter name="new_string">      <p className="type-body-sm mt-5 text-charcoal">
+        Hover or tap a county to trace its reach across Northern Utah.
+        Click any community dot to search homes there.
       </p>
     </div>
   );

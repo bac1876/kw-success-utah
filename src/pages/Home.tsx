@@ -57,15 +57,16 @@ const HOME_STATS: StatItem[] = activeBrokerage.home.stats.map((s) => ({
 
 const WASATCH_COMMUNITIES_TICKER = [
   "Layton Market Center",
-  "Ogden & Ogden Valley",
   "Kaysville & Fruit Heights",
   "Farmington & Centerville",
   "Bountiful & North Salt Lake",
   "Syracuse & West Point",
   "South Weber & Uintah",
   "Morgan & Mountain Green",
-  "Huntsville & Eden",
-  "North Ogden & Pleasant View",
+  "Salt Lake City & Sandy",
+  "Park City & Coalville",
+  "Brigham City & Tremonton",
+  "Logan & Smithfield",
 ];
 
 /* ------------------------------------------------------------------ */
@@ -254,7 +255,7 @@ function Hero() {
                 (item, idx) => (
                   <span
                     key={`${item}-${idx}`}
-                    className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-stone-dark"
+                    className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-snow/70"
                   >
                     <span className="h-1 w-1 rounded-full bg-kw-red-bright" />
                     {item}
@@ -785,7 +786,7 @@ function HomeSearchSection() {
                 <p className="text-xl font-bold text-white">
                   Thinking about selling your home in Northern Utah?
                 </p>
-                <p className="mt-2 text-sm text-stone-dark">
+                <p className="mt-2 text-sm text-snow/80">
                   Connect with a KW Success Trusted Advisor for a personalized
                   market valuation and selling strategy across Northern Utah.
                 </p>
@@ -888,7 +889,7 @@ function HomeSearchSection() {
         </div>
 
         {/* Interactive Wasatch Front Map Showcase right on the Home Page */}
-        <div className="mt-10 overflow-hidden rounded-3xl border border-ink/10 bg-ink-deep shadow-lift">
+        <div className="mt-10 overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-lift">
           <NetworkMap />
         </div>
       </div>
@@ -973,12 +974,12 @@ export default function Home() {
       <SevenChapters className="bg-snow" />
       {/* §5.3 The Success Idea (Cool Sky Mist + 3D Tilt Cards) */}
       <TheSuccessIdea />
-      {/* §5.4 The Three Pillars (Deep Slate + Animated SVG Visualizations) */}
-      <ThreePillars mode="toggle" tone="dark" />
+      {/* §5.4 The Three Pillars (Light Stone + Animated SVG Visualizations) */}
+      <ThreePillars mode="toggle" tone="light" />
       {/* §5.5 Our Promise (Cool Mist + Interactive Continuity Stepper) */}
       <OurPromise />
       {/* §5.6 Stats Band + Best of State Badge (Deep Slate Bento) */}
-      <StatsBand stats={HOME_STATS} />
+      <StatsBand stats={HOME_STATS} className="bg-ink-deep" />
       {/* §5.7 Home Search + Interactive Wasatch Front Map */}
       <HomeSearchSection />
       {/* §5.8 Testimonials (hidden by flag showTestimonials=false until real) */}

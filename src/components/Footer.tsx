@@ -111,27 +111,48 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 3 — Family of Companies (§13: Unity Home Loans) */}
+        {/* Column 3 — Family of Companies (§13: Unity Home Loans with full details) */}
         <div className="lg:col-span-3">
           <p className="type-label text-kw-red-bright">Family of Companies</p>
-          <div className="mt-5 space-y-3.5">
-            {partnerLinks.map((p) => (
-              <Link
-                key={p.to}
-                to={p.to}
-                className="group block rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-kw-red/50 hover:bg-white/[0.06]"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-snow group-hover:text-white">
-                    {p.name}
-                  </span>
-                  <ArrowUpRight className="h-4 w-4 text-kw-red transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </div>
-                <span className="mt-1 block text-xs text-stone-dark">
-                  {p.role}
+          <div className="mt-5">
+            {/* Unity Home Loans - Full Details */}
+            <Link
+              to="/services/mortgage"
+              className="group block rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-kw-red/50 hover:bg-white/[0.06]"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-snow group-hover:text-white">
+                  Unity Home Loans, LLC
                 </span>
-              </Link>
-            ))}
+                <ArrowUpRight className="h-4 w-4 text-kw-red transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </div>
+              <div className="mt-2 space-y-1 text-xs text-stone-dark">
+                <p>
+                  <a 
+                    href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/2383237" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-kw-red-bright underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    NMLS #2383237
+                  </a>
+                </p>
+                <p>1572 N. Woodland Park Dr., Suite 500</p>
+                <p>Layton, UT 84041</p>
+                <p><a href="tel:3853278809" className="hover:text-white" onClick={(e) => e.stopPropagation()}>(385) 327-8809</a></p>
+                <p><a href="mailto:info@unityhomeloans.com" className="hover:text-white" onClick={(e) => e.stopPropagation()}>info@unityhomeloans.com</a></p>
+                <p className="mt-2 italic text-[0.68rem]">
+                  All loans subject to credit approval. Rates and terms subject to change; restrictions may apply.
+                </p>
+                <div className="mt-2 flex items-center gap-1.5">
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 10 12 6.16-1.26 10-6.45 10-12V7l-10-5z"/>
+                  </svg>
+                  <span className="text-[0.68rem] font-semibold">Equal Housing Opportunity</span>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
 
@@ -205,12 +226,14 @@ export default function Footer() {
             >
               Terms
             </Link>
-            <Link
-              to="/affiliated-business-disclosure"
+            <a
+              href="https://www.UnityHomeLoans.com/ABA"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-stone-dark transition-colors hover:text-white"
             >
               Affiliated Business Disclosure
-            </Link>
+            </a>
             <Link
               to="/accessibility"
               className="text-stone-dark transition-colors hover:text-white"
