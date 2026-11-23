@@ -151,8 +151,8 @@ export default function Agents() {
       {/* §6.2 Why KW Success (Four Promises — Interactive Moving Graphic Interface) */}
       <FourPromisesShowcase />
 
-      {/* §6.3 What Makes Us Different + §6.4 Become a Trusted Advisor (Dark Slate) */}
-      <section className="bg-ink py-24 text-snow md:py-32">
+      {/* §6.3 What Makes Us Different + §6.4 Become a Trusted Advisor (Light) */}
+      <section className="bg-mist py-24 text-ink md:py-32">
         <div className="container-kw">
           <div className="grid gap-12 lg:grid-cols-12">
             {/* Left: §6.3 Four Comparison Lines */}
@@ -168,19 +168,19 @@ export default function Agents() {
                 </div>
               </Reveal>
 
-              <h2 className="type-display-lg mt-5 text-white">
+              <h2 className="type-display-lg mt-5 text-ink">
                 <SplitWords text="BUILT FOR DEPTH, NOT VOLUME." />
               </h2>
 
               <div className="mt-10 space-y-4">
                 {agentsPage.differences.map((diff, idx) => (
                   <Reveal key={diff.bold} delay={0.06 * idx} y={16}>
-                    <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-slate-card/70 p-6 transition-colors hover:border-kw-red/60">
+                    <div className="flex items-start gap-4 rounded-2xl border border-ink/15 bg-white p-6 shadow-card transition-colors hover:border-kw-red/60">
                       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-kw-red text-xs font-extrabold text-white">
                         0{idx + 1}
                       </span>
-                      <p className="text-base leading-relaxed text-stone-dark">
-                        <strong className="font-bold text-white">
+                      <p className="text-base leading-relaxed text-charcoal">
+                        <strong className="font-bold text-ink">
                           {diff.bold}
                         </strong>{" "}
                         {diff.rest}
@@ -194,24 +194,24 @@ export default function Agents() {
             {/* Right: §6.4 Become a Trusted Advisor Card */}
             <div className="lg:col-span-5 lg:self-center">
               <Reveal delay={0.2}>
-                <div className="relative overflow-hidden rounded-3xl border-2 border-kw-red bg-gradient-to-b from-slate-card to-ink-deep p-8 shadow-lift-dark md:p-10">
+                <div className="relative overflow-hidden rounded-3xl border-2 border-kw-red bg-white p-8 shadow-lift md:p-10">
                   <span className="type-label text-kw-red-bright">
                     {agentsPage.trustedAdvisor.eyebrow}
                   </span>
-                  <h3 className="type-display-md mt-4 text-white">
+                  <h3 className="type-display-md mt-4 text-ink">
                     {agentsPage.trustedAdvisor.headline}
                   </h3>
-                  <p className="type-body mt-5 leading-relaxed text-stone-dark">
+                  <p className="type-body mt-5 leading-relaxed text-charcoal">
                     {agentsPage.trustedAdvisor.body}
                   </p>
-                  <div className="mt-8 border-t border-white/10 pt-6">
+                  <div className="mt-8 border-t border-ink/10 pt-6">
                     <button
                       type="button"
                       onClick={scrollToForm}
-                      className="group inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-colors hover:text-kw-red-bright"
+                      className="group inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:text-kw-red-bright"
                     >
                       <span>Start the Conversation</span>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-kw-red text-white transition-transform duration-300 group-hover:rotate-45">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-kw-red text-white transition-all duration-300 group-hover:rotate-45 group-hover:bg-kw-red-bright">
                         <ArrowUpRight className="h-4 w-4" />
                       </span>
                     </button>
