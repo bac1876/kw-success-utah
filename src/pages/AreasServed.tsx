@@ -73,7 +73,7 @@ export default function AreasServed() {
                 01
               </span>
               <span className="type-label text-kw-red">
-                Interactive Wasatch Front Coverage Map
+                Interactive Northern Utah Coverage Map
               </span>
             </div>
             <span className="text-xs text-charcoal">

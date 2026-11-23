@@ -31,7 +31,7 @@ import Reveal, { SplitWords } from "@/components/Reveal";
 import { HEADER_H } from "@/components/Navbar";
 import SplitChars from "@/components/motion/SplitChars";
 import SpotlightCard from "@/components/motion/SpotlightCard";
-import NetworkMap from "@/components/motion/NetworkMap";
+import NetworkMap, { UTAH_AREA_COUNT } from "@/components/motion/NetworkMap";
 import { cn } from "@/lib/utils";
 import { usePageMeta } from "@/lib/usePageMeta";
 
@@ -746,7 +746,7 @@ function HomeSearchSection() {
               className="group inline-flex items-center gap-2.5 rounded-full border border-ink/20 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-ink transition-all hover:border-kw-red hover:text-kw-red"
             >
               <Compass className="h-4 w-4 text-kw-red" />
-              <span>Full 75-Community Directory</span>
+              <span>Full {UTAH_AREA_COUNT}-Community Directory</span>
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </Reveal>
@@ -888,8 +888,8 @@ function HomeSearchSection() {
           )}
         </div>
 
-        {/* Interactive Wasatch Front Map Showcase right on the Home Page */}
-        <div className="mt-10 overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-lift">
+        {/* Interactive Northern Utah Map Showcase right on the Home Page */}
+        <div className="mt-10 overflow-hidden rounded-3xl border border-ink/10 bg-white p-6 shadow-lift sm:p-8 lg:p-10">
           <NetworkMap />
         </div>
       </div>

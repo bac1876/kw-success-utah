@@ -654,7 +654,7 @@ export const kwSuccessConfig: BrokerageConfig = {
       {
         county: "Summit County",
         note: "Park City & Wasatch Back",
-        communities: ["Park City", "Heber City", "Kamas", "Coalville", "Oakley"],
+        communities: ["Park City", "Kamas", "Coalville", "Francis", "Oakley"],
       },
       {
         county: "Box Elder County",
