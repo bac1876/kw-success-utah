@@ -203,7 +203,7 @@ const COMMUNITY_CARDS = [
 
 export default function About() {
   usePageMeta("About & Leadership", activeBrokerage.aboutPage.hero.subhead);
-  const { aboutPage, externalLinks } = activeBrokerage;
+  const { aboutPage } = activeBrokerage;
   const [expandedBio, setExpandedBio] = useState<Record<string, boolean>>({});
 
   const toggleBio = (name: string) =>
