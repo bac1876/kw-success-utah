@@ -280,7 +280,7 @@ function Hero() {
 }
 
 /* ------------------------------------------------------------------ */
-/* §5.2 "One Trusted Advisor" (Dark Architectural Slate Section)     */
+/* §5.2 "One Trusted Advisor" (Light Section)     */
 /* ------------------------------------------------------------------ */
 
 function EveryoneAtOneTable() {
@@ -289,7 +289,7 @@ function EveryoneAtOneTable() {
   return (
     <section
       id="connected"
-      className="relative overflow-hidden bg-ink py-24 text-snow md:py-32"
+      className="relative overflow-hidden bg-snow py-24 text-ink md:py-32"
     >
       {/* Ambient background glow */}
       <div
@@ -312,14 +312,14 @@ function EveryoneAtOneTable() {
               </div>
             </Reveal>
 
-            <h2 className="type-display-lg mt-5 text-white text-balance">
+            <h2 className="type-display-lg mt-5 text-ink text-balance">
               <SplitWords text={oneTable.headline} />
             </h2>
           </div>
 
           <div className="lg:col-span-5">
             <Reveal delay={0.15}>
-              <p className="type-body text-stone-dark leading-relaxed">
+              <p className="type-body text-charcoal leading-relaxed">
                 {oneTable.body}
               </p>
             </Reveal>
@@ -327,7 +327,7 @@ function EveryoneAtOneTable() {
         </div>
 
         <Parallax distance={-12} className="mt-14">
-          <FourSeats tone="dark" showJourney />
+          <FourSeats tone="light" showJourney />
         </Parallax>
       </div>
     </section>
